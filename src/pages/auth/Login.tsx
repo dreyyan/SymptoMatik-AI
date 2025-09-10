@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import React from 'react';
 import Styles from '../../styles/Styles';
 
@@ -40,10 +40,14 @@ const Login = () => {
                 <input type="text" className={Styles.inputStyle}/>
                 <label htmlFor="password" className={Styles.inputLabelStyle}>Password</label>
                 <input type="password" className={Styles.inputStyle}/>
-                <button onClick={handleResetPassword} type="button" className={Styles.sublinkStyle}>Forgot your password?</button>
+                <Link to="ResetPassword" className={Styles.sublinkStyle}>Forgot your password?</Link>
             </form>
             <button type="button" className={Styles.squareButtonStyle} onClick={handleLogin}>Sign In</button>
-            <h4 className={Styles.separatorStyle}>------------------------------------ or ------------------------------------</h4>
+            <div className="flex items-center w-full my-4 text-[var-(--trust-blue)]">
+                <hr className="flex-grow border-t border-slate-400"/>
+                <span className="mx-2 text-[var-(--trust-blue)] text-sm">or</span>
+                <hr className="flex-grow border-t border-slate-400"/>
+            </div>
                 <SignInButton 
                 src="/fb-icon.png" 
                 alt="Facebook Login" 
@@ -56,9 +60,10 @@ const Login = () => {
                 label="Continue with Google"/>
                 <div className={Styles.signUpLinkDivStyle}>
                     <h4>Don't have an account?</h4>
-                    <a className="text-[var(--trust-blue)]">Sign Up</a>
+                    <Link to="SignUp" className={Styles.sublinkStyle}>Sign Up</Link>
                 </div>
         </div>
+        {/* <img src="/symptomatik-background-login-page.png" className={Styles.loginPageBackground}></img> */}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 const Styles = {
     // Div
-    mainDivStyle: "bg-[var(--trust-blue)] flex flex-col w-full min-h-screen",
-    loginDivStyle: "bg-[var(--clean-white)] flex flex-col px-10 pt-2 pb-8 w-[40%] h-screen",
+    mainDivStyle: "bg-[url('/symptomatik-background-login-page.png')] bg-cover bg-center flex flex-row w-full min-h-screen",
+    loginDivStyle: "bg-[var(--clean-white)] flex flex-col px-10 pt-2 pb-8 w-[40%] h-auto",
     heroSectionLeftDivStyle: "flex flex-col justify-center items-start mb-[20%]",
     heroSectionRightDivStyle: "flex flex-col justify-end items-end mb-[20%]",
     sidebarLinkDivStyle: "flex items-center justify-end items-center w-full h-20 pr-[6%] text-2xl font-semibold border-b-2",
@@ -13,6 +13,7 @@ const Styles = {
     inputLabelStyle: "text-sm text-[12px] text-[var(--trust-blue)]",
 
     // Images
+    loginPageBackground: "h-screen",
 
     // Buttons
     roundedButtonStyle: "border bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-full w-full mt-2 px-6 py-1 text-sm",
@@ -37,7 +38,7 @@ const Styles = {
     linkTextStyle: "text-2xl font-semibold text-white",
     headerLinkStyle: "text-2xl font-semibold color-gray",
     sidebarLinkStyle: "w-full h-full flex items-center justify-end pr-[8%]",
-    sublinkStyle: "text-sm text-right",
+    sublinkStyle: "text-sm text-[var(--trust-blue)] text-right",
     separatorStyle: "text-md text-center my-2",
 }
 
