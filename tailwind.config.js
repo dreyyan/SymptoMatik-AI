@@ -8,7 +8,9 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        // insert fonts
+        heading: ["Roboto", "sans-serif"],
+        body: ["Roboto", "sans-serif"],
+        cta: ["Roboto", "sans-serif"],
       },
     },
   },

@@ -1,11 +1,11 @@
 const Styles = {
     // Div
-    mainDivStyle: "bg-[url('/symptomatik-background-login-page.png')] bg-cover bg-center flex flex-row w-full min-h-screen",
-    loginDivStyle: "bg-[var(--clean-white)] flex flex-col px-10 pt-2 pb-8 w-[40%] h-auto",
-    heroSectionLeftDivStyle: "flex flex-col justify-center items-start mb-[20%]",
-    heroSectionRightDivStyle: "flex flex-col justify-end items-end mb-[20%]",
-    sidebarLinkDivStyle: "flex items-center justify-end items-center w-full h-20 pr-[6%] text-2xl font-semibold border-b-2",
+    mainDivStyle: "bg-[url('/symptomatik-background-login-page.png')] bg-cover bg-end flex flex-row w-full min-h-screen",
+    loginDivStyle: "bg-gradient-to-l from-transparent from-30% to-[var(--clean-white)] to-80% flex flex-col px-24 pt-2 pb-8 w-[40%] h-auto",
+    heroSectionDivStyle: "flex flex-col justify-center items-center mb-[20%]",
+    sidebarLinkDivStyle: "flex flex-col items-center justify-start items-end w-full h-full pr-[10%] text-2xl font-semibold border-b-2",
     signUpLinkDivStyle: "flex flex-row justify-center items-center gap-1 my-2 text-sm",
+    sidebarLinkSeparatorStyle: "w-full text-end border-b py-2 border-slate-400",
 
     // Form & Input
     formStyle: "flex flex-col mt-8 mb-2 py-2 w-[100%]",
@@ -20,7 +20,7 @@ const Styles = {
     squareButtonStyle: "border bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-md w-full mt-2 px-6 py-2 text-md",
 
     // Components
-    searchBarStyle: "border rounded-full w-[28%] h-[54%] pl-[1%] bg-white",
+    searchBarStyle: "border-2 border-[var(--trust-blue)] rounded-full w-[28%] h-[54%] pl-[1%] mr-40",
     modalStyle: "w-20 h-20",
 
     // Headers
@@ -29,17 +29,16 @@ const Styles = {
     h3Style: "text-2xl font-bold",
     h4Style: "text-xl font-semibold",
     logoHeaderStyle: "text-5xl font-bold color-primary",
-    heroSectionh1Style: "text-8xl font-bold",
-    heroSectionh2Style: "text-5xl font-bold mb-[2%]",
-    heroSectionpStyle: "text-xl",
 
     // Text
     pStyle: "text-md",
     linkTextStyle: "text-2xl font-semibold text-white",
     headerLinkStyle: "text-2xl font-semibold color-gray",
-    sidebarLinkStyle: "w-full h-full flex items-center justify-end pr-[8%]",
     sublinkStyle: "text-sm text-[var(--trust-blue)] text-right",
     separatorStyle: "text-md text-center my-2",
+    navigationLinkStyle: "text-lg roboto-cta relative text-[var(--trust-blue)] after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-full after:scale-x-0 after:origin-center after:bg-[var(--trust-blue)] after:transition-transform after:duration-300 hover:after:scale-x-100",
+    sidebarLinkStyle: "text-lg poppins-semibold relative text-[var(--trust-blue)]",
+
 }
 
 export default Styles

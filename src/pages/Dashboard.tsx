@@ -1,17 +1,12 @@
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import Styles from '../styles/Styles';
 
-/*
-Symptom Ranking
-Diagnosis Results
-Patient Profiles
-*/
+const Dashboard = () => {
+    return (
+        <div>
+            
+        </div>
+    );
+}
 
-const Home = () => {
-return (
-	<div>
-		<h1>Home</h1>
-		<Link to="/"></Link>
-	</div>
-	);
-};
-export default Home;
+export default Dashboard;

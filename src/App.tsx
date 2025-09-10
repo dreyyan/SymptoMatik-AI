@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
-import Login from "./pages/auth/Login";
+import Login from "./pages/auth/SignIn";
 import SignUp from "./pages/auth/SignUp";
+import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import Analytics from "./pages/Analytics";
 import Collaboration from "./pages/Collaboration";
@@ -10,13 +11,21 @@ import Help from "./pages/Help";
 function App() {
   return (
     <Routes>
+      {/* AUTH */}
       <Route path="/" element={<Login/>}/>
-      <Route path="/SignUp" element={<SignUp/>}/>
-      <Route path="/Dashboard" element={<Dashboard/>}/>
-      <Route path="/Analytics" element={<Analytics/>}/>
-      <Route path="/Collaboration" element={<Collaboration/>}/>
-      <Route path="/Account" element={<Account/>}/>
-      <Route path="/Help" element={<Help/>}/>
+      <Route path="/sign-up" element={<SignUp/>}/>
+      {/* HEADER NAVIGATION LINKS */}
+      <Route path="/home" element={<Home/>}/>
+      <Route path="/dashboard" element={<Dashboard/>}/>
+      <Route path="/help" element={<Help/>}/>
+      {/* SIDEBAR NAVIGATION LINKS */}
+      <Route path="/analytics" element={<Home/>}/>
+      <Route path="/case-trends" element={<Home/>}/>
+      <Route path="/outbreak-alerts" element={<Home/>}/>
+      <Route path="/collaboration" element={<Home/>}/>
+      <Route path="/share-case" element={<Home/>}/>
+      <Route path="/consult-colleagues" element={<Home/>}/>
+      <Route path="/language" element={<Home/>}/>
     </Routes>
   );
 }
