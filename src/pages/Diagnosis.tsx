@@ -1,15 +1,16 @@
 import { Link } from "react-router-dom";
 
 /*
-Case Trends
-Outbreak Alerts
+Symptom Ranking
+Diagnosis Results
+Patient Profiles
 */
 
 // Components
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-const Analytics = () => {
+const Diagnosis = () => {
     return (
         <div className="flex flex-row bg-[url('/')] bg-cover bg-center">
             <div className="grid grid-cols-3 gap-1 w-full h-200">
@@ -27,4 +28,4 @@ const Analytics = () => {
         </div>
     );
 };
-export default Analytics;
+export default Diagnosis;

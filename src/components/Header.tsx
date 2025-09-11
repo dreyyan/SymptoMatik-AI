@@ -10,7 +10,7 @@ const Header = () => {
             <div className="flex h-full">
                 {/* [L] BANNER */}
                 <div className="flex justify-center items-center pl-12 pr-14 bg-white-500 w-[24%]">
-                    <Link to="/dashboard">
+                    <Link to="/home">
                         <img src="/symptomatik-banner.png" className="h-full"/>
                     </Link>
                 </div>
@@ -18,8 +18,7 @@ const Header = () => {
                 <div className="flex flex-row justify-start items-center gap-x-[8%] w-[70%] pt-2">
                     <input type="text" placeholder="Enter to search..." className={Styles.searchBarStyle}/>
                     <Link to="/home"><h3 className={Styles.navigationLinkStyle}>Home</h3></Link>
-                    <Link to="/dashboard"><h3 className={Styles.navigationLinkStyle}>Dashboard</h3></Link>
-                    <Link to="/account"><h3 className={Styles.navigationLinkStyle}>Account</h3></Link>
+                    <Link to="/diagnosis"><h3 className={Styles.navigationLinkStyle}>Diagnosis</h3></Link>
                     <Link to="/help"><h3 className={Styles.navigationLinkStyle}>Help</h3></Link>
                 </div>
                 {/* [R]: BURGER MENU */}

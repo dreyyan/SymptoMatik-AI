@@ -18,6 +18,8 @@ const Styles = {
     // Buttons
     roundedButtonStyle: "border bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-full w-full mt-2 px-6 py-1 text-sm",
     squareButtonStyle: "border bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-md w-full mt-2 px-6 py-2 text-md",
+    smSquareButtonStyle: "border bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-md w-auto mt-2 px-6 py-2 text-md",
+    smSquareButtonOutlineStyle: "border bg-[var(--clean-white)] text-[var(--trust-blue)] rounded-md w-auto mt-2 px-6 py-2 text-md",
 
     // Components
     searchBarStyle: "border-2 border-[var(--trust-blue)] rounded-full w-[28%] h-[54%] pl-[1%] mr-40",

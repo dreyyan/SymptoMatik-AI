@@ -12,7 +12,14 @@ Patient Profiles
 */
 
 const Home = () => {
+    const navigate = useNavigate();
     document.title = "SymptoMatik: Home";
+
+    const handleGetStarted = () => {
+        navigate('/dashboard');
+
+    }
+
     return (
         <div className="flex flex-row bg-[url('/')] bg-cover bg-center">
             <div className="grid grid-cols-3 gap-1 w-full h-200">
@@ -20,7 +27,6 @@ const Home = () => {
 				<Header/>
                 {/* Hero Section */}
                 <div className="flex flex-col row-span-200 col-span-3 h-[2000px] bg-white-500 px-[4%] pt-[10%]">
-                    {/* First Row */}
                     <div className={Styles.heroSectionDivStyle}>
 						{/* HEADER */}
                         <h1 className="text-7xl poppins-bold text-[var(--trust-blue)]">Diagnose with Confidence,</h1>
@@ -31,6 +37,12 @@ const Home = () => {
 							<p className="roboto-body text-[var(--trust-blue)]">Empower your practice with AI-driven disease predictions, intuitive symptom ranking, and</p>
 							<p className="roboto-body text-[var(--trust-blue)]">blockchain-secured data—tailored for Filipino doctors and patients.</p>
 						</div>
+
+                        {/* GET STARTED BUTTON */}
+                        <div className="flex gap-4 mt-4">
+                            <button type="button" className={Styles.smSquareButtonStyle} onClick={handleGetStarted}>Get Started</button>
+                            <button type="button" className={Styles.smSquareButtonOutlineStyle} onClick={handleGetStarted}>View Demo</button>
+                        </div>
                     </div>
                 </div>
                 {/* Footer */}
