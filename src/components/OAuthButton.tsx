@@ -9,7 +9,7 @@ type OAuthButtonProps = {
 
 const OAuthButton: React.FC<OAuthButtonProps> = ({src, alt, onClick, label}) => {
     return (
-        <button type="button" onClick={onClick} className="flex justify-center items-center gap-2 border bg-[var(--clean-white)] text-[var(--trust-blue)] text-xs rounded-md w-full mb-4 pl-2 py-2">
+        <button type="button" onClick={onClick} className="cursor-pointer flex justify-center items-center gap-2 border text-[var(--trust-blue)] text-xs rounded-md w-full mb-4 pl-2 py-2">
             <img
             src={src}
             alt={alt}

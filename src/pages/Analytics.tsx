@@ -10,6 +10,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 const Analytics = () => {
+    document.title = "SymptoMatik: Analytics";
     return (
         <div className="flex flex-row bg-[url('/')] bg-cover bg-center">
             <div className="grid grid-cols-3 gap-1 w-full h-200">

@@ -3,10 +3,12 @@ import { useNavigate, Link } from "react-router-dom";
 
 // Components
 import BurgerMenu from "./BurgerMenu";
+import ProfileButton from "../components/ProfileButton";
 
 const Header = () => {
     return (
-        <div className="h-20 row-span-6 col-span-3 bg-gradient-to-t from-transparent from-30% to-[var(--clean-white)] to-80%">
+        // <div className="h-20 row-span-6 col-span-3 bg-gradient-to-t from-transparent from-0% to-[var(--clean-white)] to-80%">
+        <div className="h-22 row-span-6 col-span-3 bg-[var(--clean-white)] shadow-[0px_4px_10px_-5px_rgba(0,0,0,0.45)]">
             <div className="flex h-full">
                 {/* [L] BANNER */}
                 <div className="flex justify-center items-center pl-12 pr-14 bg-white-500 w-[24%]">
@@ -15,14 +17,14 @@ const Header = () => {
                     </Link>
                 </div>
                 {/* [C]: NAVIGATION LINKS */}
-                <div className="flex flex-row justify-start items-center gap-x-[8%] w-[70%] pt-2">
-                    <input type="text" placeholder="Enter to search..." className={Styles.searchBarStyle}/>
+                <div className="flex flex-row justify-start items-center gap-x-[8%] w-full">
                     <Link to="/home"><h3 className={Styles.navigationLinkStyle}>Home</h3></Link>
                     <Link to="/diagnosis"><h3 className={Styles.navigationLinkStyle}>Diagnosis</h3></Link>
+                    <Link to="/analytics"><h3 className={Styles.navigationLinkStyle}>Analytics</h3></Link>
                     <Link to="/help"><h3 className={Styles.navigationLinkStyle}>Help</h3></Link>
                 </div>
-                {/* [R]: BURGER MENU */}
-                <BurgerMenu/>
+                {/* [R] USER PROFILE */}
+                <ProfileButton/>
             </div>
         </div>
     );

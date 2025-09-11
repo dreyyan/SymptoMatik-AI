@@ -18,6 +18,7 @@ const Account = () => {
 				<Header/>
                 {/* Hero Section */}
                 <div>
+                    <Link to="..">Log out</Link>
                     
                 </div>
                 {/* Footer */}
@@ -28,4 +29,5 @@ const Account = () => {
         </div>
     );
 };
+
 export default Account;

@@ -12,8 +12,8 @@ Patient Profiles
 */
 
 const Home = () => {
-    const navigate = useNavigate();
     document.title = "SymptoMatik: Home";
+    const navigate = useNavigate();
 
     const handleGetStarted = () => {
         navigate('/dashboard');
@@ -21,12 +21,12 @@ const Home = () => {
     }
 
     return (
-        <div className="flex flex-row bg-[url('/')] bg-cover bg-center">
-            <div className="grid grid-cols-3 gap-1 w-full h-200">
+        <div className="flex flex-row bg-cover bg-center">
+            <div className="grid grid-cols-3 gap-1 w-full h-screen">
                 {/* Header */}
 				<Header/>
                 {/* Hero Section */}
-                <div className="flex flex-col row-span-200 col-span-3 h-[2000px] bg-white-500 px-[4%] pt-[10%]">
+                <div className="flex flex-col row-span-200 col-span-3 h-screen bg-white-500 px-[4%] pt-[10%]">
                     <div className={Styles.heroSectionDivStyle}>
 						{/* HEADER */}
                         <h1 className="text-7xl poppins-bold text-[var(--trust-blue)]">Diagnose with Confidence,</h1>
@@ -43,10 +43,14 @@ const Home = () => {
                             <button type="button" className={Styles.smSquareButtonStyle} onClick={handleGetStarted}>Get Started</button>
                             <button type="button" className={Styles.smSquareButtonOutlineStyle} onClick={handleGetStarted}>View Demo</button>
                         </div>
+                        {/* IMAGE */}
+                        <div className="flex justify-center items-center mt-2 w-[60%]">
+                            <img className="" src="/hero-section-background.png"/>
+                        </div>
                     </div>
                 </div>
                 {/* Footer */}
-                <div className="h-34 row-span-14 col-span-3">
+                <div className="row-span-14 col-span-3">
                     <Footer/>
                 </div>
             </div>

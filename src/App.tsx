@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Diagnosis from "./pages/Diagnosis";
 import Help from "./pages/Help";
 import Analytics from "./pages/Analytics";
+import Account from "./pages/Account";
 
 function App() {
   return (
@@ -16,8 +17,9 @@ function App() {
       <Route path="/home" element={<Home/>}/>
       <Route path="/diagnosis" element={<Diagnosis/>}/>
       <Route path="/help" element={<Help/>}/>
-      {/* SIDEBAR NAVIGATION LINKS */}
       <Route path="/analytics" element={<Analytics/>}/>
+      <Route path="/account" element={<Account/>}/>
+      
     </Routes>
   );
 }

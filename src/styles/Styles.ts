@@ -9,20 +9,20 @@ const Styles = {
 
     // Form & Input
     formStyle: "flex flex-col mt-8 mb-2 py-2 w-[100%]",
-    inputStyle: "bg-[var(--clean-white)] border-1 border-[var(--trust-blue)] w-full rounded-md mt-1 mb-2 px-3 py-2 text-sm focus:outline-none",
+    inputStyle: "border-1 border-[var(--trust-blue)] w-full rounded-md mt-1 mb-2 px-3 py-2 text-sm focus:outline-none",
     inputLabelStyle: "text-sm text-[12px] text-[var(--trust-blue)]",
 
     // Images
     loginPageBackground: "h-screen",
 
     // Buttons
-    roundedButtonStyle: "border bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-full w-full mt-2 px-6 py-1 text-sm",
-    squareButtonStyle: "border bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-md w-full mt-2 px-6 py-2 text-md",
-    smSquareButtonStyle: "border bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-md w-auto mt-2 px-6 py-2 text-md",
-    smSquareButtonOutlineStyle: "border bg-[var(--clean-white)] text-[var(--trust-blue)] rounded-md w-auto mt-2 px-6 py-2 text-md",
+    roundedButtonStyle: "cursor-pointer border bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-full w-full mt-2 px-6 py-1 text-sm",
+    squareButtonStyle: "cursor-pointer border bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-md w-full mt-2 px-6 py-2 text-md",
+    smSquareButtonStyle: "cursor-pointer border bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-md w-auto mt-2 px-6 py-2 text-md",
+    smSquareButtonOutlineStyle: "cursor-pointer border bg-[var(--clean-white)] text-[var(--trust-blue)] rounded-md w-auto mt-2 px-6 py-2 text-md",
 
     // Components
-    searchBarStyle: "border-2 border-[var(--trust-blue)] rounded-full w-[28%] h-[54%] pl-[1%] mr-40",
+    searchBarStyle: "border-2 border-[var(--trust-blue)] rounded-full w-[28%] h-[54%] pl-[1%] ml-8 mr-4",
     modalStyle: "w-20 h-20",
 
     // Headers
