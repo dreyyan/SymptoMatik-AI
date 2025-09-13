@@ -1,40 +1,36 @@
-import { useState, useRef, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import Styles from "../styles/Styles.js";
-
-/*
-Symptom Ranking
-Diagnosis Results
-Patient Profiles
-*/
-
-// Components
+import { useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import SymptomsList from "../components/SymptomsList";
-import NodeContainer from "../components/NodeContainer.js";
+import LeftSidebar from "../components/LeftSidebar";
+import NodeContainer from "../components/NodeContainer";
 
 const Diagnosis = () => {
+  useEffect(() => {
     document.title = "SymptoMatik: Diagnosis";
+  }, []);
 
+  return (
+    <div className="flex flex-col min-h-screen bg-gray-100">
+      {/* Header */}
+      <Header />
 
-    return (
-        <div className="flex flex-row bg-[url('/')] bg-cover bg-center">
-            <div className="grid grid-cols-3 gap-1 w-full h-200">
-                {/* Header */}
-                {/* <input type="text" placeholder="Enter to search..." className={Styles.searchBarStyle}/> */}
-				<Header/>
-                {/* Body */}
-                <div className="border w-full h-full">
-                    <SymptomsList/>
-                    <NodeContainer/>
-                </div>
-                {/* Footer */}
-                <div className="h-34 row-span-14 col-span-3">
-                    <Footer/>
-                </div>
-            </div>
+      {/* Main Content */}
+      <div className="flex flex-1 p-4 gap-4">
+        {/* Left: Symptoms List */}
+        <div className="w-[20%]">
+          <LeftSidebar />
         </div>
-    );
+
+        {/* Right: Droppable Area */}
+        <div className="w-3/4">
+          <NodeContainer />
+        </div>
+      </div>
+
+      {/* Footer */}
+      <Footer />
+    </div>
+  );
 };
+
 export default Diagnosis;
