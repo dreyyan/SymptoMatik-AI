@@ -40,7 +40,7 @@ const Styles = {
     separatorStyle: "text-md text-center my-2",
     navigationLinkStyle: "text-lg roboto-cta relative text-[var(--trust-blue)] after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-full after:scale-x-0 after:origin-center after:bg-[var(--trust-blue)] after:transition-transform after:duration-300 hover:after:scale-x-100",
     sidebarLinkStyle: "text-lg poppins-semibold relative text-[var(--trust-blue)]",
-
+    subheaderStyle: "text-sm font-semibold text-[var(--trust-blue)]",
 }
 
 export default Styles

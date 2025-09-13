@@ -1,30 +1,28 @@
-import { useState, useRef } from "react";
+import { useRef } from "react";
 
 type NodeType = { id: string; value: string; x: number; y: number };
 
-const NodeContainer = () => {
-  const [nodes, setNodes] = useState<NodeType[]>([]);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const dragNodeRef = useRef<HTMLDivElement>(null);
-
-  // Handle drag start for nodes in the container
-const handleDragStart = (e: React.DragEvent<HTMLDivElement>, id: string, value: string) => {
-  e.dataTransfer.setData("application/json", JSON.stringify({ id, value }));
-
-  // 🔹 Create a 1x1 transparent canvas to fully hide the drag image
-  const canvas = document.createElement("canvas");
-  canvas.width = 1;
-  canvas.height = 1;
-  const ctx = canvas.getContext("2d");
-  if (ctx) {
-    ctx.clearRect(0, 0, 1, 1);
-  }
-
-  e.dataTransfer.setDragImage(canvas, 0, 0);
+type NodeContainerProps = {
+  nodes: NodeType[];
+  setNodes: React.Dispatch<React.SetStateAction<NodeType[]>>;
 };
 
+const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
+  const containerRef = useRef<HTMLDivElement>(null);
 
-
+  // Handle drag start for nodes in the container
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, id: string, value: string) => {
+    e.dataTransfer.setData("application/json", JSON.stringify({ id, value }));
+    // Create a 1x1 transparent canvas to hide the drag image
+    const canvas = document.createElement("canvas");
+    canvas.width = 1;
+    canvas.height = 1;
+    const ctx = canvas.getContext("2d");
+    if (ctx) {
+      ctx.clearRect(0, 0, 1, 1);
+    }
+    e.dataTransfer.setDragImage(canvas, 0, 0);
+  };
 
   // Handle drop inside container
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -57,16 +55,17 @@ const handleDragStart = (e: React.DragEvent<HTMLDivElement>, id: string, value: 
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
   };
 
   // Handle when dragging a node away
   const handleDragEnd = (e: React.DragEvent<HTMLDivElement>, id: string) => {
-        const container: DOMRect = (e.currentTarget.parentNode as HTMLElement).getBoundingClientRect();
+    const container = (e.currentTarget.parentNode as HTMLElement).getBoundingClientRect();
     if (
-      e.clientX < container?.left ||
-      e.clientX > container?.right ||
-      e.clientY < container?.top ||
-      e.clientY > container?.bottom
+      e.clientX < container.left ||
+      e.clientX > container.right ||
+      e.clientY < container.top ||
+      e.clientY > container.bottom
     ) {
       // Remove node if dragged outside
       setNodes((prev) => prev.filter((n) => n.id !== id));
@@ -76,14 +75,13 @@ const handleDragStart = (e: React.DragEvent<HTMLDivElement>, id: string, value: 
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[calc(100vh-200px)] border-2 border-gray-700 bg-gray-50 rounded-lg"
+      className="relative w-full h-[calc(100vh-200px)] bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] bg-gray-50 rounded-lg"
       onDrop={handleDrop}
       onDragOver={handleDragOver}
     >
-      {nodes.map((node, index) => (
+      {nodes.map((node) => (
         <div
           key={node.id}
-          ref={index === 0 ? dragNodeRef : null} // Attach ref to first node for drag image
           className="absolute w-16 h-16 flex items-center justify-center rounded-full 
           bg-blue-500 text-white font-bold shadow-md select-none cursor-grab
           outline outline-2 outline-gray-700"
