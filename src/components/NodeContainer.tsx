@@ -1,6 +1,13 @@
 import { useRef } from "react";
 
-type NodeType = { id: string; value: string; x: number; y: number };
+type NodeType = {
+  id: string;
+  value: string;
+  x: number;
+  y: number;
+  severity: "Low" | "Medium" | "High";
+  classification: "Infectious" | "Allergic" | "Chronic";
+};
 
 type NodeContainerProps = {
   nodes: NodeType[];
@@ -10,9 +17,28 @@ type NodeContainerProps = {
 const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Color mappings for severity (outline) and classification (fill)
+  const severityOutlineColors: Record<string, string> = {
+    Low: "outline-green-500",
+    Medium: "outline-yellow-500",
+    High: "outline-red-500",
+
+    // Fallback for missing severity
+    undefined: "outline-gray-500",
+  };
+
+  const classificationFillColors: Record<string, string> = {
+    Infectious: "bg-blue-500", // Trust Blue
+    Allergic: "bg-teal-500", // Healing Teal
+    Chronic: "bg-gray-500", // Slate Gray
+
+    // Fallback for missing classification
+    undefined: "bg-gray-300",
+  };
+
   // Handle drag start for nodes in the container
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, id: string, value: string) => {
-    e.dataTransfer.setData("application/json", JSON.stringify({ id, value }));
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, id: string, value: string, severity: string, classification: string) => {
+    e.dataTransfer.setData("application/json", JSON.stringify({ id, value, severity, classification }));
     // Create a 1x1 transparent canvas to hide the drag image
     const canvas = document.createElement("canvas");
     canvas.width = 1;
@@ -30,7 +56,7 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
     const data = e.dataTransfer.getData("application/json");
     if (!data) return;
 
-    const { id, value } = JSON.parse(data);
+    const { id, value, severity, classification } = JSON.parse(data);
 
     const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
     const x = e.clientX - rect.left - 32; // Center the node
@@ -46,7 +72,7 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
         );
       } else {
         // Add new node
-        return [...prev, { id, value, x, y }];
+        return [...prev, { id, value, x, y, severity: severity || "Low", classification: classification || "Infectious" }];
       }
     });
 
@@ -60,12 +86,13 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
 
   // Handle when dragging a node away
   const handleDragEnd = (e: React.DragEvent<HTMLDivElement>, id: string) => {
-    const container = (e.currentTarget.parentNode as HTMLElement).getBoundingClientRect();
+    const container = containerRef.current?.getBoundingClientRect();
     if (
-      e.clientX < container.left ||
-      e.clientX > container.right ||
-      e.clientY < container.top ||
-      e.clientY > container.bottom
+      container &&
+      (e.clientX < container.left ||
+        e.clientX > container.right ||
+        e.clientY < container.top ||
+        e.clientY > container.bottom)
     ) {
       // Remove node if dragged outside
       setNodes((prev) => prev.filter((n) => n.id !== id));
@@ -75,19 +102,20 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[calc(100vh-200px)] bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] bg-gray-50 rounded-lg"
+      className="relative w-full h-screen bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] rounded-lg"
       onDrop={handleDrop}
       onDragOver={handleDragOver}
     >
       {nodes.map((node) => (
         <div
           key={node.id}
-          className="absolute w-16 h-16 flex items-center justify-center rounded-full 
-          bg-blue-500 text-white font-bold shadow-md select-none cursor-grab
-          outline outline-2 outline-gray-700"
+          className={`absolute w-16 h-16 flex items-center justify-center rounded-full 
+          ${classificationFillColors[node.classification] || classificationFillColors.undefined} 
+          text-white font-bold shadow-md select-none cursor-grab active:cursor-grabbing 
+          outline outline-4  ${severityOutlineColors[node.severity] || severityOutlineColors.undefined}`}
           style={{ left: node.x, top: node.y }}
           draggable
-          onDragStart={(e) => handleDragStart(e, node.id, node.value)}
+          onDragStart={(e) => handleDragStart(e, node.id, node.value, node.severity, node.classification)}
           onDragEnd={(e) => handleDragEnd(e, node.id)}
         >
           {node.value}
