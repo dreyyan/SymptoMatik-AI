@@ -74,7 +74,7 @@ const Diagnosis = () => {
       {/* Main Content */}
       <div className="flex min-h-screen flex-1 p-4 gap-4">
         {/* Left: Sidebar */}
-        <div className="w-1/4">
+        <div className="w-1/5">
           <LeftSidebar addNode={addNode} nodes={nodes} loadNodes={loadNodes} />
         </div>
         {/* Center: Droppable Area */}

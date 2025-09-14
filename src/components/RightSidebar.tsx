@@ -148,7 +148,7 @@ const RightSidebar = ({ nodes }: RightSidebarProps) => {
     .map((item) => item.disease);
 
   return (
-    <div className="flex flex-col flex-1 overflow-y-auto gap-4 p-4 bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] w-[100%] rounded-lg w-80">
+    <div className="min-h-screen flex flex-col flex-1 overflow-y-auto gap-4 p-4 bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] w-[100%] rounded-lg w-80">
       <h3 className="text-sm font-semibold text-[var(--trust-blue)]">Possible Diseases</h3>
       {Object.keys(nodeSymptoms).length === 0 ? (
         <p className="text-sm text-gray-600">No symptoms selected.</p>
