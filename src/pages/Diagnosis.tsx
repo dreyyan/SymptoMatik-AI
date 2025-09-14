@@ -10,8 +10,8 @@ type NodeType = {
   value: string;
   x: number;
   y: number;
-  severity: string;
-  classification: string;
+  severity: "Low" | "Medium" | "High";
+  classification: "Infectious" | "Allergic" | "Chronic";
 };
 
 const Diagnosis = () => {
@@ -22,13 +22,21 @@ const Diagnosis = () => {
   const [nodes, setNodes] = useState<NodeType[]>([]);
 
   const addNode = (value: string, id: string, severity: string, classification: string) => {
-    // Optional: Prevent duplicates based on value, severity, and classification
+    // Validate severity and classification
+    const validSeverities = ["Low", "Medium", "High"] as const;
+    const validClassifications = ["Infectious", "Allergic", "Chronic"] as const;
+    const validatedSeverity = validSeverities.includes(severity as any) ? severity : "Low";
+    const validatedClassification = validClassifications.includes(classification as any)
+      ? classification
+      : "Infectious";
+
+    // Prevent duplicates based on value, severity, and classification
     const existingNode = nodes.find(
-      (n) => n.value === value && n.severity === severity && n.classification === classification
+      (n) => n.value === value && n.severity === validatedSeverity && n.classification === validatedClassification
     );
     if (existingNode) {
-      console.log(`Node "${value}" already exists with severity "${severity}" and classification "${classification}"`);
-      return; // Skip adding duplicate
+      console.log(`Node "${value}" already exists with severity "${validatedSeverity}" and classification "${validatedClassification}"`);
+      return false; // Return false to indicate no node was added
     }
 
     setNodes((prev) => [
@@ -38,35 +46,32 @@ const Diagnosis = () => {
         value,
         x: Math.random() * 200 + 50, // Random x for better spread
         y: Math.random() * 200 + 50, // Random y for better spread
-        severity,
-        classification,
+        severity: validatedSeverity as "Low" | "Medium" | "High",
+        classification: validatedClassification as "Infectious" | "Allergic" | "Chronic",
       },
     ]);
+    return true; // Return true to indicate node was added
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
+    <div className="flex flex-col bg-gray-100 pb-24">
       {/* Header */}
       <Header />
-
       {/* Main Content */}
-      <div className="flex flex-1 p-4 gap-4">
+      <div className="flex min-h-screen flex-1 p-4 gap-4">
         {/* Left: Sidebar */}
-        <div className="w-2/8">
+        <div className="w-1/4">
           <LeftSidebar addNode={addNode} />
         </div>
-
         {/* Center: Droppable Area */}
-        <div className="w-full">
+        <div className="flex-1">
           <NodeContainer nodes={nodes} setNodes={setNodes} />
         </div>
-
         {/* Right: Sidebar */}
-        <div className="w-5/16">
-          <RightSidebar />
+        <div className="w-[24%]">
+          <RightSidebar nodes={nodes} />
         </div>
       </div>
-
       {/* Footer */}
       <Footer />
     </div>

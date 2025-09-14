@@ -3,7 +3,7 @@ import { useState } from "react";
 type DiseaseProps = {
   diseaseName: string;
   classification: string;
-  severity: "Mild" | "Moderate" | "Severe";
+  severity: "Low" | "Medium" | "High";
   symptoms: string[];
   description?: string;
   transmission?: string;
@@ -45,9 +45,9 @@ const Disease = ({
         <span className="italic">Classification: {classification}</span>
         <span
           className={`font-semibold ${
-            severity === "Severe"
+            severity === "High"
               ? "text-red-600"
-              : severity === "Moderate"
+              : severity === "Medium"
               ? "text-yellow-600"
               : "text-green-600"
           }`}
