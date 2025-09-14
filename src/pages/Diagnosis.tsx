@@ -21,22 +21,32 @@ const Diagnosis = () => {
 
   const [nodes, setNodes] = useState<NodeType[]>([]);
 
-  const addNode = (value: string, id: string, severity: string, classification: string) => {
-    // Validate severity and classification
+  const addNode = (
+    value: string,
+    id: string,
+    severity: string,
+    classification: string
+  ): boolean => {
     const validSeverities = ["Low", "Medium", "High"] as const;
     const validClassifications = ["Infectious", "Allergic", "Chronic"] as const;
-    const validatedSeverity = validSeverities.includes(severity as any) ? severity : "Low";
+    const validatedSeverity = validSeverities.includes(severity as any)
+      ? severity
+      : "Low";
     const validatedClassification = validClassifications.includes(classification as any)
       ? classification
       : "Infectious";
 
-    // Prevent duplicates based on value, severity, and classification
     const existingNode = nodes.find(
-      (n) => n.value === value && n.severity === validatedSeverity && n.classification === validatedClassification
+      (n) =>
+        n.value === value &&
+        n.severity === validatedSeverity &&
+        n.classification == validatedClassification
     );
     if (existingNode) {
-      console.log(`Node "${value}" already exists with severity "${validatedSeverity}" and classification "${validatedClassification}"`);
-      return false; // Return false to indicate no node was added
+      console.log(
+        `Node "${value}" already exists with severity "${validatedSeverity}" and classification "${validatedClassification}"`
+      );
+      return false;
     }
 
     setNodes((prev) => [
@@ -44,13 +54,17 @@ const Diagnosis = () => {
       {
         id,
         value,
-        x: Math.random() * 200 + 50, // Random x for better spread
-        y: Math.random() * 200 + 50, // Random y for better spread
+        x: Math.random() * 200 + 50,
+        y: Math.random() * 200 + 50,
         severity: validatedSeverity as "Low" | "Medium" | "High",
         classification: validatedClassification as "Infectious" | "Allergic" | "Chronic",
       },
     ]);
-    return true; // Return true to indicate node was added
+    return true;
+  };
+
+  const loadNodes = (newNodes: NodeType[]) => {
+    setNodes(newNodes);
   };
 
   return (
@@ -61,7 +75,7 @@ const Diagnosis = () => {
       <div className="flex min-h-screen flex-1 p-4 gap-4">
         {/* Left: Sidebar */}
         <div className="w-1/4">
-          <LeftSidebar addNode={addNode} />
+          <LeftSidebar addNode={addNode} nodes={nodes} loadNodes={loadNodes} />
         </div>
         {/* Center: Droppable Area */}
         <div className="flex-1">

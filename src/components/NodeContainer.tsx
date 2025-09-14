@@ -17,7 +17,6 @@ type NodeContainerProps = {
 const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Color mappings for severity (dropdown background) and classification (node fill)
   const severityBackgroundColors: Record<string, string> = {
     Low: "bg-green-500",
     Medium: "bg-yellow-500",
@@ -32,7 +31,6 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
     undefined: "bg-gray-300",
   };
 
-  // Handle drag start for nodes in the container
   const handleDragStart = (
     e: React.DragEvent<HTMLDivElement>,
     id: string,
@@ -54,7 +52,6 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
     e.dataTransfer.setDragImage(canvas, 0, 0);
   };
 
-  // Handle drop inside container
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const data = e.dataTransfer.getData("application/json");
@@ -88,13 +85,11 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
     }
   };
 
-  // Handle drag over
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     e.dataTransfer.dropEffect = "move";
   };
 
-  // Handle when dragging a node away
   const handleDragEnd = (e: React.DragEvent<HTMLDivElement>, id: string) => {
     const container = containerRef.current?.getBoundingClientRect();
     if (
@@ -108,7 +103,6 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
     }
   };
 
-  // Handle severity change from dropdown
   const handleSeverityChange = (id: string, newSeverity: "Low" | "Medium" | "High") => {
     setNodes((prev) =>
       prev.map((n) =>
@@ -124,35 +118,46 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
       onDrop={handleDrop}
       onDragOver={handleDragOver}
     >
-      {nodes.map((node) => (
-        <div
-          key={node.id}
-          className={`absolute w-72 h-16 flex items-center rounded-lg px-4
-            ${classificationFillColors[node.classification] || classificationFillColors.undefined}
-            text-white font-bold shadow-md select-none cursor-grab active:cursor-grabbing
-            shadow-[0_0_4px_2px_rgba(0,0,0,0.8)]`}
-          style={{ left: node.x, top: node.y }}
-          draggable
-          onDragStart={(e) =>
-            handleDragStart(e, node.id, node.value, node.severity, node.classification)
-          }
-          onDragEnd={(e) => handleDragEnd(e, node.id)}
-        >
-          <span className="flex-1">{node.value}</span>
-          <select
-            value={node.severity}
-            onChange={(e) =>
-              handleSeverityChange(node.id, e.target.value as "Low" | "Medium" | "High")
+      {nodes.map((node) => {
+        console.log(
+          `Node: ${node.value}, Classification: ${node.classification}, Color: ${
+            classificationFillColors[node.classification] || classificationFillColors.undefined
+          }`
+        );
+        return (
+          <div
+            key={node.id}
+            className={`absolute w-72 h-16 flex items-center rounded-lg px-4
+              ${
+                classificationFillColors[node.classification] || classificationFillColors.undefined
+              }
+              text-white font-bold shadow-md select-none cursor-grab active:cursor-grabbing
+              shadow-[0_0_4px_2px_rgba(0,0,0,0.8)]`}
+            style={{ left: node.x, top: node.y }}
+            draggable
+            onDragStart={(e) =>
+              handleDragStart(e, node.id, node.value, node.severity, node.classification)
             }
-            className={`h-8 px-2 rounded text-white text-sm
-              ${severityBackgroundColors[node.severity] || severityBackgroundColors.undefined}`}
+            onDragEnd={(e) => handleDragEnd(e, node.id)}
           >
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-          </select>
-        </div>
-      ))}
+            <span className="flex-1">{node.value}</span>
+            <select
+              value={node.severity}
+              onChange={(e) =>
+                handleSeverityChange(node.id, e.target.value as "Low" | "Medium" | "High")
+              }
+              className={`h-8 px-2 rounded text-white text-sm
+                ${
+                  severityBackgroundColors[node.severity] || severityBackgroundColors.undefined
+                }`}
+            >
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+          </div>
+        );
+      })}
     </div>
   );
 };

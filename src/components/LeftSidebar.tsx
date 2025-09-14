@@ -43,7 +43,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
   list.append("Wheezing");
 
   const allSymptoms = list.toArray().sort((a, b) => a.localeCompare(b));
-  const [symptomsFilter, setSymptomsFilter] = useState<string>("All");
+  const [symptomSearch, setSymptomSearch] = useState<string>("");
   const [leftSidebar, setLeftSidebar] = useState("Nodes");
   const [sidebarVisibility, setSidebarVisibility] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -51,19 +51,31 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
     title: string;
     message: string;
     confirmText: string;
+    inputValue?: string;
+    onConfirm?: (value: string) => void;
   }>({ title: "", message: "", confirmText: "OK" });
-  const [selectedPatient, setSelectedPatient] = useState<string>("");
-  const [newPatientName, setNewPatientName] = useState<string>("");
-  const [newFileName, setNewFileName] = useState<string>("");
-
-  // Track which patient folders and symptom sections are expanded
+  const [patientSearch, setPatientSearch] = useState<string>("");
   const [openFolders, setOpenFolders] = useState<Record<string, boolean>>({});
 
-  // Patient files with node data
-  const [patientFiles, setPatientFiles] = useState<Record<string, { fileName: string; nodes: NodeType[] }[]>>({
-    Adam: [{ fileName: "F1.ndg", nodes: [] }],
-    Bob: [{ fileName: "F1.ndg", nodes: [] }, { fileName: "F2.ndg", nodes: [] }],
-    Charlie: [{ fileName: "F1.ndg", nodes: [] }, { fileName: "F2.ndg", nodes: [] }, { fileName: "F3.ndg", nodes: [] }],
+  // Initialize patientFiles from localStorage or default
+  const [patientFiles, setPatientFiles] = useState<Record<string, { fileName: string; nodes: NodeType[] }[]>>(() => {
+    try {
+      const saved = localStorage.getItem("patientFiles");
+      return saved
+        ? JSON.parse(saved)
+        : {
+            Adam: [{ fileName: "F1.ndg", nodes: [] }],
+            Bob: [{ fileName: "F1.ndg", nodes: [] }, { fileName: "F2.ndg", nodes: [] }],
+            Charlie: [{ fileName: "F1.ndg", nodes: [] }, { fileName: "F2.ndg", nodes: [] }, { fileName: "F3.ndg", nodes: [] }],
+          };
+    } catch (error) {
+      console.error("Error parsing patientFiles from localStorage:", error);
+      return {
+        Adam: [{ fileName: "F1.ndg", nodes: [] }],
+        Bob: [{ fileName: "F1.ndg", nodes: [] }, { fileName: "F2.ndg", nodes: [] }],
+        Charlie: [{ fileName: "F1.ndg", nodes: [] }, { fileName: "F2.ndg", nodes: [] }, { fileName: "F3.ndg", nodes: [] }],
+      };
+    }
   });
 
   // Sample severity, classification, and section for symptoms
@@ -186,14 +198,14 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
     return acc;
   }, {} as Record<string, string[]>);
 
-  // Available sections for filtering
-  const sections = ["All", ...Object.keys(symptomsBySection).sort()];
-
-  // Filter symptoms based on selected section
-  const filteredSections =
-    symptomsFilter === "All"
-      ? symptomsBySection
-      : { [symptomsFilter]: symptomsBySection[symptomsFilter] || [] };
+  // Filter symptoms based on search input
+  const filteredSymptomsBySection = Object.keys(symptomsBySection).reduce((acc, section) => {
+    const symptoms = symptomsBySection[section].filter((symptom) =>
+      symptom.toLowerCase().includes(symptomSearch.toLowerCase())
+    );
+    if (symptoms.length > 0) acc[section] = symptoms;
+    return acc;
+  }, {} as Record<string, string[]>);
 
   const toggleFolder = (key: string) => {
     setOpenFolders((prev) => ({
@@ -206,24 +218,45 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
     setSidebarVisibility((prev) => !prev);
   };
 
+  // Filter patients and files based on search input
+  const filteredPatients = Object.keys(patientFiles).filter(
+    (patient) =>
+      patient.toLowerCase().includes(patientSearch.toLowerCase()) ||
+      patientFiles[patient].some((file) =>
+        file.fileName.toLowerCase().includes(patientSearch.toLowerCase())
+      )
+  );
+  const filteredFiles = filteredPatients.reduce((acc, patient) => {
+    const matchingFiles = patientFiles[patient].filter((file) =>
+      file.fileName.toLowerCase().includes(patientSearch.toLowerCase()) ||
+      patient.toLowerCase().includes(patientSearch.toLowerCase())
+    );
+    if (matchingFiles.length > 0) acc[patient] = matchingFiles;
+    return acc;
+  }, {} as Record<string, { fileName: string; nodes: NodeType[] }[]>);
+
   // HANDLE: ADD PATIENT
   const handleAddPatient = () => {
-    if (newPatientName.trim() && !patientFiles[newPatientName]) {
-      setPatientFiles((prev) => ({
-        ...prev,
-        [newPatientName]: [{ fileName: `${newPatientName}_F1.ndg`, nodes: [] }],
-      }));
-      setNewPatientName("");
+    if (patientSearch.trim() && !patientFiles[patientSearch]) {
+      const newFiles = [{ fileName: `${patientSearch}_F1.ndg`, nodes: [] }];
+      setPatientFiles((prev) => {
+        const updated = { ...prev, [patientSearch]: newFiles };
+        localStorage.setItem("patientFiles", JSON.stringify(updated));
+        return updated;
+      });
+      setPatientSearch("");
       setModalConfig({
         title: "Patient Added",
-        message: `Patient ${newPatientName} was successfully added!`,
+        message: `Patient ${patientSearch} was successfully added!`,
         confirmText: "OK",
       });
       setIsModalOpen(true);
     } else {
       setModalConfig({
         title: "Error",
-        message: "Please enter a unique patient name.",
+        message: patientSearch.trim()
+          ? "Patient name already exists."
+          : "Please enter a patient name.",
         confirmText: "OK",
       });
       setIsModalOpen(true);
@@ -232,87 +265,159 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
 
   // HANDLE: LOAD FILE
   const handleLoadFile = (patient: string, fileName: string) => {
-    const file = patientFiles[patient]?.find((f) => f.fileName === fileName);
-    if (file) {
-      loadNodes(file.nodes);
-      setModalConfig({
-        title: "File Loaded",
-        message: `Loaded ${fileName} for ${patient}.`,
-        confirmText: "OK",
-      });
-      setIsModalOpen(true);
-    }
-  };
-
-  // HANDLE: SAVE FILE
-  const handleSaveFile = () => {
-    if (!selectedPatient || !newFileName.trim()) {
+    try {
+      const file = patientFiles[patient]?.find((f) => f.fileName === fileName);
+      if (file) {
+        const validNodes = Array.isArray(file.nodes)
+          ? file.nodes.filter(
+              (node) =>
+                node &&
+                typeof node.id === "string" &&
+                typeof node.value === "string" &&
+                typeof node.x === "number" &&
+                typeof node.y === "number" &&
+                ["Low", "Medium", "High"].includes(node.severity) &&
+                ["Infectious", "Allergic", "Chronic"].includes(node.classification)
+            )
+          : [];
+        console.log(`Loading ${fileName} for ${patient}:`, validNodes);
+        loadNodes(validNodes);
+        setModalConfig({
+          title: "File Loaded",
+          message: `Loaded ${fileName} for ${patient}.`,
+          confirmText: "OK",
+        });
+        setIsModalOpen(true);
+      } else {
+        console.error(`File ${fileName} not found for ${patient}`);
+        setModalConfig({
+          title: "Error",
+          message: `File ${fileName} not found for ${patient}.`,
+          confirmText: "OK",
+        });
+        setIsModalOpen(true);
+      }
+    } catch (error) {
+      console.error(`Error loading ${fileName} for ${patient}:`, error);
       setModalConfig({
         title: "Error",
-        message: "Please select a patient and enter a file name.",
+        message: `Failed to load ${fileName} for ${patient}.`,
         confirmText: "OK",
       });
       setIsModalOpen(true);
-      return;
     }
-    const fileName = newFileName.endsWith(".ndg") ? newFileName : `${newFileName}.ndg`;
-    setPatientFiles((prev) => ({
-      ...prev,
-      [selectedPatient]: [
-        ...(prev[selectedPatient] || []).filter((f) => f.fileName !== fileName),
-        { fileName, nodes: nodes.map((n) => ({ ...n })) },
-      ],
-    }));
-    // Save to localStorage (simulating file storage)
-    localStorage.setItem(
-      "patientFiles",
-      JSON.stringify({
-        ...patientFiles,
-        [selectedPatient]: [
-          ...(patientFiles[selectedPatient] || []).filter((f) => f.fileName !== fileName),
-          { fileName, nodes },
-        ],
-      })
-    );
-    setNewFileName("");
-    setModalConfig({
-      title: "File Saved",
-      message: `Saved ${fileName} for ${selectedPatient}.`,
-      confirmText: "OK",
-    });
-    setIsModalOpen(true);
   };
 
   // HANDLE: ADD FILE
   const handleAddFile = () => {
-    if (!selectedPatient || !newFileName.trim()) {
+    if (!patientSearch.trim()) {
       setModalConfig({
         title: "Error",
-        message: "Please select a patient and enter a file name.",
+        message: "Please enter a patient name in the search bar.",
         confirmText: "OK",
       });
       setIsModalOpen(true);
       return;
     }
-    const fileName = newFileName.endsWith(".ndg") ? newFileName : `${newFileName}.ndg`;
-    if (patientFiles[selectedPatient]?.some((f) => f.fileName === fileName)) {
-      setModalConfig({
-        title: "Error",
-        message: "File name already exists for this patient.",
-        confirmText: "OK",
-      });
-      setIsModalOpen(true);
-      return;
-    }
-    setPatientFiles((prev) => ({
-      ...prev,
-      [selectedPatient]: [...(prev[selectedPatient] || []), { fileName, nodes: [] }],
-    }));
-    setNewFileName("");
+    const selectedPatient = filteredPatients.length === 1 && patientFiles[patientSearch] ? filteredPatients[0] : patientSearch.trim();
     setModalConfig({
-      title: "File Added",
-      message: `Added ${fileName} for ${selectedPatient}.`,
-      confirmText: "OK",
+      title: "Add File",
+      message: `Enter file name for ${selectedPatient} (.ndg):`,
+      confirmText: "Add",
+      inputValue: "",
+      onConfirm: (fileName: string) => {
+        if (!fileName.trim()) {
+          setModalConfig({
+            title: "Error",
+            message: "Please enter a file name.",
+            confirmText: "OK",
+          });
+          setIsModalOpen(true);
+          return;
+        }
+        const finalPatient = patientFiles[selectedPatient] ? selectedPatient : patientSearch.trim();
+        const finalFileName = fileName.endsWith(".ndg") ? fileName : `${fileName}.ndg`;
+        if (patientFiles[finalPatient]?.some((f) => f.fileName === finalFileName)) {
+          setModalConfig({
+            title: "Error",
+            message: `File ${finalFileName} already exists for ${finalPatient}.`,
+            confirmText: "OK",
+          });
+          setIsModalOpen(true);
+          return;
+        }
+        setPatientFiles((prev) => {
+          const newFiles = [...(prev[finalPatient] || []), { fileName: finalFileName, nodes: [] }];
+          const updatedPatientFiles = {
+            ...prev,
+            [finalPatient]: newFiles,
+          };
+          console.log(`Adding file ${finalFileName} for ${finalPatient}:`, updatedPatientFiles);
+          localStorage.setItem("patientFiles", JSON.stringify(updatedPatientFiles));
+          return updatedPatientFiles;
+        });
+        setPatientSearch("");
+        setModalConfig({
+          title: "File Added",
+          message: `Added ${finalFileName} for ${finalPatient}.`,
+          confirmText: "OK",
+        });
+        setIsModalOpen(true);
+      },
+    });
+    setIsModalOpen(true);
+  };
+
+  // HANDLE: SAVE FILE
+  const handleSaveFile = () => {
+    if (!patientSearch.trim()) {
+      setModalConfig({
+        title: "Error",
+        message: "Please enter a patient name in the search bar.",
+        confirmText: "OK",
+      });
+      setIsModalOpen(true);
+      return;
+    }
+    const selectedPatient = filteredPatients.length === 1 && patientFiles[patientSearch] ? filteredPatients[0] : patientSearch.trim();
+    setModalConfig({
+      title: "Save File",
+      message: `Enter file name for ${selectedPatient} (.ndg):`,
+      confirmText: "Save",
+      inputValue: "",
+      onConfirm: (fileName: string) => {
+        if (!fileName.trim()) {
+          setModalConfig({
+            title: "Error",
+            message: "Please enter a file name.",
+            confirmText: "OK",
+          });
+          setIsModalOpen(true);
+          return;
+        }
+        const finalPatient = patientFiles[selectedPatient] ? selectedPatient : patientSearch.trim();
+        const finalFileName = fileName.endsWith(".ndg") ? fileName : `${fileName}.ndg`;
+        setPatientFiles((prev) => {
+          const newFiles = [
+            ...(prev[finalPatient] || []).filter((f) => f.fileName !== finalFileName),
+            { fileName: finalFileName, nodes: nodes.map((n) => ({ ...n })) },
+          ];
+          const updatedPatientFiles = {
+            ...prev,
+            [finalPatient]: newFiles,
+          };
+          console.log(`Saving file ${finalFileName} for ${finalPatient}:`, updatedPatientFiles);
+          localStorage.setItem("patientFiles", JSON.stringify(updatedPatientFiles));
+          return updatedPatientFiles;
+        });
+        setPatientSearch("");
+        setModalConfig({
+          title: "File Saved",
+          message: `Saved ${finalFileName} for ${finalPatient}.`,
+          confirmText: "OK",
+        });
+        setIsModalOpen(true);
+      },
     });
     setIsModalOpen(true);
   };
@@ -347,6 +452,8 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
         title={modalConfig.title}
         message={modalConfig.message}
         confirmText={modalConfig.confirmText}
+        inputValue={modalConfig.inputValue}
+        onConfirm={modalConfig.onConfirm}
       />
       <div
         className={`flex flex-col gap-4 p-4 bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] rounded-lg h-screen ${
@@ -390,13 +497,13 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
         {/* PANEL: FILE */}
         {sidebarVisibility && leftSidebar === "File" && (
           <div>
-            {/* SEARCH BAR AND PATIENT INPUT */}
+            {/* SEARCH BAR */}
             <input
               className="shadow-[0_0_4px_1px_rgba(0,0,0,0.1)] outline-none w-full rounded-full mb-4 px-4 py-2"
               type="text"
-              placeholder="Enter patient name..."
-              value={newPatientName}
-              onChange={(e) => setNewPatientName(e.target.value)}
+              placeholder="Search patient or file..."
+              value={patientSearch}
+              onChange={(e) => setPatientSearch(e.target.value)}
             />
             {/* MINI-HEADER */}
             <div className="flex justify-between items-center mb-4">
@@ -415,59 +522,45 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
                 </button>
               </div>
             </div>
-            {/* PATIENT SELECTION FOR SAVE/ADD FILE */}
-            <select
-              value={selectedPatient}
-              onChange={(e) => setSelectedPatient(e.target.value)}
-              className="h-8 px-2 rounded text-sm text-gray-600 bg-white shadow-[0_0_4px_1px_rgba(0,0,0,0.1)] mb-4 w-full"
-            >
-              <option value="">Select a patient</option>
-              {Object.keys(patientFiles).map((patient) => (
-                <option key={patient} value={patient}>
-                  {patient}
-                </option>
-              ))}
-            </select>
-            <input
-              className="shadow-[0_0_4px_1px_rgba(0,0,0,0.1)] outline-none w-full rounded-full mb-4 px-4 py-2"
-              type="text"
-              placeholder="Enter file name (.ndg)"
-              value={newFileName}
-              onChange={(e) => setNewFileName(e.target.value)}
-            />
             {/* PATIENT FILES */}
             <div className="mt-4">
-              {Object.entries(patientFiles).map(([patient, files]) => (
-                <div key={patient} className="rounded p-2">
-                  <button
-                    onClick={() => toggleFolder(patient)}
-                    className="cursor-pointer flex items-center gap-2 w-full text-left"
-                  >
-                    <img
-                      className="w-6"
-                      src={openFolders[patient] ? "arrow-down.svg" : "arrow-right.svg"}
-                    />
-                    <span>
-                      <img className="w-7" src="patient-icon.svg" />
-                    </span>
-                    <span className={Styles.subheaderStyle}>{patient}</span>
-                  </button>
-                  {openFolders[patient] && (
-                    <div className="ml-6 mt-1 space-y-1">
-                      {files.map((file, idx) => (
-                        <div
-                          key={idx}
-                          className="flex items-center gap-2 text-sm font-semibold text-[var(--trust-blue)] hover:text-[var(--dark-navy)] cursor-pointer"
-                          onClick={() => handleLoadFile(patient, file.fileName)}
-                        >
-                          <img className="w-5" src="symptom-file-icon.svg" />
-                          {file.fileName}
-                        </div>
-                      ))}
-                    </div>
-                  )}
+              {Object.keys(filteredFiles).length > 0 ? (
+                Object.entries(filteredFiles).map(([patient, files]) => (
+                  <div key={patient} className="rounded p-2">
+                    <button
+                      onClick={() => toggleFolder(patient)}
+                      className="cursor-pointer flex items-center gap-2 w-full text-left"
+                    >
+                      <img
+                        className="w-6"
+                        src={openFolders[patient] ? "arrow-down.svg" : "arrow-right.svg"}
+                      />
+                      <span>
+                        <img className="w-7" src="patient-icon.svg" />
+                      </span>
+                      <span className={Styles.subheaderStyle}>{patient}</span>
+                    </button>
+                    {openFolders[patient] && (
+                      <div className="ml-6 mt-1 space-y-1">
+                        {files.map((file, idx) => (
+                          <div
+                            key={idx}
+                            className="flex items-center gap-2 text-sm font-semibold text-[var(--trust-blue)] hover:text-[var(--dark-navy)] cursor-pointer"
+                            onClick={() => handleLoadFile(patient, file.fileName)}
+                          >
+                            <img className="w-5" src="symptom-file-icon.svg" />
+                            {file.fileName}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <div className="text-sm text-gray-600">
+                  No patients or files match your search.
                 </div>
-              ))}
+              )}
             </div>
           </div>
         )}
@@ -484,46 +577,48 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
                   <img className="w-6" src="add-icon.svg" />
                 </button>
               </div>
-              <select
-                value={symptomsFilter}
-                onChange={(e) => setSymptomsFilter(e.target.value)}
-                className="h-8 px-2 rounded text-sm text-gray-600 bg-white shadow-[0_0_4px_1px_rgba(0,0,0,0.1)]"
-              >
-                {sections.map((section) => (
-                  <option key={section} value={section}>
-                    {section}
-                  </option>
-                ))}
-              </select>
+              <input
+                className="shadow-[0_0_4px_1px_rgba(0,0,0,0.1)] outline-none w-full rounded-full mb-4 px-4 py-2"
+                type="text"
+                placeholder="Search symptoms..."
+                value={symptomSearch}
+                onChange={(e) => setSymptomSearch(e.target.value)}
+              />
               <div className="mt-4">
-                {Object.entries(filteredSections).map(([section, symptoms]) => (
-                  <div key={section} className="rounded p-2">
-                    <button
-                      onClick={() => toggleFolder(section)}
-                      className="cursor-pointer flex items-center gap-2 w-full text-left"
-                    >
-                      <img
-                        className="w-6"
-                        src={openFolders[section] ? "arrow-down.svg" : "arrow-right.svg"}
-                      />
-                      <span className={Styles.subheaderStyle}>{section}</span>
-                    </button>
-                    {openFolders[section] && (
-                      <div className="ml-6 mt-1 space-y-1">
-                        {symptoms.map((value, index) => (
-                          <div
-                            key={index}
-                            className="flex items-center gap-2 text-sm font-semibold text-[var(--trust-blue)] hover:text-[var(--dark-navy)] cursor-pointer p-2 rounded select-none"
-                            onClick={() => addSymptomNode(value)}
-                          >
-                            <img className="w-5" src="symptom-file-icon.svg" />
-                            {value}
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                {Object.keys(filteredSymptomsBySection).length > 0 ? (
+                  Object.entries(filteredSymptomsBySection).map(([section, symptoms]) => (
+                    <div key={section} className="rounded p-2">
+                      <button
+                        onClick={() => toggleFolder(section)}
+                        className="cursor-pointer flex items-center gap-2 w-full text-left"
+                      >
+                        <img
+                          className="w-6"
+                          src={openFolders[section] ? "arrow-down.svg" : "arrow-right.svg"}
+                        />
+                        <span className={Styles.subheaderStyle}>{section}</span>
+                      </button>
+                      {openFolders[section] && (
+                        <div className="ml-6 mt-1 space-y-1">
+                          {symptoms.map((value, index) => (
+                            <div
+                              key={index}
+                              className="flex items-center gap-2 text-sm font-semibold text-[var(--trust-blue)] hover:text-[var(--dark-navy)] cursor-pointer p-2 rounded select-none"
+                              onClick={() => addSymptomNode(value)}
+                            >
+                              <img className="w-5" src="symptom-file-icon.svg" />
+                              {value}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-sm text-gray-600">
+                    No symptoms match your search.
                   </div>
-                ))}
+                )}
               </div>
             </div>
           </div>
