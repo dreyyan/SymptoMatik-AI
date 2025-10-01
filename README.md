@@ -1,69 +1,87 @@
-# React + TypeScript + Vite
+# SymptoMatik-AI
+_AI-Powered Symptom Ranking and Diagnostic Assistant for Healthcare Professionals_
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**SymptoMatik-AI** is a TypeScript-based web application built with React and Vite, designed to assist healthcare professionals in symptom ranking and disease diagnosis. Featuring an interactive node-based interface, users can drag and drop nodes to input symptoms, dynamically updating suggested diseases with relevant information. This tool aims to streamline preliminary diagnostics by leveraging AI-driven insights, making it valuable for medical professionals and educational purposes.
 
-Currently, two official plugins are available:
+The primary purpose of SymptoMatik-AI is to provide an intuitive, AI-powered platform for symptom-based disease prediction, enhancing decision-making in healthcare settings through a modern, interactive UI.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## FEATURES
+✅ **Interactive Node Interface** – Drag and drop nodes to input symptoms and visualize diagnostic relationships.  
+✅ **AI-Driven Diagnostics** – Rank and suggest possible diseases based on symptom input using machine learning models.  
+✅ **Dynamic Updates** – Real-time disease suggestion updates as nodes are manipulated.  
+✅ **TypeScript & React** – Robust, type-safe frontend with fast development via Vite.  
 
-## Expanding the ESLint configuration
+## FUTURE IMPLEMENTATIONS
+🚀 **Advanced AI Models** – Integrate gradient boosting or neural networks for improved diagnostic accuracy.  
+🚀 **Patient Data Integration** – Support for linking patient records to enhance predictions.  
+🚀 **Exportable Reports** – Generate diagnostic reports for sharing or documentation.  
+🚀 **Mobile Support** – Optimize for mobile devices with responsive design.  
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## UPDATES
+🔄 Initial setup with React, TypeScript, and Vite for fast development.  
+🔄 Node-based UI for symptom input and disease ranking implemented.  
+🔄 Ongoing enhancements to AI model integration and UI interactivity.  
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## PROJECT DETAILS
+📌 **Author:** dreyyan  
+📌 **Started:**  
+📌 **Finished:**  
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+## TECH STACK
+🛠️ **Language:** TypeScript  
+🛠️ **Framework:** React, Vite  
+🛠️ **Libraries:** ESLint (with react-x, react-dom plugins)  
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## INSTALLATION
+### Prerequisites
+- Node.js 18 or higher
+- Create a development environment:
+  ```
+  npm install
+  ```
+
+### Install Dependencies
+Clone the repository and install dependencies:
+```
+git clone https://github.com/dreyyan/symptomatik-ai.git
+cd symptomatik-ai
+npm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Verify Installation
+Check Node.js version:
 ```
+node --version
+```
+
+## USAGE
+### Running the Application
+Start the development server:
+```
+npm run dev
+```
+Open the app in your browser (typically at `http://localhost:5173`).
+
+### Example Workflow
+1. **Launch the App**: Run `npm run dev` to start the Vite server.
+2. **Interact with Nodes**: Drag and drop nodes in the UI to input symptoms.
+3. **View Diagnostics**: Observe real-time updates to suggested diseases and related information.
+4. **Refine Inputs**: Adjust node positions to refine symptom combinations and predictions.
+
+### Configuration
+- Configure ESLint for type-aware linting in `eslint.config.js` (see README for details).
+- Update `tsconfig.node.json` and `tsconfig.app.json` for project-specific TypeScript settings.
+- Ensure a modern browser for optimal rendering of the node-based interface.
+
+## DEBUGGING
+For issues, check the browser console or terminal output for Vite and React-related errors. Run with:
+```
+npm run dev
+```
+Report issues via GitHub Issues for detailed troubleshooting.
+
+## PROJECT STRUCTURE
+- `src/`: Main directory for React components and TypeScript code.
+- `eslint.config.js`: ESLint configuration for type-aware linting.
+- `tsconfig.node.json`, `tsconfig.app.json`: TypeScript configuration files.
+- Other files include Vite configuration and standard React setup.
