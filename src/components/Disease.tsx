@@ -61,9 +61,13 @@ const Disease = ({
         <p className="text-sm text-gray-600 line-clamp-2">{description}</p>
       )}
 
-      {/* Expandable Details */}
-      {expanded && (
-        <>
+      {/* Expandable Section with Animation */}
+      <div
+        className={`grid transition-all duration-500 ease-in-out ${
+          expanded ? "grid-rows-[1fr] opacity-100 mt-2" : "grid-rows-[0fr] opacity-0"
+        }`}
+      >
+        <div className="overflow-hidden flex flex-col gap-3">
           {description && (
             <div>
               <h4 className="font-semibold text-sm text-gray-700">
@@ -85,7 +89,9 @@ const Disease = ({
 
           {transmission && (
             <div>
-              <h4 className="font-semibold text-sm text-gray-700">Transmission:</h4>
+              <h4 className="font-semibold text-sm text-gray-700">
+                Transmission:
+              </h4>
               <p className="text-sm text-gray-600">{transmission}</p>
             </div>
           )}
@@ -110,8 +116,8 @@ const Disease = ({
               <p className="text-sm text-gray-600">{prognosis}</p>
             </div>
           )}
-        </>
-      )}
+        </div>
+      </div>
     </div>
   );
 };

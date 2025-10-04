@@ -11,12 +11,13 @@ const Header = () => {
             <div className="flex h-full">
                 {/* [L] BANNER */}
                 <div className="flex justify-center items-center pl-12 pr-14 bg-white-500 w-[24%]">
-                    <Link to="/home">
+                    <Link to="/home" className="flex items-center gap-2 h-[50%]">
+                        <img src="/symptomatik-logo.svg" className="h-8"/>
                         <img src="/symptomatik-banner.png" className="h-full"/>
                     </Link>
                 </div>
                 {/* [C]: NAVIGATION LINKS */}
-                <div className="flex flex-row justify-start items-center gap-x-[8%] w-full">
+                <div className="flex flex-row justify-start items-center gap-x-[6%] w-full">
                     <Link to="/home"><h3 className={Styles.navigationLinkStyle}>Home</h3></Link>
                     <Link to="/diagnosis"><h3 className={Styles.navigationLinkStyle}>Diagnosis</h3></Link>
                     <Link to="/analytics"><h3 className={Styles.navigationLinkStyle}>Analytics</h3></Link>

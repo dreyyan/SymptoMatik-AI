@@ -38,3 +38,17 @@ body {
 .roboto-body { font-family: "Roboto", sans-serif; font-weight: 400; font-style: normal; }
 .roboto-cta { font-family: "Roboto", sans-serif; font-weight: 500; font-style: normal; }
 
+/* For Chrome, Safari, Edge */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* For Firefox */
+html {
+  scrollbar-width: none;
+}
+
+/* For IE/Edge (legacy) */
+body {
+  -ms-overflow-style: none;
+}

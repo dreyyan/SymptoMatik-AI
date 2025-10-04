@@ -1,4 +1,5 @@
 import Disease from "./Disease";
+import pediatricData from "../data/pediatricData.json";
 
 type NodeType = {
   id: string;
@@ -14,108 +15,7 @@ type RightSidebarProps = {
 };
 
 const RightSidebar = ({ nodes }: RightSidebarProps) => {
-  // Sample disease data (replace with actual data source if needed)
-  const diseases = [
-    {
-      diseaseName: "Common Cold",
-      classification: "Infectious",
-      severity: "Low",
-      symptoms: ["Fever", "Cough", "Sore Throat", "Nasal Congestion", "Runny Nose", "Sneezing", "Headache", "Fatigue"],
-      description: "A viral infection of the upper respiratory tract.",
-      transmission: "Airborne droplets or contact with infected surfaces.",
-      treatment: "Rest, fluids, and over-the-counter medications.",
-      prevention: "Hand washing and avoiding sick individuals.",
-      prognosis: "Full recovery in 7-10 days.",
-    },
-    {
-      diseaseName: "Influenza",
-      classification: "Infectious",
-      severity: "Medium",
-      symptoms: ["Fever", "Cough", "Fatigue", "Headache", "Sore Throat", "Muscle Pain", "Chills"],
-      description: "A contagious respiratory illness caused by influenza viruses.",
-      transmission: "Airborne droplets or direct contact.",
-      treatment: "Antiviral medications and supportive care.",
-      prevention: "Annual flu vaccination and good hygiene.",
-      prognosis: "Recovery in 1-2 weeks, complications possible.",
-    },
-    {
-      diseaseName: "Allergic Rhinitis",
-      classification: "Allergic",
-      severity: "Low",
-      symptoms: ["Sneezing", "Nasal Congestion", "Itching", "Rash", "Runny Nose"],
-      description: "An allergic reaction to environmental allergens.",
-      transmission: "Not transmissible.",
-      treatment: "Antihistamines and nasal corticosteroids.",
-      prevention: "Avoid allergens and use air purifiers.",
-      prognosis: "Manageable with treatment.",
-    },
-    {
-      diseaseName: "Chronic Fatigue Syndrome",
-      classification: "Chronic",
-      severity: "Medium",
-      symptoms: ["Fatigue", "Headache", "Muscle Pain"],
-      description: "A disorder characterized by extreme fatigue that doesn't improve with rest.",
-      transmission: "Not transmissible.",
-      treatment: "Symptom management and cognitive behavioral therapy.",
-      prevention: "No specific prevention; manage stress and sleep.",
-      prognosis: "Varies, often long-term management required.",
-    },
-    {
-      diseaseName: "COVID-19",
-      classification: "Infectious",
-      severity: "High",
-      symptoms: ["Fever", "Cough", "Fatigue", "Shortness of Breath", "Loss of Taste", "Muscle Pain", "Headache", "Sore Throat", "Congestion", "Runny Nose", "Nausea", "Vomiting", "Diarrhea", "Chills"],
-      description: "A respiratory illness caused by the SARS-CoV-2 virus.",
-      transmission: "Airborne droplets and close contact.",
-      treatment: "Supportive care, antivirals, and vaccination.",
-      prevention: "Vaccination, masks, and social distancing.",
-      prognosis: "Recovery in 2-4 weeks, long-term effects possible.",
-    },
-    {
-      diseaseName: "Asthma",
-      classification: "Chronic",
-      severity: "Medium",
-      symptoms: ["Shortness of Breath", "Cough", "Wheezing", "Chest Tightness"],
-      description: "A chronic condition that inflames and narrows the airways.",
-      transmission: "Not transmissible.",
-      treatment: "Inhalers and avoiding triggers.",
-      prevention: "Avoid allergens and irritants.",
-      prognosis: "Manageable with treatment.",
-    },
-    {
-      diseaseName: "Migraine",
-      classification: "Chronic",
-      severity: "Medium",
-      symptoms: ["Headache", "Nausea", "Vomiting"],
-      description: "A neurological condition causing severe headaches.",
-      transmission: "Not transmissible.",
-      treatment: "Pain relievers and preventive medications.",
-      prevention: "Avoid triggers like stress and certain foods.",
-      prognosis: "Episodic, manageable.",
-    },
-    {
-      diseaseName: "Gastroenteritis",
-      classification: "Infectious",
-      severity: "Low",
-      symptoms: ["Nausea", "Vomiting", "Diarrhea", "Abdominal Pain", "Fever", "Headache"],
-      description: "Inflammation of the stomach and intestines, often viral.",
-      transmission: "Contaminated food or water.",
-      treatment: "Hydration and rest.",
-      prevention: "Hygiene and safe food handling.",
-      prognosis: "Recovery in a few days.",
-    },
-    {
-      diseaseName: "Sinusitis",
-      classification: "Chronic",
-      severity: "Low",
-      symptoms: ["Headache", "Nasal Congestion", "Facial Pain"],
-      description: "Inflammation of the sinuses.",
-      transmission: "Often follows infections.",
-      treatment: "Decongestants and antibiotics if bacterial.",
-      prevention: "Treat allergies and avoid irritants.",
-      prognosis: "Acute resolves quickly; chronic may persist.",
-    },
-  ];
+  const diseases = pediatricData.diseases;
 
   // Severity scoring for probability
   const severityScores: Record<string, number> = {

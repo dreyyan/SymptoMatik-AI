@@ -30,12 +30,12 @@ const Home = () => {
                     <div className={Styles.heroSectionDivStyle}>
 						{/* HEADER */}
                         <h1 className="text-7xl poppins-bold text-[var(--trust-blue)]">Diagnose with Confidence,</h1>
-                        <h2 className="text-5xl poppins-semibold text-[var(--trust-blue)]">Streamlined for Filipino Healthcare</h2>
+                        <h2 className="text-5xl poppins-semibold text-[var(--trust-blue)]">Streamlined for Filipino Pediatric Healthcare</h2>
 
 						{/* TEXT */}
 						<div className="pt-6 flex flex-col justify-center items-center">
-							<p className="roboto-body text-[var(--trust-blue)]">Empower your practice with AI-driven disease predictions, intuitive symptom ranking, and</p>
-							<p className="roboto-body text-[var(--trust-blue)]">blockchain-secured data—tailored for Filipino doctors and patients.</p>
+							<p className="roboto-body text-[var(--trust-blue)]">Support your pediatric practice with AI-powered disease prediction, child focused symptom assessment, and</p>
+							<p className="roboto-body text-[var(--trust-blue)]">blockchain-secured health data — crafted for Filipino doctors and their young patients.</p>
 						</div>
 
                         {/* GET STARTED BUTTON */}

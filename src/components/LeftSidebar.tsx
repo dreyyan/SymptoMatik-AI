@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Styles from "../styles/Styles.js";
 import LinkedList from "../logic/LinkedList.js";
 import Modal from "./Modal.tsx";
+import pediatricData from "../data/pediatricData.json";
 
 type NodeType = {
   id: string;
@@ -30,50 +31,7 @@ interface ModalConfig {
 const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
   const [symptomList] = useState(() => {
     const list = new LinkedList();
-    list.append("Abdominal Pain");
-    list.append("Anxiety");
-    list.append("Back Pain");
-    list.append("Blood in Urine");
-    list.append("Chest Pain");
-    list.append("Chest Tightness");
-    list.append("Chills");
-    list.append("Confusion");
-    list.append("Congestion");
-    list.append("Constipation");
-    list.append("Cough");
-    list.append("Diarrhea");
-    list.append("Difficulty Swallowing");
-    list.append("Dizziness");
-    list.append("Dry Eyes");
-    list.append("Dry Mouth");
-    list.append("Facial Pain");
-    list.append("Fatigue");
-    list.append("Fever");
-    list.append("Headache");
-    list.append("Heart Palpitations");
-    list.append("Itching");
-    list.append("Joint Pain");
-    list.append("Loss of Appetite");
-    list.append("Loss of Taste");
-    list.append("Loss of Smell");
-    list.append("Memory Loss");
-    list.append("Muscle Pain");
-    list.append("Nausea");
-    list.append("Night Sweats");
-    list.append("Numbness");
-    list.append("Rash");
-    list.append("Runny Nose");
-    list.append("Seizures");
-    list.append("Shortness of Breath");
-    list.append("Skin Lesions");
-    list.append("Sneezing");
-    list.append("Sore Throat");
-    list.append("Swollen Lymph Nodes");
-    list.append("Tremors");
-    list.append("Vomiting");
-    list.append("Weakness");
-    list.append("Weight Loss");
-    list.append("Wheezing");
+    Object.keys(pediatricData.symptoms).forEach((symptom) => list.append(symptom));
     return list;
   });
 
@@ -94,6 +52,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
   const [modifiedFiles, setModifiedFiles] = useState<Record<string, boolean>>({});
   const [currentPatient, setCurrentPatient] = useState<string | null>(null);
   const [currentFile, setCurrentFile] = useState<string | null>(null);
+  const [symptomMetadata] = useState(pediatricData.symptoms);
 
   // Initialize patientFiles from localStorage or default
   const [patientFiles, setPatientFiles] = useState<Record<string, { fileName: string; nodes: NodeType[]; modified?: boolean }[]>>(() => {
@@ -114,54 +73,6 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
         Charlie: [{ fileName: "F1.ndg", nodes: [] }, { fileName: "F2.ndg", nodes: [] }, { fileName: "F3.ndg", nodes: [] }],
       };
     }
-  });
-
-  // Symptom metadata
-  const [symptomMetadata, setSymptomMetadata] = useState<Record<string, { severity: string; classification: string; section: string }>>({
-    "Abdominal Pain": { severity: "Medium", classification: "Infectious", section: "Gastrointestinal" },
-    "Anxiety": { severity: "Medium", classification: "Chronic", section: "Neurological" },
-    "Back Pain": { severity: "Medium", classification: "Chronic", section: "Musculoskeletal" },
-    "Blood in Urine": { severity: "High", classification: "Chronic", section: "Urological" },
-    "Chest Pain": { severity: "High", classification: "Chronic", section: "Cardiovascular" },
-    "Chest Tightness": { severity: "Medium", classification: "Chronic", section: "Respiratory" },
-    "Chills": { severity: "Medium", classification: "Infectious", section: "Systemic" },
-    "Confusion": { severity: "High", classification: "Chronic", section: "Neurological" },
-    "Congestion": { severity: "Low", classification: "Allergic", section: "Respiratory" },
-    "Constipation": { severity: "Low", classification: "Chronic", section: "Gastrointestinal" },
-    "Cough": { severity: "Medium", classification: "Infectious", section: "Respiratory" },
-    "Diarrhea": { severity: "Medium", classification: "Infectious", section: "Gastrointestinal" },
-    "Difficulty Swallowing": { severity: "Medium", classification: "Chronic", section: "Gastrointestinal" },
-    "Dizziness": { severity: "Medium", classification: "Chronic", section: "Neurological" },
-    "Dry Eyes": { severity: "Low", classification: "Chronic", section: "Ophthalmological" },
-    "Dry Mouth": { severity: "Low", classification: "Chronic", section: "Head" },
-    "Facial Pain": { severity: "Low", classification: "Chronic", section: "Head" },
-    "Fatigue": { severity: "Medium", classification: "Chronic", section: "Systemic" },
-    "Fever": { severity: "High", classification: "Infectious", section: "Systemic" },
-    "Headache": { severity: "Medium", classification: "Chronic", section: "Neurological" },
-    "Heart Palpitations": { severity: "High", classification: "Chronic", section: "Cardiovascular" },
-    "Itching": { severity: "Low", classification: "Allergic", section: "Immune System" },
-    "Joint Pain": { severity: "Medium", classification: "Chronic", section: "Musculoskeletal" },
-    "Loss of Appetite": { severity: "Medium", classification: "Chronic", section: "Systemic" },
-    "Loss of Taste": { severity: "Medium", classification: "Infectious", section: "Systemic" },
-    "Loss of Smell": { severity: "Medium", classification: "Infectious", section: "Systemic" },
-    "Memory Loss": { severity: "High", classification: "Chronic", section: "Neurological" },
-    "Muscle Pain": { severity: "Medium", classification: "Chronic", section: "Musculoskeletal" },
-    "Nausea": { severity: "Medium", classification: "Infectious", section: "Gastrointestinal" },
-    "Night Sweats": { severity: "Medium", classification: "Infectious", section: "Systemic" },
-    "Numbness": { severity: "High", classification: "Chronic", section: "Neurological" },
-    "Rash": { severity: "Low", classification: "Allergic", section: "Immune System" },
-    "Runny Nose": { severity: "Low", classification: "Allergic", section: "Respiratory" },
-    "Seizures": { severity: "High", classification: "Chronic", section: "Neurological" },
-    "Shortness of Breath": { severity: "High", classification: "Chronic", section: "Respiratory" },
-    "Skin Lesions": { severity: "Medium", classification: "Chronic", section: "Immune System" },
-    "Sneezing": { severity: "Low", classification: "Allergic", section: "Respiratory" },
-    "Sore Throat": { severity: "Medium", classification: "Infectious", section: "Respiratory" },
-    "Swollen Lymph Nodes": { severity: "Medium", classification: "Infectious", section: "Immune System" },
-    "Tremors": { severity: "High", classification: "Chronic", section: "Neurological" },
-    "Vomiting": { severity: "Medium", classification: "Infectious", section: "Gastrointestinal" },
-    "Weakness": { severity: "Medium", classification: "Chronic", section: "Systemic" },
-    "Weight Loss": { severity: "High", classification: "Chronic", section: "Systemic" },
-    "Wheezing": { severity: "Medium", classification: "Chronic", section: "Respiratory" },
   });
 
   // Group symptoms by section
@@ -641,7 +552,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
           <div className="flex flex-col gap-4">
             {/* SEARCH BAR */}
             <input
-              className="shadow-[0_0_4px_1px_rgba(0,0,0,0.1)] outline-none w-full rounded-full mb-4 px-4 py-2"
+              className="w-full rounded-full px-4 py-2 bg-white border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 placeholder-gray-400"
               type="text"
               placeholder="Search patient or file..."
               value={patientSearch}
@@ -653,13 +564,13 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
                 Patient Records
               </h3>
               <div className="flex gap-2">
-                <button className="cursor-pointer" onClick={handleAddPatient}>
+                <button className="cursor-pointer duration-300 hover:opacity-60" onClick={handleAddPatient}>
                   <img className="w-6" src="add-patient-icon.svg" />
                 </button>
-                <button className="cursor-pointer" onClick={handleAddFile}>
+                <button className="cursor-pointer duration-300 hover:opacity-60" onClick={handleAddFile}>
                   <img className="w-6" src="add-file-icon.svg" />
                 </button>
-                <button className="cursor-pointer" onClick={handleSaveFile}>
+                <button className="cursor-pointer duration-300 hover:opacity-60" onClick={handleSaveFile}>
                   <img className="w-6" src="save-icon.svg" />
                 </button>
               </div>
@@ -675,7 +586,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
                         className="cursor-pointer flex items-center gap-2 flex-1 text-left"
                       >
                         <img
-                          className="w-6"
+                          className="w-6 transition-transform duration-300"
                           src={openFolders[patient] ? "arrow-down.svg" : "arrow-right.svg"}
                         />
                         <span>
@@ -684,13 +595,17 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
                         <span className={Styles.subheaderStyle}>{patient}</span>
                       </button>
                       <button
-                        className="cursor-pointer text-[var(--trust-blue)] hover:text-red-700 font-bold"
+                        className="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-500 hover:bg-red-200 hover:text-red-700 transition-all duration-300"
                         onClick={() => handleDeletePatient(patient)}
                       >
-                        X
+                        <span className="text-sm font-bold">×</span>
                       </button>
                     </div>
-                    {openFolders[patient] && (
+                    <div
+                      className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                        openFolders[patient] ? "h-auto opacity-100" : "h-0 opacity-0"
+                      }`}
+                    >
                       <div className="ml-6 mt-1 space-y-1">
                         {files.map((file, idx) => (
                           <div
@@ -708,7 +623,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
                           </div>
                         ))}
                       </div>
-                    )}
+                    </div>
                   </div>
                 ))
               ) : (
@@ -725,14 +640,14 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
             <div className="flex justify-between">
               <h3 className="text-sm font-semibold text-[var(--trust-blue)]">Symptoms</h3>
               <button
-                className="cursor-pointer"
+                className="cursor-pointer duration-300 hover:opacity-60"
                 onClick={() => addSymptomNode()}
               >
                 <img className="w-6" src="add-icon.svg" />
               </button>
             </div>
             <input
-              className="shadow-[0_0_4px_1px_rgba(0,0,0,0.1)] outline-none w-full rounded-full px-4 py-2"
+              className="w-full rounded-full px-4 py-2 bg-white border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 placeholder-gray-400"
               type="text"
               placeholder="Search symptoms..."
               value={symptomSearch}
@@ -748,12 +663,16 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
                         className="cursor-pointer flex items-center gap-2 w-full text-left"
                       >
                         <img
-                          className="w-6"
+                          className="w-6 transition-transform duration-300"
                           src={openFolders[section] ? "arrow-down.svg" : "arrow-right.svg"}
                         />
                         <span className={Styles.subheaderStyle}>{section}</span>
                       </button>
-                      {openFolders[section] && (
+                      <div
+                        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                          openFolders[section] ? "h-auto opacity-100" : "h-0 opacity-0"
+                        }`}
+                      >
                         <div className="ml-6 mt-1 space-y-1">
                           {symptoms.map((value, index) => (
                             <div
@@ -766,7 +685,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
                             </div>
                           ))}
                         </div>
-                      )}
+                      </div>
                     </div>
                   ))
                 ) : (
@@ -788,10 +707,10 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
                         >
                           <span>{node.value}</span>
                           <button
-                            className="cursor-pointer text-red-500 hover:text-red-700 font-bold"
+                            className="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-500 hover:bg-red-200 hover:text-red-700 transition-all duration-300"
                             onClick={() => handleDeleteNode(node.id)}
                           >
-                            X
+                            <span className="text-sm font-bold">×</span>
                           </button>
                         </div>
                       ))}
