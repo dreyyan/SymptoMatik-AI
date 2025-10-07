@@ -4,6 +4,8 @@ import Styles from '../styles/Styles';
 // Components
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import PrimaryButton from "../components/buttons/PrimaryButton";
+import SecondaryButton from "../components/buttons/SecondaryButton";
 
 /*
 Symptom Ranking
@@ -40,8 +42,8 @@ const Home = () => {
 
                         {/* GET STARTED BUTTON */}
                         <div className="flex gap-4 mt-4">
-                            <button type="button" className={Styles.smSquareButtonStyle} onClick={handleGetStarted}>Get Started</button>
-                            <button type="button" className={Styles.smSquareButtonOutlineStyle} onClick={handleGetStarted}>View Demo</button>
+                            <PrimaryButton text="Get Started" height="10" disabled={false}/>
+                            <SecondaryButton text="View Demo" onClick={handleGetStarted} disabled={false}/>
                         </div>
                         {/* IMAGE */}
                         <div className="flex justify-center items-center mt-2 w-[60%]">

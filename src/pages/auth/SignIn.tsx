@@ -3,7 +3,8 @@ import React from 'react';
 import Styles from '../../styles/Styles';
 
 // Components
-import OAuthButton from "../../components/OAuthButton";
+import OAuthButton from "../../components/buttons/OAuthButton";
+import PrimaryButton from "../../components/buttons/PrimaryButton";
 
 const SignIn = () => {
     // [ METHODS ]: User Authentication
@@ -34,7 +35,11 @@ const SignIn = () => {
         {/* LOGIN PANEL */}
         <div className={Styles.loginDivStyle}>
             {/* HEADER */}
-            <img src="./symptomatik-banner.png" className="w-[80%] mt-6 mb-4"/>
+            <div className="flex gap-4">
+                <img src="./symptomatik-logo.svg" className="w-10 mt-6 mb-4"/>
+                <img src="./symptomatik-banner.png" className="w-[50%] mt-6 mb-4"/>
+            </div>
+
             <h2 className={Styles.h2Style}>Welcome back!</h2>
             <h2 className={Styles.pStyle}>Sign in to access your dashboard.</h2>
 
@@ -49,7 +54,7 @@ const SignIn = () => {
                 <Link to="ResetPassword" className={Styles.sublinkStyle}>Forgot your password?</Link>
             </form>
             {/* BUTTON: SIGN UP */}
-            <button type="button" className={Styles.squareButtonStyle} onClick={handleSignIn}>Sign In</button>
+            <PrimaryButton text="Sign In" onClick={handleSignIn} width="full" height="1" disabled={false}/>
             
             {/* OR SEPARATOR */}
             <div className="flex items-center w-full my-4 text-[var-(--trust-blue)]">

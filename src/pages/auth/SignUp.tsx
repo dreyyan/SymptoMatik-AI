@@ -2,7 +2,8 @@ import { useNavigate, Link } from "react-router-dom";
 import Styles from '../../styles/Styles';
 
 // Components
-import OAuthButton from "../../components/OAuthButton";
+import OAuthButton from "../../components/buttons/OAuthButton";
+import PrimaryButton from "../../components/buttons/PrimaryButton";
 
 const SignUp = () => {
     // [ METHODS ]: User Authentication
@@ -47,7 +48,7 @@ const SignUp = () => {
             </form>
 
             {/* BUTTON: SIGN UP */}
-            <button type="button" className={Styles.squareButtonStyle} onClick={handleSignUp}>Sign Up</button>
+            <PrimaryButton text="Sign In" onClick={handleSignUp} width="full" height="1" disabled={false}/>
 
             {/* OR SEPARATOR */}
             <div className="flex items-center w-full my-4 text-[var-(--trust-blue)]">

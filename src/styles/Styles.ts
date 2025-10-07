@@ -17,8 +17,7 @@ const Styles = {
 
     // Buttons
     roundedButtonStyle: "cursor-pointer border bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-full w-full mt-2 px-6 py-1 text-sm",
-    squareButtonStyle: "cursor-pointer border bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-md w-full mt-2 px-6 py-2 text-md",
-    smSquareButtonStyle: "cursor-pointer border bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-md w-auto mt-2 px-6 py-2 text-md transition duration-300 ease-in-out hover:bg-[var(--clean-white)] hover:text-[var(--trust-blue)] hover:border-[var(--clean-white)]",
+    smSquareButtonStyle: "cursor-pointer border bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-md w-auto mt-2 px-6 py-2 text-md",
     smSquareButtonOutlineStyle: "cursor-pointer border bg-[var(--clean-white)] text-[var(--trust-blue)] rounded-md w-auto mt-2 px-6 py-2 text-md transition duration-300 ease-in-out hover:bg-[var(--clean-white)] hover:text-[var(--trust-blue)] hover:border-[var(--clean-white)]",
 
     // Components
@@ -36,7 +35,7 @@ const Styles = {
     pStyle: "text-md",
     linkTextStyle: "text-2xl font-semibold text-white",
     headerLinkStyle: "text-2xl font-semibold color-gray",
-    sublinkStyle: "text-sm text-[var(--trust-blue)] text-right",
+    sublinkStyle: "text-sm text-[var(--trust-blue)] text-right duration-200 ease-in-out transition hover:opacity-50",
     separatorStyle: "text-md text-center my-2",
     navigationLinkStyle: "text-lg roboto-cta relative text-[var(--trust-blue)] after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-full after:scale-x-0 after:origin-center after:bg-[var(--trust-blue)] after:transition-transform after:duration-300 hover:after:scale-x-100",
     sidebarLinkStyle: "text-lg poppins-semibold relative text-[var(--trust-blue)]",

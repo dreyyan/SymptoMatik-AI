@@ -29,10 +29,10 @@ const Diagnosis = () => {
   ): boolean => {
     const validSeverities = ["Low", "Medium", "High"] as const;
     const validClassifications = ["Infectious", "Allergic", "Chronic"] as const;
-    const validatedSeverity = validSeverities.includes(severity as any)
+    const validatedSeverity = validSeverities.includes(severity as never)
       ? severity
       : "Low";
-    const validatedClassification = validClassifications.includes(classification as any)
+    const validatedClassification = validClassifications.includes(classification as never)
       ? classification
       : "Infectious";
 
