@@ -17,8 +17,8 @@ const Styles = {
 
     // Buttons
     roundedButtonStyle: "cursor-pointer border bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-full w-full mt-2 px-6 py-1 text-sm",
-    smSquareButtonStyle: "cursor-pointer border bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-md w-auto mt-2 px-6 py-2 text-md",
-    smSquareButtonOutlineStyle: "cursor-pointer border bg-[var(--clean-white)] text-[var(--trust-blue)] rounded-md w-auto mt-2 px-6 py-2 text-md transition duration-300 ease-in-out hover:bg-[var(--clean-white)] hover:text-[var(--trust-blue)] hover:border-[var(--clean-white)]",
+    smSquareButtonStyle: "cursor-pointer border bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-md w-auto mt-2 px-6 py-1 text-md",
+    smSquareButtonOutlineStyle: "cursor-pointer border bg-[var(--clean-white)] text-[var(--trust-blue)] rounded-md w-auto mt-2 px-6 py-1 text-md transition duration-300 ease-in-out hover:bg-[var(--clean-white)] hover:text-[var(--trust-blue)] hover:border-[var(--clean-white)]",
 
     // Components
     searchBarStyle: "border-2 border-[var(--trust-blue)] rounded-full w-[28%] h-[54%] pl-[1%] ml-8 mr-4",

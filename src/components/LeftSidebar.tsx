@@ -499,6 +499,16 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
     }
   };
 
+  // HANDLE: Open/close patient settings
+  const togglePatientSettings = () => {
+
+  };
+
+  // HANLDE: Rename patient name
+  const renamePatient = () => {
+
+  };
+
   return (
     <>
       <Modal
@@ -512,7 +522,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
         showCancel={modalConfig.showCancel}
       />
       <div
-        className={`flex flex-col gap-4 p-10 bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] rounded-lg h-screen ${
+        className={`flex flex-col gap-4 px-6 py-10 bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] rounded-lg h-screen ${
           sidebarVisibility ? "" : "px-1 py-4"
         }`}
       >
@@ -550,16 +560,8 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
         {/* PANEL: FILE */}
         {sidebarVisibility && leftSidebar === "File" && (
           <div className="flex flex-col gap-4">
-            {/* SEARCH BAR */}
-            <input
-              className="w-full rounded-full px-4 py-2 bg-white border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 placeholder-gray-400"
-              type="text"
-              placeholder="Search patient or file..."
-              value={patientSearch}
-              onChange={(e) => setPatientSearch(e.target.value)}
-            />
             {/* MINI-HEADER */}
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center">
               <h3 className="text-sm font-semibold text-[var(--trust-blue)]">
                 Patient Records
               </h3>
@@ -575,6 +577,14 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
                 </button>
               </div>
             </div>
+            {/* SEARCH BAR */}
+            <input
+              className="w-full rounded-full px-4 py-2 bg-white border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 placeholder-gray-400"
+              type="text"
+              placeholder="Search patient or file..."
+              value={patientSearch}
+              onChange={(e) => setPatientSearch(e.target.value)}
+            />
             {/* PATIENT FILES */}
             <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
               {Object.keys(filteredFiles).length > 0 ? (
@@ -595,11 +605,13 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
                         <span className={Styles.subheaderStyle}>{patient}</span>
                       </button>
                       <button
-                        className="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-500 hover:bg-red-200 hover:text-red-700 transition-all duration-300"
-                        onClick={() => handleDeletePatient(patient)}
+                        className="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full text-gray-500 hover:bg-black-200 hover:text-gray-700 transition-all duration-300"
+                        onClick={() => togglePatientSettings(patient)}
                       >
-                        <span className="text-sm font-bold">×</span>
+                        <span className="text-md">•••</span>
                       </button>
+                      {/* () => renamePatient(patient) */}
+                      {/* () => handleDeletePatient(patient) */}
                     </div>
                     <div
                       className={`overflow-hidden transition-all duration-300 ease-in-out ${
@@ -654,7 +666,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
               onChange={(e) => setSymptomSearch(e.target.value)}
             />
             <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
-              <div className="mt-4">
+              <div className="">
                 {Object.keys(filteredSymptomsBySection).length > 0 ? (
                   Object.entries(filteredSymptomsBySection).map(([section, symptoms]) => (
                     <div key={section} className="rounded p-2">
