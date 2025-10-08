@@ -89,13 +89,14 @@ const Diagnosis = () => {
         <div className="flex-1 flex flex-col">
           {currentFile && currentPatient && (
             <div className="bg-white p-4 rounded-tl-lg rounded-tr-lg shadow z-1">
-              <h2 className="text-lg font-bold text-[var(--trust-blue)]">
-                {currentPatient} - {currentFile}
-              </h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-lg font-bold text-[var(--trust-blue)]">{currentPatient} |</h2>
+                <h3 className="text-sm font-bold text-[var(--trust-blue)]">{currentFile}</h3>
+              </div>
+
               <p className="text-sm text-gray-600">
                 Number of symptoms: {nodes.length}
               </p>
-              {/* Add more details here if available, e.g., created date, last modified, etc. */}
             </div>
           )}
           <NodeContainer nodes={nodes} setNodes={setNodes} />

@@ -18,10 +18,9 @@ const Header = () => {
                 </div>
                 {/* [C]: NAVIGATION LINKS */}
                 <div className="flex flex-row justify-end items-center gap-x-[6%] w-full">
-                    <Link to="/home"><h3 className={Styles.navigationLinkStyle}>Home</h3></Link>
                     <Link to="/diagnosis"><h3 className={Styles.navigationLinkStyle}>Diagnosis</h3></Link>
                     <Link to="/analytics"><h3 className={Styles.navigationLinkStyle}>Analytics</h3></Link>
-                    <Link to="/help"><h3 className={Styles.navigationLinkStyle}>Help</h3></Link>
+                    <Link to="/consultation"><h3 className={Styles.navigationLinkStyle}>Consult a Doctor</h3></Link>
                 </div>
                 {/* [R] USER PROFILE */}
                 <ProfileButton/>

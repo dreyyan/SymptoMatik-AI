@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Diagnosis from "./pages/Diagnosis";
 import Help from "./pages/Help";
 import Analytics from "./pages/Analytics";
+import ConsultADoctor from "./pages/ConsultADoctor";
 import Account from "./pages/Account";
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
       <Route path="/help" element={<Help/>}/>
       <Route path="/analytics" element={<Analytics/>}/>
       <Route path="/account" element={<Account/>}/>
-      
+      <Route path="/consultation" element={<ConsultADoctor/>}/>
     </Routes>
   );
 }

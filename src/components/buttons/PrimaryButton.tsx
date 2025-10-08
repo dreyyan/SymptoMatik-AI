@@ -34,7 +34,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({text, onClick, disabled = 
 
         flex justify-center items-center
 
-        mt-2 px-6 py-2
+        mt-2 px-6
 
         bg-[var(--trust-blue)]
         text-[var(--clean-white)]

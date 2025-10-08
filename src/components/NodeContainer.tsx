@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 
 type NodeType = {
   id: string;
@@ -16,6 +16,8 @@ type NodeContainerProps = {
 
 const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [draggingNodeId, setDraggingNodeId] = useState<string | null>(null);
+  const [offset, setOffset] = useState<{ x: number; y: number } | null>(null);
 
   const severityBackgroundColors: Record<string, string> = {
     Low: "bg-green-500",
@@ -31,77 +33,57 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
     undefined: "bg-gray-300",
   };
 
-  const handleDragStart = (
-    e: React.DragEvent<HTMLDivElement>,
-    id: string,
-    value: string,
-    severity: string,
-    classification: string
+  const handleMouseDown = (
+    e: React.MouseEvent<HTMLDivElement>,
+    node: NodeType
   ) => {
-    e.dataTransfer.setData(
-      "application/json",
-      JSON.stringify({ id, value, severity, classification })
+    e.preventDefault(); // Prevent default browser behavior
+    if (!containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const offsetX = e.clientX - rect.left - node.x;
+    const offsetY = e.clientY - rect.top - node.y;
+    setDraggingNodeId(node.id);
+    setOffset({ x: offsetX, y: offsetY });
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    e.preventDefault(); // Prevent default browser behavior
+    if (!draggingNodeId || !offset || !containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = Math.max(0, Math.min(e.clientX - rect.left - offset.x, rect.width - 240));
+    const y = Math.max(0, Math.min(e.clientY - rect.top - offset.y, rect.height - 64));
+    setNodes((prev) =>
+      prev.map((n) =>
+        n.id === draggingNodeId ? { ...n, x, y } : n
+      )
     );
-    const canvas = document.createElement("canvas");
-    canvas.width = 1;
-    canvas.height = 1;
-    const ctx = canvas.getContext("2d");
-    if (ctx) {
-      ctx.clearRect(0, 0, 1, 1);
-    }
-    e.dataTransfer.setDragImage(canvas, 0, 0);
   };
 
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const data = e.dataTransfer.getData("application/json");
-    if (!data) return;
-    try {
-      const { id, value, severity, classification } = JSON.parse(data);
-      const rect = (e.currentTarget as HTMLDivElement).getBoundingClientRect();
-      const x = Math.max(0, Math.min(e.clientX - rect.left - 32, rect.width - 240));
-      const y = Math.max(0, Math.min(e.clientY - rect.top - 32, rect.height - 64));
-      setNodes((prev) => {
-        const exists = prev.find((n) => n.id === id);
-        if (exists) {
-          return prev.map((n) => (n.id === id ? { ...n, x, y } : n));
-        } else {
-          return [
-            ...prev,
-            {
-              id,
-              value,
-              x,
-              y,
-              severity: severity || "Low",
-              classification: classification || "Infectious",
-            },
-          ];
-        }
-      });
-      e.dataTransfer.dropEffect = "move";
-    } catch (error) {
-      console.error("Invalid drag data:", error);
-    }
-  };
-
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    e.dataTransfer.dropEffect = "move";
-  };
-
-  const handleDragEnd = (e: React.DragEvent<HTMLDivElement>, id: string) => {
-    const container = containerRef.current?.getBoundingClientRect();
+  const handleMouseUp = (e: MouseEvent) => {
+    if (!draggingNodeId || !containerRef.current) return;
+    const rect = containerRef.current.getBoundingClientRect();
     if (
-      container &&
-      (e.clientX < container.left ||
-        e.clientX > container.right ||
-        e.clientY < container.top ||
-        e.clientY > container.bottom)
+      e.clientX < rect.left ||
+      e.clientX > rect.right ||
+      e.clientY < rect.top ||
+      e.clientY > rect.bottom
     ) {
-      setNodes((prev) => prev.filter((n) => n.id !== id));
+      setNodes((prev) => prev.filter((n) => n.id !== draggingNodeId));
     }
+    setDraggingNodeId(null);
+    setOffset(null);
   };
+
+  useEffect(() => {
+    if (draggingNodeId) {
+      window.addEventListener("mousemove", handleMouseMove);
+      window.addEventListener("mouseup", handleMouseUp);
+    }
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      window.removeEventListener("mouseup", handleMouseUp);
+    };
+  }, [draggingNodeId, offset]);
 
   const handleSeverityChange = (id: string, newSeverity: "Low" | "Medium" | "High") => {
     setNodes((prev) =>
@@ -115,8 +97,6 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
     <div
       ref={containerRef}
       className="relative w-full h-screen rounded-bl-lg rounded-br-lg bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)]"
-      onDrop={handleDrop}
-      onDragOver={handleDragOver}
     >
       {nodes.map((node) => {
         console.log(
@@ -127,29 +107,29 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
         return (
           <div
             key={node.id}
-            className={`absolute w-72 h-16 flex items-center rounded-lg px-4
-              ${
-                classificationFillColors[node.classification] || classificationFillColors.undefined
-              }
-              text-white font-bold shadow-md select-none cursor-grab active:cursor-grabbing
-              shadow-[0_0_4px_2px_rgba(0,0,0,0.8)]`}
+            className="absolute w-72 h-16 flex items-center rounded-lg pr-4 bg-[var(--clean-white)] text-white font-bold shadow-md select-none shadow-[0_0_4px_2px_rgba(0,0,0,0.8)]"
             style={{ left: node.x, top: node.y }}
-            draggable
-            onDragStart={(e) =>
-              handleDragStart(e, node.id, node.value, node.severity, node.classification)
-            }
-            onDragEnd={(e) => handleDragEnd(e, node.id)}
           >
-            <span className="flex-1">{node.value}</span>
+            {/* Left: Draggable Point with Leeway */}
+            <div
+              className={`flex items-center justify-center h-full w-12 rounded-tl-lg rounded-bl-lg cursor-grab ${
+                draggingNodeId === node.id ? 'cursor-grabbing' : 'cursor-grab'
+              } ${
+                classificationFillColors[node.classification] || classificationFillColors.undefined
+              }`}
+              onMouseDown={(e) => handleMouseDown(e, node)}
+            >
+              <img className="w-6" src="drag-indicator-icon.svg" />
+            </div>
+            <span className="flex-1 text-black pl-2">{node.value}</span>
             <select
               value={node.severity}
               onChange={(e) =>
                 handleSeverityChange(node.id, e.target.value as "Low" | "Medium" | "High")
               }
-              className={`h-8 px-2 rounded text-white text-sm
-                ${
-                  severityBackgroundColors[node.severity] || severityBackgroundColors.undefined
-                }`}
+              className={`h-8 px-2 rounded text-white text-sm ${
+                severityBackgroundColors[node.severity] || severityBackgroundColors.undefined
+              }`}
             >
               <option value="Low">Low</option>
               <option value="Medium">Medium</option>

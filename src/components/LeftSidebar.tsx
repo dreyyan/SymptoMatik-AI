@@ -717,10 +717,10 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
         )}
         {/* PANEL: FILE */}
         {sidebarVisibility && leftSidebar === "File" && (
-          <div className="flex flex-col gap-4 min-h-32">
+          <div className="flex flex-col gap-4 min-h-32 pt-6">
             {/* MINI-HEADER */}
             <div className="flex justify-between items-center">
-              <h3 className="text-sm font-semibold text-[var(--trust-blue)]">
+              <h3 className="text-lg font-semibold text-[var(--trust-blue)]">
                 Patient Records
               </h3>
               <div className="flex gap-2">
@@ -758,7 +758,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                           src={openFolders[patient] ? "arrow-down.svg" : "arrow-right.svg"}
                         />
                         <span>
-                          <img className="w-7" src="patient-icon.svg" />
+                          <img className="w-6 mr-1" src="patient-icon.svg" />
                         </span>
                         <span className={Styles.subheaderStyle}>{patient}</span>
                       </button>
@@ -805,7 +805,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                         {files.map((file, idx) => (
                           <div
                             key={idx}
-                            className={`relative flex items-center justify-between text-sm font-semibold text-[var(--trust-blue)] hover:text-[var(---dark-navy)] cursor-pointer px-2 py-1 rounded ${
+                            className={`relative flex items-center justify-between text-md font-bold text-[var(--slate-gray)] hover:text-[var(---dark-navy)] cursor-pointer px-2 py-1 rounded ${
                               hoveredFile === `${patient}-${file.fileName}` ? "bg-gray-200" : ""
                             }`}
                             onMouseEnter={() => setHoveredFile(`${patient}-${file.fileName}`)}
@@ -823,7 +823,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                             >
                               <span className="text-xs text-[var(--trust-blue)]">•••</span>
                             </button>
-                            {/* Settings Menu for File */}
+                            {/* Settings Menu for File */}  
                             {settingsMenuFile === `${patient}-${file.fileName}` && (
                               <div
                                 className="fixed bg-white shadow-lg rounded-md p-2 z-20 w-40"
@@ -865,8 +865,8 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
         )}
         {/* PANEL: NODES */}
         {sidebarVisibility && leftSidebar === "Nodes" && (
-          <div className="flex flex-col gap-4">
-            <h3 className="text-sm font-semibold text-[var(--trust-blue)]">Symptoms</h3>
+          <div className="flex flex-col gap-4 pt-6">
+            <h3 className="text-lg font-semibold text-[var(--trust-blue)]">Symptoms</h3>
             <input
               className="w-full rounded-full px-4 py-2 bg-white border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 placeholder-gray-400"
               type="text"
@@ -875,7 +875,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
               onChange={(e) => setSymptomSearch(e.target.value)}
             />
             <div className="max-h-[calc(100vh-100px)] overflow-y-auto">
-              <div className="">
+              <div>
                 {Object.keys(filteredSymptomsBySection).length > 0 ? (
                   Object.entries(filteredSymptomsBySection).map(([section, symptoms]) => (
                     <div key={section} className="rounded p-2">
