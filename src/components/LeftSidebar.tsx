@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Styles from "../styles/Styles.js";
 import LinkedList from "../logic/LinkedList.js";
 import Modal from "./Modal.tsx";
@@ -17,6 +17,8 @@ type LeftSidebarProps = {
   addNode: (value: string, id: string, severity: string, classification: string) => boolean;
   nodes: NodeType[];
   loadNodes: (nodes: NodeType[]) => void;
+  setCurrentPatient: (patient: string | null) => void;
+  setCurrentFile: (file: string | null) => void;
 };
 
 interface ModalConfig {
@@ -28,7 +30,7 @@ interface ModalConfig {
   showCancel?: boolean;
 }
 
-const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
+const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentFile }: LeftSidebarProps) => {
   const [symptomList] = useState(() => {
     const list = new LinkedList();
     Object.keys(pediatricData.symptoms).forEach((symptom) => list.append(symptom));
@@ -50,11 +52,12 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
   const [openFolders, setOpenFolders] = useState<Record<string, boolean>>({});
   const [hoveredFile, setHoveredFile] = useState<string | null>(null);
   const [modifiedFiles, setModifiedFiles] = useState<Record<string, boolean>>({});
-  const [currentPatient, setCurrentPatient] = useState<string | null>(null);
-  const [currentFile, setCurrentFile] = useState<string | null>(null);
+  const [currentLocalPatient, setCurrentLocalPatient] = useState<string | null>(null);
+  const [currentLocalFile, setCurrentLocalFile] = useState<string | null>(null);
   const [symptomMetadata] = useState(pediatricData.symptoms);
-  const [settingsMenuPatient, setSettingsMenuPatient] = useState<string | null>(null); // Track which patient's settings menu is open
-  const [settingsMenuFile, setSettingsMenuFile] = useState<string | null>(null); // Track which file's settings menu is open
+  const [settingsMenuPatient, setSettingsMenuPatient] = useState<string | null>(null);
+  const [settingsMenuFile, setSettingsMenuFile] = useState<string | null>(null);
+  const settingsMenuRefs = useRef<Record<string, HTMLButtonElement | null>>({});
 
   // Initialize patientFiles from localStorage or default
   const [patientFiles, setPatientFiles] = useState<Record<string, { fileName: string; nodes: NodeType[]; modified?: boolean }[]>>(() => {
@@ -76,6 +79,23 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
       };
     }
   });
+
+  // Close dropdown menus when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const isOutside = Object.values(settingsMenuRefs.current).every(
+        (ref) => ref && !ref.contains(event.target as Node)
+      );
+      if (isOutside && (settingsMenuPatient || settingsMenuFile)) {
+        setSettingsMenuPatient(null);
+        setSettingsMenuFile(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [settingsMenuPatient, settingsMenuFile]);
 
   // Group symptoms by section
   const symptomsBySection = allSymptoms.reduce((acc, symptom) => {
@@ -124,13 +144,29 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
 
   // Track changes to nodes to mark files as modified
   useEffect(() => {
-    if (nodes.length > 0 && currentPatient && currentFile) {
+    if (nodes.length > 0 && currentLocalPatient && currentLocalFile) {
       setModifiedFiles((prev) => ({
         ...prev,
-        [`${currentPatient}-${currentFile}`]: true,
+        [`${currentLocalPatient}-${currentLocalFile}`]: true,
       }));
     }
-  }, [nodes, currentPatient, currentFile]);
+  }, [nodes, currentLocalPatient, currentLocalFile]);
+
+  // Calculate dropdown menu position
+  const getMenuPosition = (buttonRef: HTMLButtonElement | null) => {
+    if (!buttonRef) return { top: '0px', left: '0px', openUpward: false };
+    const rect = buttonRef.getBoundingClientRect();
+    const menuHeight = 80; // Approximate height of the menu
+    const viewportHeight = window.innerHeight;
+    const openUpward = rect.bottom + menuHeight > viewportHeight;
+    const menuTop = openUpward ? rect.top - menuHeight : rect.bottom;
+    const menuLeft = rect.right - 100; // Adjust to align menu with button (assuming menu width ~100px)
+    return {
+      top: `${menuTop}px`,
+      left: `${menuLeft}px`,
+      openUpward,
+    };
+  };
 
   // HANDLE: ADD PATIENT
   const handleAddPatient = () => {
@@ -193,7 +229,9 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
           localStorage.setItem("patientFiles", JSON.stringify(updated));
           return updated;
         });
-        if (currentPatient === patient) {
+        if (currentLocalPatient === patient) {
+          setCurrentLocalPatient(null);
+          setCurrentLocalFile(null);
           setCurrentPatient(null);
           setCurrentFile(null);
           loadNodes([]);
@@ -216,7 +254,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
       title: "Rename Patient",
       message: `Enter new name for ${patient}:`,
       confirmText: "Rename",
-      inputValue: patient,
+      inputValue: "",
       showCancel: true,
       onConfirm: (newName: string) => {
         if (!newName.trim()) {
@@ -246,7 +284,8 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
           localStorage.setItem("patientFiles", JSON.stringify(updated));
           return updated;
         });
-        if (currentPatient === patient) {
+        if (currentLocalPatient === patient) {
+          setCurrentLocalPatient(newName);
           setCurrentPatient(newName);
         }
         setModalConfig({
@@ -288,7 +327,8 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
           localStorage.setItem("patientFiles", JSON.stringify(updated));
           return updated;
         });
-        if (currentPatient === patient && currentFile === fileName) {
+        if (currentLocalPatient === patient && currentLocalFile === fileName) {
+          setCurrentLocalFile(null);
           setCurrentFile(null);
           loadNodes([]);
         }
@@ -315,7 +355,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
       title: "Rename File",
       message: `Enter new name for ${fileName}:`,
       confirmText: "Rename",
-      inputValue: fileName,
+      inputValue: "",
       showCancel: true,
       onConfirm: (newFileName: string) => {
         if (!newFileName.trim()) {
@@ -347,7 +387,8 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
           localStorage.setItem("patientFiles", JSON.stringify(updated));
           return updated;
         });
-        if (currentPatient === patient && currentFile === fileName) {
+        if (currentLocalPatient === patient && currentLocalFile === fileName) {
+          setCurrentLocalFile(finalNewFileName);
           setCurrentFile(finalNewFileName);
         }
         setModifiedFiles((prev) => {
@@ -372,7 +413,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
 
   // HANDLE: DELETE NODE
   const handleDeleteNode = (nodeId: string) => {
-    if (!currentPatient || !currentFile) {
+    if (!currentLocalPatient || !currentLocalFile) {
       setModalConfig({
         title: "Error",
         message: "No file is currently loaded. Please load a file to delete nodes.",
@@ -392,17 +433,17 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
       onConfirm: () => {
         const updatedNodes = nodes.filter((n) => n.id !== nodeId);
         setPatientFiles((prev) => {
-          const newFiles = prev[currentPatient].map((file) =>
-            file.fileName === currentFile ? { ...file, nodes: updatedNodes } : file
+          const newFiles = prev[currentLocalPatient].map((file) =>
+            file.fileName === currentLocalFile ? { ...file, nodes: updatedNodes } : file
           );
-          const updatedPatientFiles = { ...prev, [currentPatient]: newFiles };
+          const updatedPatientFiles = { ...prev, [currentLocalPatient]: newFiles };
           localStorage.setItem("patientFiles", JSON.stringify(updatedPatientFiles));
           return updatedPatientFiles;
         });
         loadNodes(updatedNodes);
         setModifiedFiles((prev) => ({
           ...prev,
-          [`${currentPatient}-${currentFile}`]: true,
+          [`${currentLocalPatient}-${currentLocalFile}`]: true,
         }));
         setModalConfig({
           title: "Node Deleted",
@@ -435,6 +476,8 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
           : [];
         console.log(`Loading ${fileName} for ${patient}:`, validNodes);
         loadNodes(validNodes);
+        setCurrentLocalPatient(patient);
+        setCurrentLocalFile(fileName);
         setCurrentPatient(patient);
         setCurrentFile(fileName);
         setModalConfig({
@@ -537,7 +580,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
 
   // HANDLE: SAVE FILE
   const handleSaveFile = () => {
-    if (!currentPatient || !currentFile) {
+    if (!currentLocalPatient || !currentLocalFile) {
       setModalConfig({
         title: "Error",
         message: "No file is currently loaded. Please load a file before saving.",
@@ -548,20 +591,20 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
       return;
     }
     setPatientFiles((prev) => {
-      const updatedFiles = prev[currentPatient].map((file) =>
-        file.fileName === currentFile ? { ...file, nodes } : file
+      const updatedFiles = prev[currentLocalPatient].map((file) =>
+        file.fileName === currentLocalFile ? { ...file, nodes } : file
       );
-      const updated = { ...prev, [currentPatient]: updatedFiles };
+      const updated = { ...prev, [currentLocalPatient]: updatedFiles };
       localStorage.setItem("patientFiles", JSON.stringify(updated));
       return updated;
     });
     setModifiedFiles((prev) => ({
       ...prev,
-      [`${currentPatient}-${currentFile}`]: false,
+      [`${currentLocalPatient}-${currentLocalFile}`]: false,
     }));
     setModalConfig({
       title: "File Saved",
-      message: `File ${currentFile} for ${currentPatient} was successfully saved.`,
+      message: `File ${currentLocalFile} for ${currentLocalPatient} was successfully saved.`,
       confirmText: "OK",
       showCancel: false,
     });
@@ -600,8 +643,6 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
           }
           setAllSymptoms((prev) => [...prev, customSymptom].sort((a, b) => a.localeCompare(b)));
           const metadata = { section: "Custom", severity: "Medium", classification: "Other" };
-          // Assuming symptomMetadata is mutable or handle accordingly
-          // For now, since it's const, perhaps use a state for it if needed
           const id = Date.now().toString();
           addNode(customSymptom, id, metadata.severity, metadata.classification);
           setModalConfig({
@@ -633,7 +674,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
             message: "",
             confirmText: "OK",
             showCancel: false,
-          }); // Reset modal config after close
+          });
         }}
         title={modalConfig.title}
         message={modalConfig.message}
@@ -703,14 +744,14 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
               onChange={(e) => setPatientSearch(e.target.value)}
             />
             {/* PATIENT FILES */}
-            <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
+            <div className="max-h-[calc(100vh-100px)] overflow-y-auto relative">
               {Object.keys(filteredFiles).length > 0 ? (
                 Object.entries(filteredFiles).map(([patient, files]) => (
-                  <div key={patient} className="rounded p-2 relative">
-                    <div className="flex items-center gap-2">
+                  <div key={patient} className="rounded p-2 pr-4 relative">
+                    <div className="flex justify-center items-center">
                       <button
                         onClick={() => toggleFolder(patient)}
-                        className="cursor-pointer flex items-center gap-2 flex-1 text-left"
+                        className="cursor-pointer flex items-center gap-1 flex-1 text-left"
                       >
                         <img
                           className="w-6 transition-transform duration-300"
@@ -724,13 +765,17 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
                       <button
                         className="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full text-gray-500 hover:bg-gray-200 hover:text-gray-700 transition-all duration-300"
                         onClick={() => togglePatientSettings(patient)}
+                        ref={(el) => (settingsMenuRefs.current[`patient-${patient}`] = el)}
                       >
                         <span className="text-md text-[var(--trust-blue)]">•••</span>
                       </button>
                     </div>
                     {/* Settings Menu for Patient */}
                     {settingsMenuPatient === patient && (
-                      <div className="absolute right-2 top-8 bg-white shadow-lg rounded-md p-2 z-10">
+                      <div
+                        className="fixed bg-white shadow-lg rounded-md p-2 z-20 w-40"
+                        style={getMenuPosition(settingsMenuRefs.current[`patient-${patient}`])}
+                      >
                         <button
                           className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                           onClick={() => {
@@ -774,12 +819,16 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
                             <button
                               className="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full text-gray-500 hover:bg-gray-200 hover:text-gray-700 transition-all duration-300"
                               onClick={() => toggleFileSettings(patient, file.fileName)}
+                              ref={(el) => (settingsMenuRefs.current[`${patient}-${file.fileName}`] = el)}
                             >
                               <span className="text-xs text-[var(--trust-blue)]">•••</span>
                             </button>
                             {/* Settings Menu for File */}
                             {settingsMenuFile === `${patient}-${file.fileName}` && (
-                              <div className="absolute right-2 top-8 bg-white shadow-lg rounded-md p-2 z-10">
+                              <div
+                                className="fixed bg-white shadow-lg rounded-md p-2 z-20 w-40"
+                                style={getMenuPosition(settingsMenuRefs.current[`${patient}-${file.fileName}`])}
+                              >
                                 <button
                                   className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                   onClick={() => {
@@ -825,7 +874,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
               value={symptomSearch}
               onChange={(e) => setSymptomSearch(e.target.value)}
             />
-            <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
+            <div className="max-h-[calc(100vh-100px)] overflow-y-auto">
               <div className="">
                 {Object.keys(filteredSymptomsBySection).length > 0 ? (
                   Object.entries(filteredSymptomsBySection).map(([section, symptoms]) => (
@@ -867,7 +916,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
                 )}
               </div>
               {/* LOADED NODES */}
-              {currentFile && currentPatient && (
+              {currentLocalFile && currentLocalPatient && (
                 <div className="mt-4">
                   <h3 className="text-sm font-semibold text-[var(--trust-blue)]">Loaded Nodes</h3>
                   {nodes.length > 0 ? (

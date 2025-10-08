@@ -20,6 +20,8 @@ const Diagnosis = () => {
   }, []);
 
   const [nodes, setNodes] = useState<NodeType[]>([]);
+  const [currentPatient, setCurrentPatient] = useState<string | null>(null);
+  const [currentFile, setCurrentFile] = useState<string | null>(null);
 
   const addNode = (
     value: string,
@@ -75,10 +77,27 @@ const Diagnosis = () => {
       <div className="flex min-h-screen flex-1 p-4 gap-4">
         {/* Left: Sidebar */}
         <div className="w-1/5 h-screen">
-          <LeftSidebar addNode={addNode} nodes={nodes} loadNodes={loadNodes} />
+          <LeftSidebar 
+            addNode={addNode} 
+            nodes={nodes} 
+            loadNodes={loadNodes} 
+            setCurrentPatient={setCurrentPatient}
+            setCurrentFile={setCurrentFile}
+          />
         </div>
         {/* Center: Droppable Area */}
-        <div className="flex-1">
+        <div className="flex-1 flex flex-col">
+          {currentFile && currentPatient && (
+            <div className="bg-white p-4 rounded-tl-lg rounded-tr-lg shadow z-1">
+              <h2 className="text-lg font-bold text-[var(--trust-blue)]">
+                {currentPatient} - {currentFile}
+              </h2>
+              <p className="text-sm text-gray-600">
+                Number of symptoms: {nodes.length}
+              </p>
+              {/* Add more details here if available, e.g., created date, last modified, etc. */}
+            </div>
+          )}
           <NodeContainer nodes={nodes} setNodes={setNodes} />
         </div>
         {/* Right: Sidebar */}

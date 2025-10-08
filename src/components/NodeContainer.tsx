@@ -114,7 +114,7 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-screen bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] rounded-lg"
+      className="relative w-full h-screen rounded-bl-lg rounded-br-lg bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)]"
       onDrop={handleDrop}
       onDragOver={handleDragOver}
     >
