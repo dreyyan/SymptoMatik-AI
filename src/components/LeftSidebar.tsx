@@ -53,6 +53,8 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
   const [currentPatient, setCurrentPatient] = useState<string | null>(null);
   const [currentFile, setCurrentFile] = useState<string | null>(null);
   const [symptomMetadata] = useState(pediatricData.symptoms);
+  const [settingsMenuPatient, setSettingsMenuPatient] = useState<string | null>(null); // Track which patient's settings menu is open
+  const [settingsMenuFile, setSettingsMenuFile] = useState<string | null>(null); // Track which file's settings menu is open
 
   // Initialize patientFiles from localStorage or default
   const [patientFiles, setPatientFiles] = useState<Record<string, { fileName: string; nodes: NodeType[]; modified?: boolean }[]>>(() => {
@@ -208,6 +210,166 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
     setIsModalOpen(true);
   };
 
+  // HANDLE: RENAME PATIENT
+  const renamePatient = (patient: string) => {
+    setModalConfig({
+      title: "Rename Patient",
+      message: `Enter new name for ${patient}:`,
+      confirmText: "Rename",
+      inputValue: patient,
+      showCancel: true,
+      onConfirm: (newName: string) => {
+        if (!newName.trim()) {
+          setModalConfig({
+            title: "Error",
+            message: "Please enter a valid patient name.",
+            confirmText: "OK",
+            showCancel: false,
+          });
+          setIsModalOpen(true);
+          return;
+        }
+        if (patientFiles[newName]) {
+          setModalConfig({
+            title: "Error",
+            message: "A patient with this name already exists.",
+            confirmText: "OK",
+            showCancel: false,
+          });
+          setIsModalOpen(true);
+          return;
+        }
+        setPatientFiles((prev) => {
+          const updated = { ...prev };
+          updated[newName] = updated[patient];
+          delete updated[patient];
+          localStorage.setItem("patientFiles", JSON.stringify(updated));
+          return updated;
+        });
+        if (currentPatient === patient) {
+          setCurrentPatient(newName);
+        }
+        setModalConfig({
+          title: "Patient Renamed",
+          message: `Patient ${patient} was successfully renamed to ${newName}.`,
+          confirmText: "OK",
+          showCancel: false,
+        });
+        setIsModalOpen(true);
+      },
+    });
+    setIsModalOpen(true);
+  };
+
+  // HANDLE: TOGGLE PATIENT SETTINGS
+  const togglePatientSettings = (patient: string) => {
+    setSettingsMenuPatient((prev) => (prev === patient ? null : patient));
+    setSettingsMenuFile(null); // Close any open file menu
+  };
+
+  // HANDLE: TOGGLE FILE SETTINGS
+  const toggleFileSettings = (patient: string, fileName: string) => {
+    const key = `${patient}-${fileName}`;
+    setSettingsMenuFile((prev) => (prev === key ? null : key));
+    setSettingsMenuPatient(null); // Close any open patient menu
+  };
+
+  // HANDLE: DELETE FILE
+  const handleDeleteFile = (patient: string, fileName: string) => {
+    setModalConfig({
+      title: "Delete File",
+      message: `Are you sure you want to delete ${fileName} for ${patient}?`,
+      confirmText: "Delete",
+      showCancel: true,
+      onConfirm: () => {
+        setPatientFiles((prev) => {
+          const updatedFiles = prev[patient].filter((file) => file.fileName !== fileName);
+          const updated = { ...prev, [patient]: updatedFiles };
+          localStorage.setItem("patientFiles", JSON.stringify(updated));
+          return updated;
+        });
+        if (currentPatient === patient && currentFile === fileName) {
+          setCurrentFile(null);
+          loadNodes([]);
+        }
+        setModifiedFiles((prev) => {
+          const updated = { ...prev };
+          delete updated[`${patient}-${fileName}`];
+          return updated;
+        });
+        setModalConfig({
+          title: "File Deleted",
+          message: `File ${fileName} was successfully deleted.`,
+          confirmText: "OK",
+          showCancel: false,
+        });
+        setIsModalOpen(true);
+      },
+    });
+    setIsModalOpen(true);
+  };
+
+  // HANDLE: RENAME FILE
+  const renameFile = (patient: string, fileName: string) => {
+    setModalConfig({
+      title: "Rename File",
+      message: `Enter new name for ${fileName}:`,
+      confirmText: "Rename",
+      inputValue: fileName,
+      showCancel: true,
+      onConfirm: (newFileName: string) => {
+        if (!newFileName.trim()) {
+          setModalConfig({
+            title: "Error",
+            message: "Please enter a valid file name.",
+            confirmText: "OK",
+            showCancel: false,
+          });
+          setIsModalOpen(true);
+          return;
+        }
+        const finalNewFileName = newFileName.endsWith(".ndg") ? newFileName : `${newFileName}.ndg`;
+        if (patientFiles[patient].some((file) => file.fileName === finalNewFileName)) {
+          setModalConfig({
+            title: "Error",
+            message: "A file with this name already exists.",
+            confirmText: "OK",
+            showCancel: false,
+          });
+          setIsModalOpen(true);
+          return;
+        }
+        setPatientFiles((prev) => {
+          const updatedFiles = prev[patient].map((file) =>
+            file.fileName === fileName ? { ...file, fileName: finalNewFileName } : file
+          );
+          const updated = { ...prev, [patient]: updatedFiles };
+          localStorage.setItem("patientFiles", JSON.stringify(updated));
+          return updated;
+        });
+        if (currentPatient === patient && currentFile === fileName) {
+          setCurrentFile(finalNewFileName);
+        }
+        setModifiedFiles((prev) => {
+          const updated = { ...prev };
+          if (updated[`${patient}-${fileName}`]) {
+            updated[`${patient}-${finalNewFileName}`] = updated[`${patient}-${fileName}`];
+            delete updated[`${patient}-${fileName}`];
+          }
+          return updated;
+        });
+        setModalConfig({
+          title: "File Renamed",
+          message: `File ${fileName} was successfully renamed to ${finalNewFileName}.`,
+          confirmText: "OK",
+          showCancel: false,
+        });
+        setIsModalOpen(true);
+      },
+    });
+    setIsModalOpen(true);
+  };
+
   // HANDLE: DELETE NODE
   const handleDeleteNode = (nodeId: string) => {
     if (!currentPatient || !currentFile) {
@@ -309,14 +471,24 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
     if (!patientSearch.trim()) {
       setModalConfig({
         title: "Error",
-        message: "Please enter a patient name in the search bar.",
+        message: "Please enter a patient name in the search bar to add a file.",
         confirmText: "OK",
         showCancel: false,
       });
       setIsModalOpen(true);
       return;
     }
-    const selectedPatient = filteredPatients.length === 1 && patientFiles[patientSearch] ? filteredPatients[0] : patientSearch.trim();
+    const selectedPatient = filteredPatients.length === 1 ? filteredPatients[0] : patientSearch.trim();
+    if (!patientFiles[selectedPatient]) {
+      setModalConfig({
+        title: "Error",
+        message: "Patient not found. Please add the patient first or select an existing one.",
+        confirmText: "OK",
+        showCancel: false,
+      });
+      setIsModalOpen(true);
+      return;
+    }
     setModalConfig({
       title: "Add File",
       message: `Enter file name for ${selectedPatient} (.ndg):`,
@@ -334,12 +506,11 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
           setIsModalOpen(true);
           return;
         }
-        const finalPatient = patientFiles[selectedPatient] ? selectedPatient : patientSearch.trim();
         const finalFileName = fileName.endsWith(".ndg") ? fileName : `${fileName}.ndg`;
-        if (patientFiles[finalPatient]?.some((f) => f.fileName === finalFileName)) {
+        if (patientFiles[selectedPatient].some((f) => f.fileName === finalFileName)) {
           setModalConfig({
             title: "Error",
-            message: `File ${finalFileName} already exists for ${finalPatient}.`,
+            message: `File ${finalFileName} already exists for ${selectedPatient}.`,
             confirmText: "OK",
             showCancel: false,
           });
@@ -347,19 +518,14 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
           return;
         }
         setPatientFiles((prev) => {
-          const newFiles = [...(prev[finalPatient] || []), { fileName: finalFileName, nodes: [] }];
-          const updatedPatientFiles = {
-            ...prev,
-            [finalPatient]: newFiles,
-          };
-          console.log(`Adding file ${finalFileName} for ${finalPatient}:`, updatedPatientFiles);
-          localStorage.setItem("patientFiles", JSON.stringify(updatedPatientFiles));
-          return updatedPatientFiles;
+          const updatedFiles = [...prev[selectedPatient], { fileName: finalFileName, nodes: [] }];
+          const updated = { ...prev, [selectedPatient]: updatedFiles };
+          localStorage.setItem("patientFiles", JSON.stringify(updated));
+          return updated;
         });
-        setPatientSearch("");
         setModalConfig({
           title: "File Added",
-          message: `Added ${finalFileName} for ${finalPatient}.`,
+          message: `File ${finalFileName} was successfully added to ${selectedPatient}.`,
           confirmText: "OK",
           showCancel: false,
         });
@@ -382,17 +548,12 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
       return;
     }
     setPatientFiles((prev) => {
-      const newFiles = [
-        ...(prev[currentPatient] || []).filter((f) => f.fileName !== currentFile),
-        { fileName: currentFile, nodes: nodes.map((n) => ({ ...n })), modified: false },
-      ];
-      const updatedPatientFiles = {
-        ...prev,
-        [currentPatient]: newFiles,
-      };
-      console.log(`Saving file ${currentFile} for ${currentPatient}:`, updatedPatientFiles);
-      localStorage.setItem("patientFiles", JSON.stringify(updatedPatientFiles));
-      return updatedPatientFiles;
+      const updatedFiles = prev[currentPatient].map((file) =>
+        file.fileName === currentFile ? { ...file, nodes } : file
+      );
+      const updated = { ...prev, [currentPatient]: updatedFiles };
+      localStorage.setItem("patientFiles", JSON.stringify(updated));
+      return updated;
     });
     setModifiedFiles((prev) => ({
       ...prev,
@@ -400,7 +561,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
     }));
     setModalConfig({
       title: "File Saved",
-      message: `Saved ${currentFile} for ${currentPatient}.`,
+      message: `File ${currentFile} for ${currentPatient} was successfully saved.`,
       confirmText: "OK",
       showCancel: false,
     });
@@ -408,8 +569,8 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
   };
 
   // HANDLE: ADD SYMPTOM NODE
-  const addSymptomNode = (value: string = "Custom Symptom") => {
-    if (value === "Custom Symptom") {
+  const addSymptomNode = (value?: string) => {
+    if (!value) {
       setModalConfig({
         title: "Add Custom Symptom",
         message: "Enter custom symptom name:",
@@ -437,83 +598,43 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
             setIsModalOpen(true);
             return;
           }
-          setAllSymptoms((prev) => {
-            const updated = [...prev, customSymptom].sort((a, b) => a.localeCompare(b));
-            return updated;
+          setAllSymptoms((prev) => [...prev, customSymptom].sort((a, b) => a.localeCompare(b)));
+          const metadata = { section: "Custom", severity: "Medium", classification: "Other" };
+          // Assuming symptomMetadata is mutable or handle accordingly
+          // For now, since it's const, perhaps use a state for it if needed
+          const id = Date.now().toString();
+          addNode(customSymptom, id, metadata.severity, metadata.classification);
+          setModalConfig({
+            title: "Symptom Added",
+            message: `Custom symptom "${customSymptom}" added successfully.`,
+            confirmText: "OK",
+            showCancel: false,
           });
-          setSymptomMetadata((prev) => ({
-            ...prev,
-            [customSymptom]: { severity: "Low", classification: "Infectious", section: "Other" },
-          }));
-          const success = addNode(
-            customSymptom,
-            `${customSymptom}-${Date.now()}`,
-            "Low",
-            "Infectious"
-          );
-          if (success) {
-            setModalConfig({
-              title: "Symptom Added",
-              message: `Custom symptom "${customSymptom}" was successfully added!`,
-              confirmText: "OK",
-              showCancel: false,
-            });
-            setIsModalOpen(true);
-            if (currentPatient && currentFile) {
-              setModifiedFiles((prev) => ({
-                ...prev,
-                [`${currentPatient}-${currentFile}`]: true,
-              }));
-            }
-          }
+          setIsModalOpen(true);
         },
       });
       setIsModalOpen(true);
-    } else {
-      const metadata = symptomMetadata[value] || {
-        severity: "Low",
-        classification: "Infectious",
-        section: "Other",
-      };
-      const success = addNode(
-        value,
-        `${value}-${Date.now()}`,
-        metadata.severity,
-        metadata.classification
-      );
-      if (success) {
-        setModalConfig({
-          title: "Symptom Added",
-          message: `Symptom "${value}" was successfully added!`,
-          confirmText: "OK",
-          showCancel: false,
-        });
-        setIsModalOpen(true);
-        if (currentPatient && currentFile) {
-          setModifiedFiles((prev) => ({
-            ...prev,
-            [`${currentPatient}-${currentFile}`]: true,
-          }));
-        }
-      }
+      return;
     }
-  };
-
-  // HANDLE: Open/close patient settings
-  const togglePatientSettings = () => {
-
-  };
-
-  // HANLDE: Rename patient name
-  const renamePatient = () => {
-
+    const metadata = symptomMetadata[value];
+    if (!metadata) return;
+    const id = Date.now().toString();
+    addNode(value, id, metadata.severity, metadata.classification);
   };
 
   return (
     <>
       <Modal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setModalConfig({
+            title: "",
+            message: "",
+            confirmText: "OK",
+            showCancel: false,
+          }); // Reset modal config after close
+        }}
         title={modalConfig.title}
         message={modalConfig.message}
         confirmText={modalConfig.confirmText}
@@ -526,10 +647,6 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
           sidebarVisibility ? "" : "px-1 py-4"
         }`}
       >
-        {/* HEADERS */}
-        <div className={`flex justify-between ${sidebarVisibility ? "" : "justify-center"}`}>
-          {sidebarVisibility && <img className="w-8" src="symptomatik-black-logo.svg" />}
-        </div>
         {/* BUTTONS: FILE & NODES */}
         {sidebarVisibility && (
           <div className="flex gap-2">
@@ -559,7 +676,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
         )}
         {/* PANEL: FILE */}
         {sidebarVisibility && leftSidebar === "File" && (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 min-h-32">
             {/* MINI-HEADER */}
             <div className="flex justify-between items-center">
               <h3 className="text-sm font-semibold text-[var(--trust-blue)]">
@@ -589,7 +706,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
             <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
               {Object.keys(filteredFiles).length > 0 ? (
                 Object.entries(filteredFiles).map(([patient, files]) => (
-                  <div key={patient} className="rounded p-2">
+                  <div key={patient} className="rounded p-2 relative">
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => toggleFolder(patient)}
@@ -605,14 +722,35 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
                         <span className={Styles.subheaderStyle}>{patient}</span>
                       </button>
                       <button
-                        className="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full text-gray-500 hover:bg-black-200 hover:text-gray-700 transition-all duration-300"
+                        className="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full text-gray-500 hover:bg-gray-200 hover:text-gray-700 transition-all duration-300"
                         onClick={() => togglePatientSettings(patient)}
                       >
-                        <span className="text-md">•••</span>
+                        <span className="text-md text-[var(--trust-blue)]">•••</span>
                       </button>
-                      {/* () => renamePatient(patient) */}
-                      {/* () => handleDeletePatient(patient) */}
                     </div>
+                    {/* Settings Menu for Patient */}
+                    {settingsMenuPatient === patient && (
+                      <div className="absolute right-2 top-8 bg-white shadow-lg rounded-md p-2 z-10">
+                        <button
+                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => {
+                            renamePatient(patient);
+                            setSettingsMenuPatient(null);
+                          }}
+                        >
+                          Rename Patient
+                        </button>
+                        <button
+                          className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                          onClick={() => {
+                            handleDeletePatient(patient);
+                            setSettingsMenuPatient(null);
+                          }}
+                        >
+                          Delete Patient
+                        </button>
+                      </div>
+                    )}
                     <div
                       className={`overflow-hidden transition-all duration-300 ease-in-out ${
                         openFolders[patient] ? "h-auto opacity-100" : "h-0 opacity-0"
@@ -622,16 +760,46 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
                         {files.map((file, idx) => (
                           <div
                             key={idx}
-                            className={`flex items-center gap-2 text-sm font-semibold text-[var(--trust-blue)] hover:text-[var(---dark-navy)] cursor-pointer p-2 rounded ${
+                            className={`relative flex items-center justify-between text-sm font-semibold text-[var(--trust-blue)] hover:text-[var(---dark-navy)] cursor-pointer px-2 py-1 rounded ${
                               hoveredFile === `${patient}-${file.fileName}` ? "bg-gray-200" : ""
                             }`}
-                            onClick={() => handleLoadFile(patient, file.fileName)}
                             onMouseEnter={() => setHoveredFile(`${patient}-${file.fileName}`)}
                             onMouseLeave={() => setHoveredFile(null)}
                           >
-                            <img className="w-5" src="symptom-file-icon.svg" />
-                            {file.fileName}
-                            {modifiedFiles[`${patient}-${file.fileName}`] && <span className="ml-1">*</span>}
+                            <div className="flex items-center gap-2 flex-1" onClick={() => handleLoadFile(patient, file.fileName)}>
+                              <img className="w-4" src="symptom-file-icon.svg" />
+                              <p className="text-xs">{file.fileName}</p>
+                              {modifiedFiles[`${patient}-${file.fileName}`] && <span className="ml-1">*</span>}
+                            </div>
+                            <button
+                              className="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full text-gray-500 hover:bg-gray-200 hover:text-gray-700 transition-all duration-300"
+                              onClick={() => toggleFileSettings(patient, file.fileName)}
+                            >
+                              <span className="text-xs text-[var(--trust-blue)]">•••</span>
+                            </button>
+                            {/* Settings Menu for File */}
+                            {settingsMenuFile === `${patient}-${file.fileName}` && (
+                              <div className="absolute right-2 top-8 bg-white shadow-lg rounded-md p-2 z-10">
+                                <button
+                                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                  onClick={() => {
+                                    renameFile(patient, file.fileName);
+                                    setSettingsMenuFile(null);
+                                  }}
+                                >
+                                  Rename File
+                                </button>
+                                <button
+                                  className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                                  onClick={() => {
+                                    handleDeleteFile(patient, file.fileName);
+                                    setSettingsMenuFile(null);
+                                  }}
+                                >
+                                  Delete File
+                                </button>
+                              </div>
+                            )}
                           </div>
                         ))}
                       </div>
@@ -649,15 +817,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes }: LeftSidebarProps) => {
         {/* PANEL: NODES */}
         {sidebarVisibility && leftSidebar === "Nodes" && (
           <div className="flex flex-col gap-4">
-            <div className="flex justify-between">
-              <h3 className="text-sm font-semibold text-[var(--trust-blue)]">Symptoms</h3>
-              <button
-                className="cursor-pointer duration-300 hover:opacity-60"
-                onClick={() => addSymptomNode()}
-              >
-                <img className="w-6" src="add-icon.svg" />
-              </button>
-            </div>
+            <h3 className="text-sm font-semibold text-[var(--trust-blue)]">Symptoms</h3>
             <input
               className="w-full rounded-full px-4 py-2 bg-white border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 placeholder-gray-400"
               type="text"

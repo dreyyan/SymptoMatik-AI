@@ -68,7 +68,7 @@ const Diagnosis = () => {
   };
 
   return (
-    <div className="flex flex-col bg-gray-100 pb-24">
+    <div className="flex flex-col bg-gray-100">
       {/* Header */}
       <Header />
       {/* Main Content */}

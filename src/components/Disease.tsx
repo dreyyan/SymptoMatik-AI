@@ -10,6 +10,7 @@ type DiseaseProps = {
   treatment?: string;
   prevention?: string;
   prognosis?: string;
+  confidenceLevel?: number; // Confidence level as a percentage (0-100)
 };
 
 const Disease = ({
@@ -22,6 +23,7 @@ const Disease = ({
   treatment,
   prevention,
   prognosis,
+  confidenceLevel,
 }: DiseaseProps) => {
   const [expanded, setExpanded] = useState(false);
 
@@ -55,6 +57,21 @@ const Disease = ({
           Severity: {severity}
         </span>
       </div>
+
+      {/* Confidence Level */}
+      {confidenceLevel !== undefined && (
+        <div className="flex items-center gap-3">
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div
+              className="bg-[var(--trust-blue)] h-2 rounded-full"
+              style={{ width: `${confidenceLevel}%` }}
+            ></div>
+          </div>
+          <span className="text-sm text-gray-600 font-semibold">
+            {confidenceLevel}%
+          </span>
+        </div>
+      )}
 
       {/* Short Description */}
       {description && !expanded && (
