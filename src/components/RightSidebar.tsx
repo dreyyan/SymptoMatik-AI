@@ -50,15 +50,15 @@ const RightSidebar = ({ nodes }: RightSidebarProps) => {
     });
 
   return (
-    <div className="min-h-screen flex flex-col flex-1 overflow-y-auto gap-4 p-4 bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] w-[100%] w-80">
-      <h3 className="text-lg font-semibold text-[var(--trust-blue)]">Possible Diseases</h3>
+    <div className="min-h-screen flex flex-col items-end flex-1 overflow-y-auto gap-2 p-4 bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] w-[100%] w-80">
+      <h3 className="text-xl inter-semibold text-[var(--trust-blue)]">Possible Diseases</h3>
       {Object.keys(nodeSymptoms).length === 0 ? (
         <p className="text-sm text-gray-600">No symptoms selected.</p>
       ) : scoredDiseases.length === 0 ? (
         <p className="text-sm text-gray-600">No matching diseases found.</p>
       ) : (
         <div className="flex flex-col gap-4">
-          <p className="text-sm text-[var(--)]">SymptoMatik-AI thinks your patient has...</p>
+          <p className="text-sm text-end text-[var(--slate-gray)]">SymptoMatik-AI thinks your patient has...</p>
           {scoredDiseases.map((item, index) => (
             <Disease
               key={index}

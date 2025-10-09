@@ -1,20 +1,18 @@
 @import "tailwindcss";
 
 :root {
-  /* Primary brand color — trust, reliability */
-  --trust-blue: #0057B7;    /* A deeper, professional blue for navbar, buttons, links, highlights */
-  /* Neutral gray — calm, dependable */
-  --neutral-gray: #6B7280;  /* Body text, secondary text, borders, subtle backgrounds */
-  /* Secondary brand color — supportive, calming */
-  --calm-blue: #4B8EF7;     /* Secondary buttons, charts, badges */
-  /* Backgrounds & surfaces */
-  --soft-white: #F9FAFB;    /* Page background, cards, form inputs */
-  /* Accent (use sparingly for CTAs) */
-  --accent-coral: #F87171;  /* Alert button, notification dot, emphasis */
-  /* Deep background */
-  --deep-blue: #1E3A8A;     /* Footers, sidebars, headers on dark mode */
-  /* Text */
-  --text: #1F2A44;         /* Primary text for readability */
+  /* 🌊 Primary brand color — trust, reliability */
+  --trust-blue: #005566;   /* Navbar, buttons, links, highlights */
+  /* 🩺 Secondary brand color — healing, wellness */
+  --healing-teal: #00A5A5; /* Secondary buttons, charts, badges */
+  /* 🧼 Backgrounds & surfaces */
+  --clean-white: #F5F7FA;  /* Page background, cards, form inputs */
+  /* 🪨 Neutral text & dividers */
+  --slate-gray: #4A5E6D;   /* Body text, secondary text, borders */
+  /* 🌺 Accent (use sparingly for CTAs) */
+  --accent-coral: #FF6F61; /* Alert button, notification dot, emphasis */
+  /* 🌌 Deep background */
+  --dark-navy: #1A2A44;    /* Footers, sidebars, headers on dark mode */
 }
 
 body {
@@ -75,4 +73,14 @@ html {
 /* For IE/Edge (legacy) */
 body {
   -ms-overflow-style: none;
+}
+
+/* Hide the Scrollbar */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
 }

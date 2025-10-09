@@ -5,8 +5,10 @@ import Home from "./pages/Home";
 import Diagnosis from "./pages/Diagnosis";
 import Help from "./pages/Help";
 import Analytics from "./pages/Analytics";
-import ConsultADoctor from "./pages/ConsultADoctor";
+import Consultation from "./pages/Consultation";
 import Account from "./pages/Account";
+import DiagnosisPatient from "./pages/patient/DiagnosisPatient";
+import ConsultationPatient from "./pages/patient/ConsultationPatient";
 
 function App() {
   return (
@@ -17,10 +19,12 @@ function App() {
       {/* HEADER NAVIGATION LINKS */}
       <Route path="/home" element={<Home/>}/>
       <Route path="/diagnosis" element={<Diagnosis/>}/>
+      <Route path="/diagnosis-patient" element={<DiagnosisPatient/>}/>
       <Route path="/help" element={<Help/>}/>
       <Route path="/analytics" element={<Analytics/>}/>
       <Route path="/account" element={<Account/>}/>
-      <Route path="/consultation" element={<ConsultADoctor/>}/>
+      <Route path="/consultation" element={<Consultation/>}/>
+      <Route path="/consultation-patient" element={<ConsultationPatient/>}/>
     </Routes>
   );
 }

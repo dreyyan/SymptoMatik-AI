@@ -28,7 +28,11 @@ const SignUp = () => {
         {/* LOGIN PANEL */}
         <div className={Styles.loginDivStyle}>
             {/* HEADER */}
-            <img src="./symptomatik-banner.png" className="w-[80%] mt-6 mb-4"/>
+            <div className="flex gap-4">
+                <img src="./symptomatik-logo.svg" className="w-10 mt-6 mb-4"/>
+                <img src="./symptomatik-banner.svg" className="w-[50%] mt-6 mb-4"/>
+            </div>
+
             <h2 className={Styles.h2Style}>Start your journey</h2>
             <h2 className={Styles.pStyle}>Be a part of the revolution.</h2>
 
@@ -48,7 +52,7 @@ const SignUp = () => {
             </form>
 
             {/* BUTTON: SIGN UP */}
-            <PrimaryButton text="Sign Up" onClick={handleSignUp} width="full" height="36px" disabled={false}/>
+            <PrimaryButton text="Sign Up" onClick={handleSignUp} width="full" fontSize="18px" height="40px" disabled={false}/>
 
             {/* OR SEPARATOR */}
             <div className="flex items-center w-full my-4 text-[var-(--trust-blue)]">

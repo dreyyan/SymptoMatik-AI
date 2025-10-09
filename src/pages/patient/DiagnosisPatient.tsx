@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import LeftSidebar from "../components/LeftSidebar";
-import RightSidebar from "../components/RightSidebar";
-import NodeContainer from "../components/NodeContainer";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
+import LeftSidebarPatient from "../../components/LeftSidebarPatient";
+import RightSidebar from "../../components/RightSidebar";
+import NodeContainer from "../../components/NodeContainer";
+import RightSidebarPatient from "../../components/RightSidebarPatient";
 
 type NodeType = {
   id: string;
@@ -126,7 +127,7 @@ const Diagnosis = () => {
       <div className="flex min-h-screen flex-1">
         {/* Left: Sidebar */}
         <div className="w-1/5 h-screen">
-          <LeftSidebar
+          <LeftSidebarPatient
             addNode={addNode}
             nodes={nodes}
             loadNodes={loadNodes}
@@ -159,8 +160,8 @@ const Diagnosis = () => {
           <NodeContainer nodes={nodes} setNodes={setNodes} />
         </div>
         {/* Right: Sidebar */}
-        <div className="w-[24%]">
-          <RightSidebar nodes={nodes} />
+        <div className="w-auto">
+          <RightSidebarPatient nodes={nodes} />
         </div>
       </div>
       {/* Footer */}

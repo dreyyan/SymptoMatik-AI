@@ -17,7 +17,7 @@ const Styles = {
 
     // Buttons
     roundedButtonStyle: "cursor-pointer border bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-full w-full mt-2 px-6 py-1 text-sm",
-    primaryButtonStyle: "cursor-pointer bg-[var(--trust-blue)] text-[var(--soft-white)] rounded-2xl w-auto mt-2 px-6 text-md font-semibold",
+    primaryButtonStyle: "cursor-pointer bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-2xl w-auto mt-2 px-6 text-md font-bold",
     secondaryButtonStyle: "cursor-pointer border bg-[var(--clean-white)] text-[var(--trust-blue)] rounded-2xl w-auto mt-2 px-6 py-1 text-md transition duration-300 ease-in-out hover:bg-[#E6F0F2] hover:text-[var(--trust-blue)] hover:border-[var(--clean-white)]",
 
     // Components

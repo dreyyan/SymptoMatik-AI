@@ -66,14 +66,14 @@ const Disease = ({
           </div>
           <div className="flex items-center gap-4">
             {/* PROGRESS BAR */}
-            <div className="w-[90%] bg-gray-200 rounded-full h-2">
+            <div className="w-[90%] bg-gray-200 rounded-full h-3">
               <div
-                className="bg-[var(--trust-blue)] h-2 rounded-full"
+                className="bg-[var(--trust-blue)] h-3 rounded-full"
                 style={{ width: `${confidenceLevel}%` }}
               ></div>
             </div>
             {/* VALUE */}
-            <span className="text-sm text-gray-600 font-semibold">
+            <span className="text-lg text-gray-600 inter-semibold">
               {confidenceLevel}%
             </span>
           </div>

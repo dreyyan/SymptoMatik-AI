@@ -37,7 +37,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({text, onClick, disabled = 
         mt-2 px-5
 
         bg-[var(--trust-blue)]
-        text-[var(--soft-white)]
+        text-[var(--clean-white)]
         text-md
 
         dm-serif-display

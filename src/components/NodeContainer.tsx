@@ -96,7 +96,7 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-screen rounded-bl-lg rounded-br-lg bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)]"
+      className="relative w-full h-screen bg-gray-100 border-2 border-[rgba(107,114,128,0.1)]"
     >
       {nodes.map((node) => {
         console.log(
@@ -107,7 +107,7 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
         return (
           <div
             key={node.id}
-            className="absolute w-80 h-16 flex items-center rounded-lg pr-4 bg-[var(--soft-white)] text-white font-bold shadow-md select-none shadow-[0_0_4px_2px_rgba(0,0,0,0.8)]"
+            className="absolute w-80 h-16 flex items-center rounded-lg pr-4 bg-[var(--clean-white)] text-white font-bold shadow-md select-none shadow-[0_0_4px_2px_rgba(0,0,0,0.8)]"
             style={{ left: node.x, top: node.y }}
           >
             {/* Left: Draggable Point with Leeway */}
@@ -119,9 +119,9 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
               }`}
               onMouseDown={(e) => handleMouseDown(e, node)}
             >
-              <img className="w-6" src="drag-indicator-icon.svg" />
+              <img className="w-8" src="drag-indicator-icon.svg"/>
             </div>
-            <span className="flex-1 inter text-sm text-black pl-4">{node.value}</span>
+            <span className="flex-1 inter-semibold text-md text-black pl-4">{node.value}</span>
             <select
               value={node.severity}
               onChange={(e) =>

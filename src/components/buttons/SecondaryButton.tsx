@@ -28,7 +28,7 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({ text, onClick, disabl
                 text-[var(--trust-blue)]
                 border-[var(--trust-blue)]
                 hover:bg-[var(--trust-blue)]
-                hover:text-[var(--soft-white)]
+                hover:text-[var(--clean-white)]
                 border
 
                 dm-serif-display
@@ -36,8 +36,7 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({ text, onClick, disabl
                 duration-200 ease-in-out
 
                 transition
-                transform 
-                hover:scale-101
+                transform
                 
                 cursor-pointer
 
