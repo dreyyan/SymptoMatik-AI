@@ -48,7 +48,7 @@ const SignUp = () => {
             </form>
 
             {/* BUTTON: SIGN UP */}
-            <PrimaryButton text="Sign In" onClick={handleSignUp} width="full" height="1" disabled={false}/>
+            <PrimaryButton text="Sign Up" onClick={handleSignUp} width="full" height="36px" disabled={false}/>
 
             {/* OR SEPARATOR */}
             <div className="flex items-center w-full my-4 text-[var-(--trust-blue)]">

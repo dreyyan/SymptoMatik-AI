@@ -39,7 +39,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
 
   const [allSymptoms, setAllSymptoms] = useState<string[]>(symptomList.toArray().sort((a, b) => a.localeCompare(b)));
   const [symptomSearch, setSymptomSearch] = useState<string>("");
-  const [leftSidebar, setLeftSidebar] = useState("Nodes");
+  const [leftSidebar, setLeftSidebar] = useState("File");
   const [sidebarVisibility, setSidebarVisibility] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState<ModalConfig>({
@@ -684,7 +684,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
         showCancel={modalConfig.showCancel}
       />
       <div
-        className={`flex flex-col gap-4 px-6 py-10 bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] rounded-lg h-screen ${
+        className={`flex flex-col gap-4 px-6 py-4 bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] h-screen ${
           sidebarVisibility ? "" : "px-1 py-4"
         }`}
       >
@@ -717,21 +717,21 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
         )}
         {/* PANEL: FILE */}
         {sidebarVisibility && leftSidebar === "File" && (
-          <div className="flex flex-col gap-4 min-h-32 pt-6">
+          <div className="flex flex-col gap-4 min-h-32 pt-2">
             {/* MINI-HEADER */}
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg font-semibold text-[var(--trust-blue)]">
+            <div className="flex justify-between items-end">
+              <h3 className="text-md font-[600] text-[var(--trust-blue)]">
                 Patient Records
               </h3>
               <div className="flex gap-2">
                 <button className="cursor-pointer duration-300 hover:opacity-60" onClick={handleAddPatient}>
-                  <img className="w-6" src="add-patient-icon.svg" />
+                  <img className="w-6 transition-all duration-150 hover:scale-105" src="add-patient-icon.svg" />
                 </button>
                 <button className="cursor-pointer duration-300 hover:opacity-60" onClick={handleAddFile}>
-                  <img className="w-6" src="add-file-icon.svg" />
+                  <img className="w-6 transition-all duration-150 hover:scale-105" src="add-symptom-file-icon.svg" />
                 </button>
                 <button className="cursor-pointer duration-300 hover:opacity-60" onClick={handleSaveFile}>
-                  <img className="w-6" src="save-icon.svg" />
+                  <img className="w-6 transition-all duration-150 hover:scale-105" src="save-icon.svg" />
                 </button>
               </div>
             </div>
@@ -758,16 +758,16 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                           src={openFolders[patient] ? "arrow-down.svg" : "arrow-right.svg"}
                         />
                         <span>
-                          <img className="w-6 mr-1" src="patient-icon.svg" />
+                          <img className="w-5 mr-1" src="patient-icon.svg" />
                         </span>
-                        <span className={Styles.subheaderStyle}>{patient}</span>
+                        <span className="text-sm font-[500] text-[var(--text)]">{patient}</span>
                       </button>
                       <button
-                        className="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full text-gray-500 hover:bg-gray-200 hover:text-gray-700 transition-all duration-300"
+                        className="cursor-pointer flex items-center justify-center w-8 h-4 rounded-full text-gray-500 hover:bg-gray-200 hover:text-gray-700 transition-all duration-300"
                         onClick={() => togglePatientSettings(patient)}
                         ref={(el) => (settingsMenuRefs.current[`patient-${patient}`] = el)}
                       >
-                        <span className="text-md text-[var(--trust-blue)]">•••</span>
+                        <span className="text-sm font-[100] tracking-tighter text-[var(--text)]">• • •</span>
                       </button>
                     </div>
                     {/* Settings Menu for Patient */}
@@ -797,7 +797,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                       </div>
                     )}
                     <div
-                      className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                      className={`overflow-hidden transition-all duration-300 ease-in-out pl-6  ${
                         openFolders[patient] ? "h-auto opacity-100" : "h-0 opacity-0"
                       }`}
                     >
@@ -813,15 +813,16 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                           >
                             <div className="flex items-center gap-2 flex-1" onClick={() => handleLoadFile(patient, file.fileName)}>
                               <img className="w-4" src="symptom-file-icon.svg" />
-                              <p className="text-xs">{file.fileName}</p>
+                              <p className="text-xs font-[600]">{file.fileName}</p>
                               {modifiedFiles[`${patient}-${file.fileName}`] && <span className="ml-1">*</span>}
                             </div>
                             <button
-                              className="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full text-gray-500 hover:bg-gray-200 hover:text-gray-700 transition-all duration-300"
+                              className="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full text-gray-500 transition-all duration-300"
                               onClick={() => toggleFileSettings(patient, file.fileName)}
                               ref={(el) => (settingsMenuRefs.current[`${patient}-${file.fileName}`] = el)}
                             >
-                              <span className="text-xs text-[var(--trust-blue)]">•••</span>
+                              {/* <span className="text-xs text-[var(--trust-blue)]">•••</span> */}
+                              <span className="text-[10px] font-[100] tracking-tighter text-[var(--text)]">• • •</span>
                             </button>
                             {/* Settings Menu for File */}  
                             {settingsMenuFile === `${patient}-${file.fileName}` && (
@@ -865,8 +866,8 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
         )}
         {/* PANEL: NODES */}
         {sidebarVisibility && leftSidebar === "Nodes" && (
-          <div className="flex flex-col gap-4 pt-6">
-            <h3 className="text-lg font-semibold text-[var(--trust-blue)]">Symptoms</h3>
+          <div className="flex flex-col gap-4 pt-2">
+            <h3 className="text-md font-[600] text-[var(--trust-blue)]">Symptoms</h3>
             <input
               className="w-full rounded-full px-4 py-2 bg-white border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 placeholder-gray-400"
               type="text"
@@ -898,10 +899,10 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                           {symptoms.map((value, index) => (
                             <div
                               key={index}
-                              className="flex items-center gap-2 text-sm font-semibold text-[var(--trust-blue)] hover:text-[var(---dark-navy)] cursor-pointer p-2 rounded select-none"
+                              className="flex items-center gap-2 text-sm font-[500] text-[var(--trust-blue)] hover:text-[var(---dark-navy)] cursor-pointer p-2 rounded select-none"
                               onClick={() => addSymptomNode(value)}
                             >
-                              <img className="w-5" src="symptom-file-icon.svg" />
+                              <img className="w-6" src="symptom-file-icon.svg" />
                               {value}
                             </div>
                           ))}

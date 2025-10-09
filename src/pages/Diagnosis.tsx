@@ -72,9 +72,9 @@ const Diagnosis = () => {
   return (
     <div className="flex flex-col bg-gray-100">
       {/* Header */}
-      <Header />
+      <Header/>
       {/* Main Content */}
-      <div className="flex min-h-screen flex-1 p-4 gap-4">
+      <div className="flex min-h-screen flex-1">
         {/* Left: Sidebar */}
         <div className="w-1/5 h-screen">
           <LeftSidebar 
@@ -88,7 +88,7 @@ const Diagnosis = () => {
         {/* Center: Droppable Area */}
         <div className="flex-1 flex flex-col">
           {currentFile && currentPatient && (
-            <div className="bg-white p-4 rounded-tl-lg rounded-tr-lg shadow z-1">
+            <div className="bg-white p-4 shadow z-1">
               <div className="flex items-center gap-2">
                 <h2 className="text-lg font-bold text-[var(--trust-blue)]">{currentPatient} |</h2>
                 <h3 className="text-sm font-bold text-[var(--trust-blue)]">{currentFile}</h3>

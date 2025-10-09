@@ -107,12 +107,12 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
         return (
           <div
             key={node.id}
-            className="absolute w-72 h-16 flex items-center rounded-lg pr-4 bg-[var(--clean-white)] text-white font-bold shadow-md select-none shadow-[0_0_4px_2px_rgba(0,0,0,0.8)]"
+            className="absolute w-80 h-16 flex items-center rounded-lg pr-4 bg-[var(--clean-white)] text-white font-bold shadow-md select-none shadow-[0_0_4px_2px_rgba(0,0,0,0.8)]"
             style={{ left: node.x, top: node.y }}
           >
             {/* Left: Draggable Point with Leeway */}
             <div
-              className={`flex items-center justify-center h-full w-12 rounded-tl-lg rounded-bl-lg cursor-grab ${
+              className={`flex items-center justify-center h-full w-10 rounded-tl-lg rounded-bl-lg cursor-grab ${
                 draggingNodeId === node.id ? 'cursor-grabbing' : 'cursor-grab'
               } ${
                 classificationFillColors[node.classification] || classificationFillColors.undefined
@@ -121,7 +121,7 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
             >
               <img className="w-6" src="drag-indicator-icon.svg" />
             </div>
-            <span className="flex-1 text-black pl-2">{node.value}</span>
+            <span className="flex-1 text-sm text-black pl-4">{node.value}</span>
             <select
               value={node.severity}
               onChange={(e) =>

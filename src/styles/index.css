@@ -2,7 +2,7 @@
 
 :root {
   /* 🌊 Primary brand color — trust, reliability */
-  --trust-blue: #005566;   /* Navbar, buttons, links, highlights */
+  --trust-blue: #02a9a6;   /* Navbar, buttons, links, highlights */
   /* 🩺 Secondary brand color — healing, wellness */
   --healing-teal: #00A5A5; /* Secondary buttons, charts, badges */
   /* 🧼 Backgrounds & surfaces */
@@ -13,10 +13,11 @@
   --accent-coral: #FF6F61; /* Alert button, notification dot, emphasis */
   /* 🌌 Deep background */
   --dark-navy: #1A2A44;    /* Footers, sidebars, headers on dark mode */
+  --text: #444444;
 }
 
 body {
-    font-family: "Roboto", sans-serif;
+    font-family: "Inter", sans-serif;
     font-weight: 400;
     color: var(--slate-gray);
     background-color: var(--clean-white);
@@ -37,6 +38,14 @@ body {
 .roboto-heading { font-family: "Roboto", sans-serif; font-weight: 700; font-style: normal; }
 .roboto-body { font-family: "Roboto", sans-serif; font-weight: 400; font-style: normal; }
 .roboto-cta { font-family: "Roboto", sans-serif; font-weight: 500; font-style: normal; }
+
+
+.inter {
+  font-family: "Inter", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
 
 /* For Chrome, Safari, Edge */
 ::-webkit-scrollbar {

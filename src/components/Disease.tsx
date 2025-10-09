@@ -60,16 +60,23 @@ const Disease = ({
 
       {/* Confidence Level */}
       {confidenceLevel !== undefined && (
-        <div className="flex items-center gap-3">
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div
-              className="bg-[var(--trust-blue)] h-2 rounded-full"
-              style={{ width: `${confidenceLevel}%` }}
-            ></div>
+        <div className="block items-center gap-3">
+          <div className="text-md ">
+            Confidence Level:
           </div>
-          <span className="text-sm text-gray-600 font-semibold">
-            {confidenceLevel}%
-          </span>
+          <div className="flex items-center gap-4">
+            {/* PROGRESS BAR */}
+            <div className="w-[90%] bg-gray-200 rounded-full h-2">
+              <div
+                className="bg-[var(--trust-blue)] h-2 rounded-full"
+                style={{ width: `${confidenceLevel}%` }}
+              ></div>
+            </div>
+            {/* VALUE */}
+            <span className="text-sm text-gray-600 font-semibold">
+              {confidenceLevel}%
+            </span>
+          </div>
         </div>
       )}
 

@@ -54,7 +54,7 @@ const SignIn = () => {
                 <Link to="ResetPassword" className={Styles.sublinkStyle}>Forgot your password?</Link>
             </form>
             {/* BUTTON: SIGN UP */}
-            <PrimaryButton text="Sign In" onClick={handleSignIn} width="full" height="1" disabled={false}/>
+            <PrimaryButton text="Sign In" onClick={handleSignIn} width="full" height="36px" disabled={false}/>
             
             {/* OR SEPARATOR */}
             <div className="flex items-center w-full my-4 text-[var-(--trust-blue)]">
