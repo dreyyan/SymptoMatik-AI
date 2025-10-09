@@ -22,19 +22,19 @@ const Header = () => {
       <div className="flex h-full">
         {/* [L] BANNER */}
         <div className="flex justify-center items-center pl-8 pr-14 bg-white-500 w-[24%]">
-          <Link to="/home" className="flex items-center gap-2 h-[50%]">
-            <img src="/symptomatik-logo.svg" className="h-12" />
-            <img src="/symptomatik-banner.png" className="h-full" />
+          <Link to="/home" className="flex items-center gap-4 h-[50%]">
+            <img src="/symptomatik-logo.svg" className="h-10" />
+            <img src="/symptomatik-banner.svg" className="h-full" />
           </Link>
         </div>
 
         {/* [C] NAVIGATION LINKS */}
-        <div className="flex flex-row justify-end items-center gap-x-[4%] w-full">
+        <div className="flex flex-row justify-end items-center gap-x-[6%] w-full">
           <Link to="/diagnosis">
             <img
               src={
                 hovered.diagnosis
-                  ? "diagnosis-hover-icon.svg"
+                  ? "diagnosis-icon-hover.svg"
                   : "diagnosis-icon.svg"
               }
               onMouseEnter={() => handleHover("diagnosis", true)}
@@ -48,7 +48,7 @@ const Header = () => {
             <img
               src={
                 hovered.analytics
-                  ? "analytics-hover-icon.svg"
+                  ? "analytics-icon-hover.svg"
                   : "analytics-icon.svg"
               }
               onMouseEnter={() => handleHover("analytics", true)}
@@ -62,7 +62,7 @@ const Header = () => {
             <img
               src={
                 hovered.consultation
-                  ? "consultation-hover-icon.svg"
+                  ? "consultation-icon-hover.svg"
                   : "consultation-icon.svg"
               }
               onMouseEnter={() => handleHover("consultation", true)}

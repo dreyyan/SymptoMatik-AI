@@ -7,10 +7,10 @@ interface PrimaryButtonProps {
     width?: string;
     height?: string;
     borderRadius?: string;
+    fontSize?: string;
 };
 
-const PrimaryButton: React.FC<PrimaryButtonProps> = ({text, onClick, disabled = false, href, width = "150px", height = "52px", borderRadius = "100px"}) => {
-    const fontSize = `calc(${height} * 0.5)`;
+const PrimaryButton: React.FC<PrimaryButtonProps> = ({text, onClick, disabled = false, href, width = "150px", height = "52px", borderRadius = "100px", fontSize = "20px"}) => {
 
     const style = { width, height, borderRadius, fontSize };
         if (href) {
@@ -34,10 +34,10 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({text, onClick, disabled = 
 
         flex justify-center items-center
 
-        mt-2 px-6
+        mt-2 px-5
 
         bg-[var(--trust-blue)]
-        text-[var(--clean-white)]
+        text-[var(--soft-white)]
         text-md
 
         dm-serif-display
@@ -47,7 +47,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({text, onClick, disabled = 
 
         transition
         transform 
-        hover:scale-101
+        hover:-translate-y-[1px]
         hover:opacity-90
         
         cursor-pointer

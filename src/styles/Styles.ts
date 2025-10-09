@@ -2,7 +2,7 @@ const Styles = {
     // Div
     mainDivStyle: "bg-[url('/symptomatik-background-login-page.png')] bg-cover bg-end flex flex-row w-full min-h-screen",
     loginDivStyle: "bg-gradient-to-l from-transparent from-30% to-[var(--clean-white)] to-80% flex flex-col px-24 pt-2 pb-8 w-[40%] h-auto",
-    heroSectionDivStyle: "flex flex-col justify-center items-center mb-[20%]",
+    heroSectionDivStyle: "flex flex-col justify-center mb-[20%]",
     sidebarLinkDivStyle: "flex flex-col items-center justify-start items-end w-full h-full pr-[10%] text-2xl font-semibold border-b-2",
     signUpLinkDivStyle: "flex flex-row justify-center items-center gap-1 my-2 text-sm",
     sidebarLinkSeparatorStyle: "w-full text-end border-b py-2 border-slate-400",
@@ -17,8 +17,8 @@ const Styles = {
 
     // Buttons
     roundedButtonStyle: "cursor-pointer border bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-full w-full mt-2 px-6 py-1 text-sm",
-    smSquareButtonStyle: "cursor-pointer bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-2xl w-auto mt-2 px-6 text-md",
-    smSquareButtonOutlineStyle: "cursor-pointer border bg-[var(--clean-white)] text-[var(--trust-blue)] rounded-2xl w-auto mt-2 px-6 py-1 text-md transition duration-300 ease-in-out hover:bg-[#E6F0F2] hover:text-[var(--trust-blue)] hover:border-[var(--clean-white)]",
+    primaryButtonStyle: "cursor-pointer bg-[var(--trust-blue)] text-[var(--soft-white)] rounded-2xl w-auto mt-2 px-6 text-md font-semibold",
+    secondaryButtonStyle: "cursor-pointer border bg-[var(--clean-white)] text-[var(--trust-blue)] rounded-2xl w-auto mt-2 px-6 py-1 text-md transition duration-300 ease-in-out hover:bg-[#E6F0F2] hover:text-[var(--trust-blue)] hover:border-[var(--clean-white)]",
 
     // Components
     searchBarStyle: "border-2 border-[var(--trust-blue)] rounded-full w-[28%] h-[54%] pl-[1%] ml-8 mr-4",
@@ -39,7 +39,7 @@ const Styles = {
     separatorStyle: "text-md text-center my-2",
     navigationLinkStyle: "text-lg roboto-cta relative text-[var(--trust-blue)] after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-full after:scale-x-0 after:origin-center after:bg-[var(--trust-blue)] after:transition-transform after:duration-300 hover:after:scale-x-100",
     sidebarLinkStyle: "text-lg poppins-semibold relative text-[var(--trust-blue)]",
-    subheaderStyle: "text-md font-[500] text-[var(--text)]",
+    subheaderStyle: "text-md inter-semibold text-[var(--trust-blue)]",
 }
 
 export default Styles

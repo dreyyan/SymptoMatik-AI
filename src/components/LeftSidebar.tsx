@@ -172,7 +172,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
   const handleAddPatient = () => {
     setModalConfig({
       title: "Add Patient",
-      message: "Enter patient name:",
+      message: "",
       confirmText: "Add",
       inputValue: "",
       showCancel: true,
@@ -695,32 +695,32 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
               type="button"
               className={
                 leftSidebar === "File"
-                  ? Styles.smSquareButtonStyle
-                  : Styles.smSquareButtonOutlineStyle
+                  ? Styles.primaryButtonStyle
+                  : Styles.secondaryButtonStyle
               }
               onClick={() => setLeftSidebar("File")}
             >
-              File
+              Files
             </button>
             <button
               type="button"
               className={
                 leftSidebar === "Nodes"
-                  ? Styles.smSquareButtonStyle
-                  : Styles.smSquareButtonOutlineStyle
+                  ? Styles.primaryButtonStyle
+                  : Styles.secondaryButtonStyle
               }
               onClick={() => setLeftSidebar("Nodes")}
             >
-              Nodes
+              Symptoms
             </button>
           </div>
         )}
         {/* PANEL: FILE */}
         {sidebarVisibility && leftSidebar === "File" && (
-          <div className="flex flex-col gap-4 min-h-32 pt-2">
+          <div className="flex flex-col gap-4 min-h-32 pt-4">
             {/* MINI-HEADER */}
             <div className="flex justify-between items-end">
-              <h3 className="text-md font-[600] text-[var(--trust-blue)]">
+              <h3 className="text-lg font-[600] leading-none text-[var(--trust-blue)]">
                 Patient Records
               </h3>
               <div className="flex gap-2">
@@ -737,7 +737,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
             </div>
             {/* SEARCH BAR */}
             <input
-              className="w-full rounded-full px-4 py-2 bg-white border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 placeholder-gray-400"
+              className="w-full inter text-sm rounded-full px-4 py-2 bg-white border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 placeholder-gray-400"
               type="text"
               placeholder="Search patient or file..."
               value={patientSearch}
@@ -757,17 +757,18 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                           className="w-6 transition-transform duration-300"
                           src={openFolders[patient] ? "arrow-down.svg" : "arrow-right.svg"}
                         />
+                        {/* ICON: Patient */}
                         <span>
-                          <img className="w-5 mr-1" src="patient-icon.svg" />
+                          <img className="w-5 mr-1" src="patient-icon.svg"/>
                         </span>
-                        <span className="text-sm font-[500] text-[var(--text)]">{patient}</span>
+                        <span className="text-sm inter text-[var(--text)]">{patient}</span>
                       </button>
                       <button
                         className="cursor-pointer flex items-center justify-center w-8 h-4 rounded-full text-gray-500 hover:bg-gray-200 hover:text-gray-700 transition-all duration-300"
                         onClick={() => togglePatientSettings(patient)}
                         ref={(el) => (settingsMenuRefs.current[`patient-${patient}`] = el)}
                       >
-                        <span className="text-sm font-[100] tracking-tighter text-[var(--text)]">• • •</span>
+                        <span className="text-sm font-bold text-[var(--text)]">…</span>
                       </button>
                     </div>
                     {/* Settings Menu for Patient */}
@@ -777,7 +778,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                         style={getMenuPosition(settingsMenuRefs.current[`patient-${patient}`])}
                       >
                         <button
-                          className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          className="roboto-cta block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                           onClick={() => {
                             renamePatient(patient);
                             setSettingsMenuPatient(null);
@@ -786,7 +787,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                           Rename Patient
                         </button>
                         <button
-                          className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                          className="roboto-cta block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                           onClick={() => {
                             handleDeletePatient(patient);
                             setSettingsMenuPatient(null);
@@ -805,15 +806,21 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                         {files.map((file, idx) => (
                           <div
                             key={idx}
-                            className={`relative flex items-center justify-between text-md font-bold text-[var(--slate-gray)] hover:text-[var(---dark-navy)] cursor-pointer px-2 py-1 rounded ${
+                            className={`border-b border-[rgba(107,114,128,0.2)] relative flex items-center justify-between text-md font-bold text-[var(--slate-gray)] hover:text-[var(---dark-navy)] cursor-pointer px-2 py-1 rounded ${
                               hoveredFile === `${patient}-${file.fileName}` ? "bg-gray-200" : ""
                             }`}
                             onMouseEnter={() => setHoveredFile(`${patient}-${file.fileName}`)}
                             onMouseLeave={() => setHoveredFile(null)}
                           >
                             <div className="flex items-center gap-2 flex-1" onClick={() => handleLoadFile(patient, file.fileName)}>
-                              <img className="w-4" src="symptom-file-icon.svg" />
-                              <p className="text-xs font-[600]">{file.fileName}</p>
+                              <img
+                                className="w-5 transition-colors duration-150"
+                                src={hoveredFile === `${patient}-${file.fileName}`
+                                  ? "symptom-file-icon-hover.svg"
+                                  : "symptom-file-icon.svg"}
+                                alt="Symptom file icon"
+                              />
+                              <p className="text-sm inter-body flex items-center gap-2 text-[var(--text)] transition duration-150 cursor-pointer select-none">{file.fileName}</p>
                               {modifiedFiles[`${patient}-${file.fileName}`] && <span className="ml-1">*</span>}
                             </div>
                             <button
@@ -821,8 +828,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                               onClick={() => toggleFileSettings(patient, file.fileName)}
                               ref={(el) => (settingsMenuRefs.current[`${patient}-${file.fileName}`] = el)}
                             >
-                              {/* <span className="text-xs text-[var(--trust-blue)]">•••</span> */}
-                              <span className="text-[10px] font-[100] tracking-tighter text-[var(--text)]">• • •</span>
+                              <span className="text-sm font-bold text-[var(--text)]">…</span>
                             </button>
                             {/* Settings Menu for File */}  
                             {settingsMenuFile === `${patient}-${file.fileName}` && (
@@ -831,7 +837,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                                 style={getMenuPosition(settingsMenuRefs.current[`${patient}-${file.fileName}`])}
                               >
                                 <button
-                                  className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                  className="roboto-cta block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                                   onClick={() => {
                                     renameFile(patient, file.fileName);
                                     setSettingsMenuFile(null);
@@ -840,7 +846,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                                   Rename File
                                 </button>
                                 <button
-                                  className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
+                                  className="roboto-cta block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
                                   onClick={() => {
                                     handleDeleteFile(patient, file.fileName);
                                     setSettingsMenuFile(null);
@@ -866,10 +872,10 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
         )}
         {/* PANEL: NODES */}
         {sidebarVisibility && leftSidebar === "Nodes" && (
-          <div className="flex flex-col gap-4 pt-2">
-            <h3 className="text-md font-[600] text-[var(--trust-blue)]">Symptoms</h3>
+          <div className="flex flex-col gap-4 pt-3">
+            {/* <h3 className="text-xl font-[600] text-[var(--trust-blue)]">Symptoms</h3> */}
             <input
-              className="w-full rounded-full px-4 py-2 bg-white border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 placeholder-gray-400"
+              className="w-full inter text-sm rounded-full px-4 py-2 bg-white border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 placeholder-gray-400"
               type="text"
               placeholder="Search symptoms..."
               value={symptomSearch}
@@ -895,14 +901,19 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                           openFolders[section] ? "h-auto opacity-100" : "h-0 opacity-0"
                         }`}
                       >
-                        <div className="ml-6 mt-1 space-y-1">
+                        <div className="ml-6 mt-1 ">
                           {symptoms.map((value, index) => (
+                            // ICON: Symptom File
                             <div
                               key={index}
-                              className="flex items-center gap-2 text-sm font-[500] text-[var(--trust-blue)] hover:text-[var(---dark-navy)] cursor-pointer p-2 rounded select-none"
+                              className="border-b border-[rgba(107,114,128,0.2)] text-sm inter-body flex items-center gap-2 text-[var(--text)] transition duration-150 cursor-pointer p-2 select-none"
                               onClick={() => addSymptomNode(value)}
                             >
-                              <img className="w-6" src="symptom-file-icon.svg" />
+                              <img
+                                className="w-5 transition-colors duration-150"
+                                src="symptom-icon.svg"
+                                alt="Symptom icon"
+                              />
                               {value}
                             </div>
                           ))}
@@ -919,7 +930,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
               {/* LOADED NODES */}
               {currentLocalFile && currentLocalPatient && (
                 <div className="mt-4">
-                  <h3 className="text-sm font-semibold text-[var(--trust-blue)]">Loaded Nodes</h3>
+                  <h3 className="text-sm inter-semibold text-[var(--trust-blue)]">Loaded Nodes</h3>
                   {nodes.length > 0 ? (
                     <div className="mt-2 space-y-1">
                       {nodes.map((node) => (
@@ -938,7 +949,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                       ))}
                     </div>
                   ) : (
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm inter text-gray-600">
                       No nodes loaded for the current file.
                     </div>
                   )}

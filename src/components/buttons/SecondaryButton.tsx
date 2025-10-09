@@ -3,11 +3,12 @@ interface SecondaryButtonProps {
     onClick?: () => void;
     disabled?: boolean;
     width?: string;
+    fontSize?: string;
 }
 
-const SecondaryButton: React.FC<SecondaryButtonProps> = ({ text, onClick, disabled = false, width }) => {
+const SecondaryButton: React.FC<SecondaryButtonProps> = ({ text, onClick, disabled = false, width, fontSize = "16px" }) => {
 
-    const style = { width };
+    const style = { width, fontSize };
 
     return (
         <button
@@ -25,10 +26,10 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({ text, onClick, disabl
 
                 bg-[var(--clean-white)]
                 text-[var(--trust-blue)]
-                border
                 border-[var(--trust-blue)]
                 hover:bg-[var(--trust-blue)]
-                hover:text-[var(--clean-white)]
+                hover:text-[var(--soft-white)]
+                border
 
                 dm-serif-display
 
@@ -44,7 +45,7 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({ text, onClick, disabl
                 disabled:cursor-not-allowed
             `}
         >
-            <p className="text-[14px]">{text}</p>
+            {text}
         </button>
     );
 }

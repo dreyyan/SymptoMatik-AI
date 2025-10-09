@@ -107,7 +107,7 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
         return (
           <div
             key={node.id}
-            className="absolute w-80 h-16 flex items-center rounded-lg pr-4 bg-[var(--clean-white)] text-white font-bold shadow-md select-none shadow-[0_0_4px_2px_rgba(0,0,0,0.8)]"
+            className="absolute w-80 h-16 flex items-center rounded-lg pr-4 bg-[var(--soft-white)] text-white font-bold shadow-md select-none shadow-[0_0_4px_2px_rgba(0,0,0,0.8)]"
             style={{ left: node.x, top: node.y }}
           >
             {/* Left: Draggable Point with Leeway */}
@@ -121,13 +121,13 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
             >
               <img className="w-6" src="drag-indicator-icon.svg" />
             </div>
-            <span className="flex-1 text-sm text-black pl-4">{node.value}</span>
+            <span className="flex-1 inter text-sm text-black pl-4">{node.value}</span>
             <select
               value={node.severity}
               onChange={(e) =>
                 handleSeverityChange(node.id, e.target.value as "Low" | "Medium" | "High")
               }
-              className={`h-8 px-2 rounded text-white text-sm ${
+              className={`h-8 px-2 rounded inter-semibold text-white text-sm ${
                 severityBackgroundColors[node.severity] || severityBackgroundColors.undefined
               }`}
             >
