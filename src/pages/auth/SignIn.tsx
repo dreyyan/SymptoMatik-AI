@@ -7,6 +7,8 @@ import OAuthButton from "../../components/buttons/OAuthButton";
 import PrimaryButton from "../../components/buttons/PrimaryButton";
 
 const SignIn = () => {
+  document.title = "SymptoMatik: Sign In";
+
   // [ METHODS ]: User Authentication
   const navigate = useNavigate();
   const handleSignIn = () => {
@@ -37,7 +39,7 @@ const SignIn = () => {
           <img src="./symptomatik-logo.svg" className="w-16 mt-6 mb-4" />
         </div>
 
-        <h2 className="text-4xl text-center inter-semibold text-[var(--primary-teal)]">
+        <h2 className="text-4xl text-center inter-semibold text-[var(--trust-blue)]">
           Welcome Back
         </h2>
         <h2 className="text-md text-center">
@@ -46,12 +48,14 @@ const SignIn = () => {
 
         {/* FORM INPUT */}
         <form action="/login-form" className={Styles.formStyle}>
+        <label htmlFor="username-email" className={Styles.inputLabelStyle}>Username or Email</label>
           <input
             type="text"
             placeholder="Username or Email"
             className={Styles.inputStyle}
           />
 
+          <label htmlFor="password" className={Styles.inputLabelStyle}>Password</label>
           <input
             type="password"
             placeholder="Password"
@@ -68,7 +72,7 @@ const SignIn = () => {
           onClick={handleSignIn}
           width="full"
           fontSize="18px"
-          height="50px"
+          height="40px"
           disabled={false}
         />
 

@@ -7,7 +7,7 @@ const ProfileButton = () => {
       {/* PROFILE SECTION */}
       <Link to="/account" className="flex justify-center items-center gap-x-4">
         {/* PROFILE PLACEHOLDER */}
-        <img src="profile-placeholder.avif" className="h-12 rounded-full" />
+        <img src="profile-placeholder.avif" className="h-10 rounded-full" />
         {/* NAME & USERNAME */}
         <div className="flex flex-col justify-center pr-4">
           <h3 className="text-md font-[300] text-[var(--text)]">

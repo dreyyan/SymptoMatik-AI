@@ -2,9 +2,9 @@
 
 :root {
   /* 🌊 Primary brand color — trust, reliability */
-  --primary-teal: #02a9a6; /* Navbar, buttons, links, highlights */
+  --trust-blue: #005566;   /* Navbar, buttons, links, highlights */
   /* 🩺 Secondary brand color — healing, wellness */
-  --healing-teal: #00a5a5; /* Secondary buttons, charts, badges */
+  --healing-teal: #02a9a6; /* Secondary buttons, charts, badges */
   /* 🧼 Backgrounds & surfaces */
   --clean-white: #f5f7fa; /* Page background, cards, form inputs */
   /* 🪨 Neutral text & dividers */

@@ -39,7 +39,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
       onClick={onClick}
       className="
         cursor-pointer
-        rounded-sm
+        rounded-full
 
         w-auto
 
@@ -47,7 +47,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
 
         mt-2 px-5
 
-        bg-[var(--primary-teal)]
+        bg-[var(--trust-blue)]
         text-white
         text-md
 

@@ -13,7 +13,7 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({
   disabled = false,
   width,
   fontSize = "16px",
-  borderRadius = "20px",
+  borderRadius = "6px",
 }) => {
   const style = { width, fontSize, borderRadius };
 
@@ -23,9 +23,6 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({
       onClick={disabled ? undefined : onClick}
       className={`
                 cursor-pointer
-                rounded-sm
-
-                w-42
 
                 flex justify-center items-center
 
@@ -33,7 +30,9 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({
 
                 text-[var(--trust-blue)]
                 border-[var(--trust-blue)]
-                hover:text-[var(--healing-teal)]
+                hover:border-[var(--clean-white)]
+                hover:bg-[var(--trust-blue)]
+                hover:text-white
                 border
 
                 dm-serif-display

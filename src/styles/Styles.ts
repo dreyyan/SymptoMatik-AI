@@ -12,10 +12,9 @@ const Styles = {
   sidebarLinkSeparatorStyle: "w-full text-end border-b py-2 border-slate-400",
 
   // Form & Input
-  formStyle: "flex flex-col mt-8 mb-2 py-2 w-[100%] gap-4",
-  inputStyle:
-    "border-1 border-[#BABABA] h-10 w-full rounded-[16px] mt-1 mb-2 px-3 py-2 text-sm focus:outline-none",
-  inputLabelStyle: "text-sm text-[12px] text-[var(--trust-blue)]",
+  formStyle: "flex flex-col mt-8 mb-2 py-2 w-[100%] gap-1",
+  inputStyle: "border-1 border-[#BABABA] h-10 w-full rounded-full mt-1 mb-2 px-3 py-2 text-sm focus:outline focus:outline focus:outline-[var(--healing-teal)]",
+  inputLabelStyle: "text-sm inter-semibold text-[var(--trust-blue)]",
 
   // Images
   loginPageBackground: "h-screen",
@@ -24,9 +23,9 @@ const Styles = {
   roundedButtonStyle:
     "cursor-pointer border bg-[var(--primary-teal)] text-[var(--clean-white)] rounded-full w-full mt-2 px-6 py-1 text-sm",
   primaryButtonStyle:
-    "cursor-pointer bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-2xl w-auto mt-2 px-6 text-md font-bold",
+    "cursor-pointer bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-full w-auto mt-2 px-6 text-md inter-semibold",
   secondaryButtonStyle:
-    "cursor-pointer border bg-[var(--clean-white)] text-[var(--trust-blue)] rounded-2xl w-auto mt-2 px-6 py-1 text-md transition duration-300 ease-in-out hover:bg-[#E6F0F2] hover:text-[var(--trust-blue)] hover:border-[var(--clean-white)]",
+    "cursor-pointer border inter bg-[var(--clean-white)] text-[var(--trust-blue)] rounded-full w-auto mt-2 px-6 py-1 text-md transition duration-300 ease-in-out hover:bg-[#E6F0F2] hover:text-[var(--trust-blue)] hover:border-[var(--clean-white)]",
 
   // Components
   searchBarStyle:
@@ -45,7 +44,7 @@ const Styles = {
   linkTextStyle: "text-2xl font-semibold text-white",
   headerLinkStyle: "text-2xl font-semibold color-gray",
   sublinkStyle:
-    "text-sm text-blue text-left duration-200 ease-in-out transition hover:opacity-50",
+    "text-xs font-bold text-[var(--slate-gray)] text-left duration-200 ease-in-out transition hover:opacity-50",
   separatorStyle: "text-md text-center my-2",
   navigationLinkStyle:
     "text-lg roboto-cta relative text-[var(--trust-blue)] after:content-[''] after:absolute after:left-0 after:bottom-0 after:h-[2px] after:w-full after:scale-x-0 after:origin-center after:bg-[var(--trust-blue)] after:transition-transform after:duration-300 hover:after:scale-x-100",

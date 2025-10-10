@@ -6,6 +6,8 @@ import OAuthButton from "../../components/buttons/OAuthButton";
 import PrimaryButton from "../../components/buttons/PrimaryButton";
 
 const SignUp = () => {
+    document.title = "SymptoMatik: Sign Up";
+
     // [ METHODS ]: User Authentication
     const navigate = useNavigate();
 

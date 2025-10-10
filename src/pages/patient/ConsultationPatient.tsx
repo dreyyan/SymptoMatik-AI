@@ -208,23 +208,23 @@ const ConsultationPatient = () => {
                 </div>
                 <div className="flex gap-2">
                   <button
-                    className="cursor-pointer flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-[var(--trust-blue)] hover:bg-blue-200 transition-all duration-300"
+                    className="cursor-pointer flex items-center justify-center w-8 h-8 rounded-full text-[var(--trust-blue)] hover:bg-blue-200 transition-all duration-300"
                     onClick={handleCallDoctor}
                   >
-                    <img className="w-5" src="phone-icon.svg" alt="Icon ng Tawag" />
+                    <img className="w-5" src="phone-icon.svg" alt="Phone Icon" />
                   </button>
                   <button
-                    className="cursor-pointer flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-[var(--trust-blue)] hover:bg-blue-200 transition-all duration-300"
+                    className="cursor-pointer flex items-center justify-center w-8 h-8 rounded-full text-[var(--trust-blue)] hover:bg-blue-200 transition-all duration-300"
                     onClick={handleCallDoctor}
                   >
-                    <img className="w-5" src="video-call-icon.svg" alt="Icon ng Tawag" />
+                    <img className="w-5" src="video-call-icon.svg" alt="Video Call Icon" />
                   </button>
                   <div className="relative">
                     <button
-                      className="cursor-pointer flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-[var(--trust-blue)] hover:bg-blue-200 transition-all duration-300"
+                      className="cursor-pointer flex items-center justify-center w-8 h-8 rounded-full text-[var(--trust-blue)] hover:bg-blue-200 transition-all duration-300"
                       onClick={toggleOthersMenu}
                     >
-                      <img className="w-5" src="others-icon.svg" alt="Icon ng Iba Pa" />
+                      <img className="w-5" src="others-icon.svg" alt="Others Icon" />
                     </button>
                     {showOthersMenu && (
                       <div className="absolute right-0 top-10 bg-white shadow-lg rounded-md p-2 z-10 w-48">

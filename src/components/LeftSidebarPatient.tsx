@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import Styles from "../styles/Styles.js";
 import LinkedList from "../logic/LinkedList.js";
 import Modal from "./Modal.tsx";
-import pediatricData from "../data/pediatricData.json";
+import data from "../data/data.json";
 
 type NodeType = {
   id: string;
@@ -17,6 +17,14 @@ type LeftSidebarProps = {
   addNode: (value: string, id: string, severity: string, classification: string) => boolean;
   nodes: NodeType[];
   loadNodes: (nodes: NodeType[]) => void;
+  setCurrentPatient: (patient: string | null) => void;
+  setCurrentFile: (file: string | null) => void;
+  patientFiles: Record<string, { fileName: string; nodes: NodeType[]; modified?: boolean }[]>;
+  setPatientFiles: React.Dispatch<React.SetStateAction<Record<string, { fileName: string; nodes: NodeType[]; modified?: boolean }[]>>>;
+  modifiedFiles: Record<string, boolean>;
+  setModifiedFiles: React.Dispatch<React.SetStateAction<Record<string, boolean>>>;
+  currentPatient: string | null;
+  currentFile: string | null;
 };
 
 interface ModalConfig {
@@ -28,19 +36,16 @@ interface ModalConfig {
   showCancel?: boolean;
 }
 
-const LeftSidebar = ({
-  addNode,
-  nodes,
-  loadNodes,
-}: LeftSidebarProps) => {
+const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentFile, patientFiles, setPatientFiles, modifiedFiles, setModifiedFiles, currentPatient, currentFile }: LeftSidebarProps) => {
   const [symptomList] = useState(() => {
     const list = new LinkedList();
-    Object.keys(pediatricData.symptoms).forEach((symptom) => list.append(symptom));
+    Object.keys(data.symptoms).forEach((symptom) => list.append(symptom));
     return list;
   });
 
   const [allSymptoms, setAllSymptoms] = useState<string[]>(symptomList.toArray().sort((a, b) => a.localeCompare(b)));
   const [symptomSearch, setSymptomSearch] = useState<string>("");
+  const [leftSidebar, setLeftSidebar] = useState("Nodes");
   const [sidebarVisibility, setSidebarVisibility] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState<ModalConfig>({
@@ -49,8 +54,30 @@ const LeftSidebar = ({
     confirmText: "OK",
     showCancel: false,
   });
+  const [patientSearch, setPatientSearch] = useState<string>("");
   const [openFolders, setOpenFolders] = useState<Record<string, boolean>>({});
-  const [symptomMetadata] = useState(pediatricData.symptoms);
+  const [hoveredFile, setHoveredFile] = useState<string | null>(null);
+  const [symptomMetadata] = useState(data.symptoms);
+  const [settingsMenuPatient, setSettingsMenuPatient] = useState<string | null>(null);
+  const [settingsMenuFile, setSettingsMenuFile] = useState<string | null>(null);
+  const settingsMenuRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+
+  // Close dropdown menus when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const isOutside = Object.values(settingsMenuRefs.current).every(
+        (ref) => ref && !ref.contains(event.target as Node)
+      );
+      if (isOutside && (settingsMenuPatient || settingsMenuFile)) {
+        setSettingsMenuPatient(null);
+        setSettingsMenuFile(null);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [settingsMenuPatient, settingsMenuFile]);
 
   // Group symptoms by section
   const symptomsBySection = allSymptoms.reduce((acc, symptom) => {
@@ -80,10 +107,47 @@ const LeftSidebar = ({
     setSidebarVisibility((prev) => !prev);
   };
 
-  // HANDLE: DELETE NODE
-  const handleDeleteNode = (nodeId: string) => {
-    const updatedNodes = nodes.filter((n) => n.id !== nodeId);
-    loadNodes(updatedNodes);
+  // Filter patients and files based on search input
+  const filteredPatients = Object.keys(patientFiles).filter(
+    (patient) =>
+      patient.toLowerCase().includes(patientSearch.toLowerCase()) ||
+      patientFiles[patient].some((file) =>
+        file.fileName.toLowerCase().includes(patientSearch.toLowerCase())
+      )
+  );
+  const filteredFiles = filteredPatients.reduce((acc, patient) => {
+    const matchingFiles = patientFiles[patient].filter((file) =>
+      file.fileName.toLowerCase().includes(patientSearch.toLowerCase()) ||
+      patient.toLowerCase().includes(patientSearch.toLowerCase())
+    );
+    if (matchingFiles.length > 0) acc[patient] = matchingFiles;
+    return acc;
+  }, {} as Record<string, { fileName: string; nodes: NodeType[]; modified?: boolean }[]>);
+
+  // Track changes to nodes to mark files as modified
+  useEffect(() => {
+    if (nodes.length > 0 && currentPatient && currentFile) {
+      setModifiedFiles((prev) => ({
+        ...prev,
+        [`${currentPatient}-${currentFile}`]: true,
+      }));
+    }
+  }, [nodes, currentPatient, currentFile, setModifiedFiles]);
+
+  // Calculate dropdown menu position
+  const getMenuPosition = (buttonRef: HTMLButtonElement | null) => {
+    if (!buttonRef) return { top: '0px', left: '0px', openUpward: false };
+    const rect = buttonRef.getBoundingClientRect();
+    const menuHeight = 80; // Approximate height of the menu
+    const viewportHeight = window.innerHeight;
+    const openUpward = rect.bottom + menuHeight > viewportHeight;
+    const menuTop = openUpward ? rect.top - menuHeight : rect.bottom;
+    const menuLeft = rect.right - 100; // Adjust to align menu with button (assuming menu width ~100px)
+    return {
+      top: `${menuTop}px`,
+      left: `${menuLeft}px`,
+      openUpward,
+    };
   };
 
   // HANDLE: ADD SYMPTOM NODE
@@ -163,8 +227,8 @@ const LeftSidebar = ({
           sidebarVisibility ? "" : "px-1 py-4"
         }`}
       >
-        {/* Symptoms Panel */}
-        {sidebarVisibility && (
+        {/* PANEL: NODES */}
+        {sidebarVisibility && leftSidebar === "Nodes" && (
           <div className="flex flex-col gap-4 pt-3">
             <h3 className="text-lg font-[600] text-[var(--trust-blue)]">Symptoms</h3>
             <input
@@ -220,31 +284,33 @@ const LeftSidebar = ({
                 )}
               </div>
               {/* LOADED NODES */}
-              <div className="mt-4">
-                <h3 className="text-sm inter-semibold text-[var(--trust-blue)]">Loaded Nodes</h3>
-                {nodes.length > 0 ? (
-                  <div className="mt-2 space-y-1">
-                    {nodes.map((node) => (
-                      <div
-                        key={node.id}
-                        className="flex items-center justify-between text-sm font-semibold text-[var(--trust-blue)] p-2 rounded"
-                      >
-                        <span>{node.value}</span>
-                        <button
-                          className="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-500 hover:bg-red-200 hover:text-red-700 transition-all duration-300"
-                          onClick={() => handleDeleteNode(node.id)}
+              {currentFile && currentPatient && (
+                <div className="mt-4">
+                  <h3 className="text-sm inter-semibold text-[var(--trust-blue)]">Loaded Nodes</h3>
+                  {nodes.length > 0 ? (
+                    <div className="mt-2 space-y-1">
+                      {nodes.map((node) => (
+                        <div
+                          key={node.id}
+                          className="flex items-center justify-between text-sm font-semibold text-[var(--trust-blue)] p-2 rounded"
                         >
-                          <span className="text-xs font-bold">X</span>
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-sm inter text-gray-600">
-                    No nodes loaded.
-                  </div>
-                )}
-              </div>
+                     <span>{node.value}</span>
+                          <button
+                            className="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-500 hover:bg-red-200 hover:text-red-700 transition-all duration-300"
+                            onClick={() => handleDeleteNode(node.id)}
+                          >
+                            <span className="text-xs font-bold">X</span>
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="text-sm inter text-gray-600">
+                      No nodes loaded for the current file.
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
           </div>
         )}

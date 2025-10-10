@@ -24,7 +24,7 @@ const Header = () => {
         <div className="flex justify-center items-center pl-8 pr-14 bg-white-500 w-[24%]">
           <Link to="/home" className="flex items-center gap-4 h-[50%]">
             <img src="/symptomatik-logo.svg" className="h-10" />
-            <img src="/SymptoMatik-banner.svg" className="h-full" />
+            <img src="/symptomatik-banner.svg" className="h-full" />
           </Link>
         </div>
 
@@ -39,7 +39,7 @@ const Header = () => {
               }
               onMouseEnter={() => handleHover("diagnosis", true)}
               onMouseLeave={() => handleHover("diagnosis", false)}
-              className="w-7 transition-all duration-150 hover:scale-105"
+              className="w-8 transition-all duration-150 hover:scale-105"
               alt="Diagnosis"
             />
           </Link>
@@ -53,7 +53,7 @@ const Header = () => {
               }
               onMouseEnter={() => handleHover("analytics", true)}
               onMouseLeave={() => handleHover("analytics", false)}
-              className="w-7 transition-all duration-150 hover:scale-105"
+              className="w-8 transition-all duration-150 hover:scale-105"
               alt="Analytics"
             />
           </Link>
@@ -67,7 +67,7 @@ const Header = () => {
               }
               onMouseEnter={() => handleHover("consultation", true)}
               onMouseLeave={() => handleHover("consultation", false)}
-              className="w-7 transition-all duration-150 hover:scale-105"
+              className="w-8 transition-all duration-150 hover:scale-105"
               alt="Consultation"
             />
           </Link>

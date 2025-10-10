@@ -20,17 +20,17 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
   const [offset, setOffset] = useState<{ x: number; y: number } | null>(null);
 
   const severityBackgroundColors: Record<string, string> = {
-    Low: "bg-green-500",
-    Medium: "bg-yellow-500",
-    High: "bg-red-500",
-    undefined: "bg-gray-500",
+    Low: "bg-[#4db6ac]", // #2a8475, muted green-teal (was bg-green-500)
+    Medium: "bg-[#f0c14b]", // #8b7d3b, muted gold (was bg-yellow-500)
+    High: "bg-[#da4b41ff]", // #da4b41ff, soft coral-red (was bg-red-500)
+    undefined: "bg-[#b0bec5]", // #4a5e6d, palette gray (was bg-gray-500)
   };
 
   const classificationFillColors: Record<string, string> = {
-    Infectious: "bg-blue-500",
-    Allergic: "bg-teal-500",
-    Chronic: "bg-gray-500",
-    undefined: "bg-gray-300",
+    Infectious: "bg-[#4b8291]", // #005566, palette blue (was bg-blue-500)
+    Allergic: "bg-[#4dd0e1]", // #02a9a6, palette teal (was bg-teal-500)
+    Chronic: "bg-[#90a4ae]", // #1a2a44, palette navy (was bg-gray-500)
+    undefined: "bg-[#f5f7fa]", // #f5f7fa, palette white (was bg-gray-300)
   };
 
   const handleMouseDown = (
@@ -121,7 +121,7 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
             >
               <img className="w-8" src="drag-indicator-icon.svg"/>
             </div>
-            <span className="flex-1 inter-semibold text-md text-black pl-4">{node.value}</span>
+            <span className="flex-1 inter-semibold text-sm text-[var(--slate-gray)] pl-4">{node.value}</span>
             <select
               value={node.severity}
               onChange={(e) =>
