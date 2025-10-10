@@ -807,7 +807,7 @@ const LeftSidebar = ({
                         <span className="text-md inter-medium">{patient}</span>
                       </button>
                       <button
-                        className="cursor-pointer flex items-center justify-center w-8 h-4 rounded-full"
+                        className="cursor-pointer flex items-center justify-center w-8 h-4 rounded-full "
                         onClick={() => togglePatientSettings(patient)}
                         ref={(el) =>
                           (settingsMenuRefs.current[`patient-${patient}`] = el)
