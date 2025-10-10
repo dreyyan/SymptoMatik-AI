@@ -13,12 +13,12 @@ type MessageType = {
 type PatientType = {
   id: string;
   name: string;
-  age: string;
+  age: string; // Added for doctor context
   mockConversation: MessageType[];
 };
 
 const Consultation = () => {
-  document.title = "SymptoMatik: Consultation";
+  document.title = "SymptoMatik: Konsultasyon - Doktor";
 
   const [selectedPatient, setSelectedPatient] = useState<PatientType | null>(null);
   const [messages, setMessages] = useState<MessageType[]>([]);
@@ -122,9 +122,6 @@ const Consultation = () => {
     },
   ];
 
-  // Array of patient icons to alternate
-  const patientIcons = ["patient-icon.jpg", "patient-icon-1.jpg", "patient-icon-2.jpg"];
-
   const handleSelectPatient = (patient: PatientType) => {
     setSelectedPatient(patient);
     // Load mock conversation for the selected patient
@@ -170,13 +167,6 @@ const Consultation = () => {
     setShowOthersMenu(false);
   };
 
-  // Determine patient icon based on selected patient's index
-  const getPatientIcon = () => {
-    if (!selectedPatient) return patientIcons[0];
-    const index = patients.findIndex((pat) => pat.id === selectedPatient.id);
-    return patientIcons[index % patientIcons.length];
-  };
-
   return (
     <div className="flex flex-col bg-gray-100 min-h-screen">
       {/* Header */}
@@ -187,7 +177,7 @@ const Consultation = () => {
         <div className="w-1/4 bg-white rounded-lg shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] p-4">
           <h3 className="text-lg inter-semibold text-[var(--trust-blue)] mb-4">Mga Pasyente</h3>
           <div className="flex flex-col gap-2">
-            {patients.map((patient, index) => (
+            {patients.map((patient) => (
               <div
                 key={patient.id}
                 className={`cursor-pointer p-3 rounded-lg flex items-center gap-3 transition-all duration-300 hover:bg-gray-100 ${
@@ -195,7 +185,7 @@ const Consultation = () => {
                 }`}
                 onClick={() => handleSelectPatient(patient)}
               >
-                <img className="w-10 h-10 rounded-full" src={patientIcons[index % patientIcons.length]} alt={`Icon ng ${patient.name}`} />
+                <div className="w-8 h-8 bg-gray-400 rounded-full" />
                 <div>
                   <p className="text-base inter-semibold text-[var(--trust-blue)]">{patient.name}</p>
                   <p className="text-xs inter text-[var(--slate-gray)]">{patient.age}</p>
@@ -210,7 +200,7 @@ const Consultation = () => {
             <>
               <div className="p-4 border-b border-gray-200 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <img className="w-10 h-10 rounded-full" src={getPatientIcon()} alt={`Icon ng ${selectedPatient.name}`} />
+                  <div className="w-8 h-8 bg-gray-400 rounded-full" />
                   <div>
                     <h2 className="text-lg inter-semibold text-[var(--trust-blue)]">{selectedPatient.name}</h2>
                     <p className="text-sm inter text-[var(--slate-gray)]">{selectedPatient.age}</p>
@@ -263,18 +253,21 @@ const Consultation = () => {
                       className={`flex mb-4 ${message.sender === "doctor" ? "flex-row-reverse" : "flex-row"} items-end gap-2`}
                     >
                       {message.sender === "patient" && (
-                        <img className="w-8 h-8 rounded-full" src={getPatientIcon()} alt={`Icon ng ${selectedPatient.name}`} />
+                        <div className="w-8 h-8 bg-gray-400 rounded-full" />
                       )}
                       <div
                         className={`max-w-[70%] p-3 rounded-lg shadow-sm ${
                           message.sender === "doctor"
-                            ? "bg-[var(--trust-blue)] text-white rounded-br-none"
-                            : "bg-gray-100 text-gray-800 rounded-bl-none"
+                            ? "bg-[var(--trust-blue)] text-white rounded-bl-none"
+                            : "bg-gray-100 text-gray-800 rounded-br-none"
                         }`}
                       >
                         <p className="text-sm inter">{message.text}</p>
                         <p className="text-xs text-gray-400 mt-1 text-right">{message.timestamp}</p>
                       </div>
+                      {message.sender === "doctor" && (
+                        <img className="w-8 h-8 rounded-full" src="doctor-icon.webp" alt="Icon ng Doktor" />
+                      )}
                     </div>
                   ))
                 ) : (

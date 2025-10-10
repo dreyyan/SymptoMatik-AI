@@ -121,7 +121,7 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
             >
               <img className="w-8" src="drag-indicator-icon.svg"/>
             </div>
-            <span className="flex-1 inter-semibold text-sm text-black pl-4">{node.value}</span>
+            <span className="flex-1 inter-semibold text-md text-black pl-4">{node.value}</span>
             <select
               value={node.severity}
               onChange={(e) =>

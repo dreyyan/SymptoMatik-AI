@@ -1,5 +1,4 @@
 import { useMemo } from "react";
-import PrimaryButton from "./buttons/PrimaryButton";
 
 type NodeType = {
   id: string;
@@ -17,28 +16,28 @@ type RightSidebarPatientProps = {
 // Mock data for professionals
 const professionals = [
   {
-    name: "Dr. Maria Santos",
+    name: "Dr. Jane Smith",
     specialty: "Infectious Disease Specialist",
-    medicalPlace: "Maynila Pediatric Center",
-    address: "123 Kalusugan St., Ermita, Manila",
+    medicalPlace: "City Pediatric Clinic",
+    address: "123 Health St, Springfield, IL 62701",
   },
   {
-    name: "Dr. Michael Dela Cruz",
+    name: "Dr. Michael Lee",
     specialty: "Allergist",
-    medicalPlace: "Quezon City Allergy Clinic",
-    address: "456 Kaginhawaan Ave., Diliman, Quezon City",
+    medicalPlace: "Allergy Care Center",
+    address: "456 Wellness Ave, Springfield, IL 62702",
   },
   {
-    name: "Dr. Emily Reyes",
+    name: "Dr. Emily Chen",
     specialty: "Chronic Disease Specialist",
-    medicalPlace: "Makati General Hospital",
-    address: "789 Galing Rd., Poblacion, Makati City",
+    medicalPlace: "Springfield General Hospital",
+    address: "789 Healing Rd, Springfield, IL 62703",
   },
   {
-    name: "Dr. Roberto Garcia",
+    name: "Dr. Robert Patel",
     specialty: "Pediatrician",
-    medicalPlace: "Pasig Family Health Clinic",
-    address: "321 Aruga Lane, Kapitolyo, Pasig City",
+    medicalPlace: "Family Health Clinic",
+    address: "321 Care Lane, Springfield, IL 62704",
   },
 ];
 
@@ -47,10 +46,6 @@ const specialtyToClassification = {
   Allergist: "Allergic",
   "Chronic Disease Specialist": "Chronic",
   Pediatrician: ["Infectious", "Allergic", "Chronic"], // Generalist can handle all
-};
-
-const handleConnectDoctor = () => {
-    
 };
 
 const RightSidebarPatient = ({ nodes }: RightSidebarPatientProps) => {
@@ -82,7 +77,7 @@ const RightSidebarPatient = ({ nodes }: RightSidebarPatientProps) => {
   }, [nodeClassifications]);
 
   return (
-    <div className="min-h-screen flex flex-col gap-2 p-4 bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] w-100 overflow-y-auto">
+    <div className="min-h-screen flex flex-col gap-2 p-4 bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] w-80 overflow-y-auto">
       <h3 className="text-xl inter-semibold text-end text-[var(--trust-blue)]">Suitable Professionals</h3>
       {nodes.length === 0 ? (
         <p className="text-sm inter text-gray-600">No symptoms selected.</p>
@@ -94,26 +89,13 @@ const RightSidebarPatient = ({ nodes }: RightSidebarPatientProps) => {
           {recommendedProfessionals.map((professional, index) => (
             <div
               key={index}
-              className="bg-white p-4 rounded-lg shadow-[0_0_2px_rgba(0,0,0,0.1)] hover:shadow-[0_0_4px_rgba(0,0,0,0.2)] transition-all duration-200"
+              className="bg-white p-4 rounded-lg shadow-[0_0_2px_rgba(0,0,0,0.1)] hover:shadow-[0_0_4px_rgba(0,0,0,0.2)] transition-all duration-200 transform hover:-translate-y-1"
             >
-              {/* HEADER */}
-                <div className="flex gap-4">
-                  <img className="w-10 h-10 rounded-full" src="doctor-icon.webp" alt="Icon ng Doktor" />
-                  <div className="">
-                    <p className="text-md inter-semibold text-[var(--trust-blue)]">{professional.name}</p>
-                    <p className="text-sm inter italic text-[var(--slate-gray)]">{professional.specialty}</p>
-                  </div>
-                </div>
-                <hr className="my-2 mb-4 border-t border-gray-300"/>
-                <div className="flex flex-col gap-y-2 mb-4">
-                  <span className="flex gap-2"><img className="w-6" src="establishment-icon.svg"/><p className="text-sm inter-semibold text-[var(--trust-blue)]">{professional.medicalPlace}</p></span>
-                  <span className="flex gap-2"><img className="w-6" src="current-location-icon.svg"/><p className="text-sm inter text-[var(--slate-gray)]">{professional.address}</p></span>
-                </div>
-                  <button
-                    className="inter-semibold cursor-pointer flex items-center justify-center w-full h-8 rounded-full bg-[var(--healing-teal)] text-[var(--clean-white)] hover:opacity-90 transition-all duration-300 transform hover:-translate-y-1"
-                    onClick={handleConnectDoctor}
-                  >Connect
-                  </button>
+              <p className="text-base inter-semibold text-[var(--trust-blue)]">{professional.name}</p>
+              <p className="text-sm inter italic text-[var(--slate-gray)]">{professional.specialty}</p>
+              <hr className="my-2 border-t border-gray-300" />
+              <p className="text-sm inter font-semibold text-[var(--trust-blue)]">{professional.medicalPlace}</p>
+              <p className="text-sm inter text-[var(--slate-gray)]">{professional.address}</p>
             </div>
           ))}
         </div>

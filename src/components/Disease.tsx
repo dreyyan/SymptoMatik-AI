@@ -60,8 +60,8 @@ const Disease = ({
 
       {/* Confidence Level */}
       {confidenceLevel !== undefined && (
-        <div className="block items-center">
-          <div className="text-md inter-semibold">
+        <div className="block items-center gap-3">
+          <div className="text-md ">
             Confidence Level:
           </div>
           <div className="flex items-center gap-4">
