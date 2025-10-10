@@ -8,12 +8,11 @@ import PrimaryButton from "../components/buttons/PrimaryButton";
 import SecondaryButton from "../components/buttons/SecondaryButton";
 
 const Home = () => {
-    document.title = "SymptoMatik: Home";
+    document.title = "SymptoMatik: Diagnose with Confidence";
     const navigate = useNavigate();
 
     const handleGetStarted = () => {
-        navigate('/dashboard');
-
+        navigate('../diagnosis');
     }
 
     return (
@@ -39,8 +38,8 @@ const Home = () => {
 
                         {/* GET STARTED BUTTON */}
                         <div className="flex gap-4 mt-6">
-                            <PrimaryButton text="Get Started" height="46px" fontSize="18px" disabled={false}/>
-                            <SecondaryButton text="View Demo" fontSize="16px" onClick={handleGetStarted} disabled={false}/>
+                            <PrimaryButton text="Get Started" height="46px" fontSize="18px" onClick={handleGetStarted} disabled={false}/>
+                            <SecondaryButton text="View Demo" fontSize="16px" disabled={false}/>
                         </div>
                         {/* IMAGE */}
                         <div className="flex justify-center items-center mt-2 w-[60%]">

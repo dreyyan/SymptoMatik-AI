@@ -18,7 +18,7 @@ type DoctorType = {
 };
 
 const ConsultationPatient = () => {
-  document.title = "SymptoMatik: Consult A Doctor";
+  document.title = "SymptoMatik: Consultation";
 
   const [selectedDoctor, setSelectedDoctor] = useState<DoctorType | null>(null);
   const [messages, setMessages] = useState<MessageType[]>([]);
@@ -122,6 +122,9 @@ const ConsultationPatient = () => {
     },
   ];
 
+  // Array of doctor icons to alternate
+  const doctorIcons = ["doctor-icon.webp", "doctor-icon-1.jpg", "doctor-icon-2.png"];
+
   const handleSelectDoctor = (doctor: DoctorType) => {
     setSelectedDoctor(doctor);
     // Load mock conversation for the selected doctor
@@ -167,6 +170,13 @@ const ConsultationPatient = () => {
     setShowOthersMenu(false);
   };
 
+  // Determine doctor icon based on selected doctor's index
+  const getDoctorIcon = () => {
+    if (!selectedDoctor) return doctorIcons[0];
+    const index = doctors.findIndex((doc) => doc.id === selectedDoctor.id);
+    return doctorIcons[index % doctorIcons.length];
+  };
+
   return (
     <div className="flex flex-col bg-gray-100 min-h-screen">
       {/* Header */}
@@ -177,7 +187,7 @@ const ConsultationPatient = () => {
         <div className="w-1/4 bg-white rounded-lg shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] p-4">
           <h3 className="text-lg inter-semibold text-[var(--trust-blue)] mb-4">Mga Doktor</h3>
           <div className="flex flex-col gap-2">
-            {doctors.map((doctor) => (
+            {doctors.map((doctor, index) => (
               <div
                 key={doctor.id}
                 className={`cursor-pointer p-3 rounded-lg flex items-center gap-3 transition-all duration-300 hover:bg-gray-100 ${
@@ -185,7 +195,7 @@ const ConsultationPatient = () => {
                 }`}
                 onClick={() => handleSelectDoctor(doctor)}
               >
-                <img className="w-10 h-10 rounded-full" src="doctor-icon.webp" alt="Icon ng Doktor" />
+                <img className="w-10 h-10 rounded-full" src={doctorIcons[index % doctorIcons.length]} alt={`Icon ng ${doctor.name}`} />
                 <div>
                   <p className="text-base inter-semibold text-[var(--trust-blue)]">{doctor.name}</p>
                   <p className="text-xs inter text-[var(--slate-gray)]">{doctor.specialty}</p>
@@ -200,7 +210,7 @@ const ConsultationPatient = () => {
             <>
               <div className="p-4 border-b border-gray-200 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <img className="w-10 h-10 rounded-full" src="doctor-icon.webp" alt="Icon ng Doktor" />
+                  <img className="w-10 h-10 rounded-full" src={getDoctorIcon()} alt={`Icon ng ${selectedDoctor.name}`} />
                   <div>
                     <h2 className="text-lg inter-semibold text-[var(--trust-blue)]">{selectedDoctor.name}</h2>
                     <p className="text-sm inter text-[var(--slate-gray)]">{selectedDoctor.specialty}</p>
@@ -253,7 +263,7 @@ const ConsultationPatient = () => {
                       className={`flex mb-4 ${message.sender === "patient" ? "flex-row-reverse" : "flex-row"} items-end gap-2`}
                     >
                       {message.sender === "doctor" && (
-                        <img className="w-8 h-8 rounded-full" src="doctor-icon.webp" alt="Icon ng Doktor" />
+                        <img className="w-8 h-8 rounded-full" src={getDoctorIcon()} alt={`Icon ng ${selectedDoctor.name}`} />
                       )}
                       <div
                         className={`max-w-[70%] p-3 rounded-lg shadow-sm ${
@@ -263,7 +273,7 @@ const ConsultationPatient = () => {
                         }`}
                       >
                         <p className="text-sm inter">{message.text}</p>
-                        <p className="text-xs text-gray-400 mt-1 text-right">{message.timestamp}</p>
+                        <p className="text-xs text-[var(--clean-white)] mt-1 text-right">{message.timestamp}</p>
                       </div>
                     </div>
                   ))
