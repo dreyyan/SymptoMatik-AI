@@ -1,32 +1,43 @@
 interface PrimaryButtonProps {
-    text: string,
-    onClick?: () => void;
-    disabled: boolean;
-    href?: string;
+  text: string;
+  onClick?: () => void;
+  disabled: boolean;
+  href?: string;
 
-    width?: string;
-    height?: string;
-    borderRadius?: string;
-    fontSize?: string;
-};
+  width?: string;
+  height?: string;
+  borderRadius?: string;
+  fontSize?: string;
+}
 
-const PrimaryButton: React.FC<PrimaryButtonProps> = ({text, onClick, disabled = false, href, width = "150px", height = "52px", borderRadius = "100px", fontSize = "20px"}) => {
-
-    const style = { width, height, borderRadius, fontSize };
-        if (href) {
-        return (
-            <a
-                href={href}
-                className={`btn ${disabled ? "btn-disabled" : ""}`}
-                onClick={(e) => disabled && e.preventDefault()}
-            >
-                {text}
-            </a>
-        );
-    }
-
+const PrimaryButton: React.FC<PrimaryButtonProps> = ({
+  text,
+  onClick,
+  disabled = false,
+  href,
+  width = "150px",
+  height = "52px",
+  borderRadius = "100px",
+  fontSize = "20px",
+}) => {
+  const style = { width, height, borderRadius, fontSize };
+  if (href) {
     return (
-        <button style={style} onClick={onClick} className="
+      <a
+        href={href}
+        className={`btn ${disabled ? "btn-disabled" : ""}`}
+        onClick={(e) => disabled && e.preventDefault()}
+      >
+        {text}
+      </a>
+    );
+  }
+
+  return (
+    <button
+      style={style}
+      onClick={onClick}
+      className="
         cursor-pointer
         rounded-md
 
@@ -36,8 +47,8 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({text, onClick, disabled = 
 
         mt-2 px-5
 
-        bg-[var(--trust-blue)]
-        text-[var(--clean-white)]
+        bg-[var(--primary-teal)]
+        text-white
         text-md
 
         dm-serif-display
@@ -54,9 +65,11 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({text, onClick, disabled = 
 
         disabled:opacity-50
         disabled:cursor-not-allowed
-        ">{text}
-        </button>
-    );
-}
+        "
+    >
+      {text}
+    </button>
+  );
+};
 
 export default PrimaryButton;
