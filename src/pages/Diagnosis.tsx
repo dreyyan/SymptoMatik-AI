@@ -22,26 +22,47 @@ const Diagnosis = () => {
   const [nodes, setNodes] = useState<NodeType[]>([]);
   const [currentPatient, setCurrentPatient] = useState<string | null>(null);
   const [currentFile, setCurrentFile] = useState<string | null>(null);
-  const [patientFiles, setPatientFiles] = useState<Record<string, { fileName: string; nodes: NodeType[]; modified?: boolean }[]>>(() => {
+  const [patientFiles, setPatientFiles] = useState<
+    Record<
+      string,
+      { fileName: string; nodes: NodeType[]; modified?: boolean }[]
+    >
+  >(() => {
     try {
       const saved = localStorage.getItem("patientFiles");
       return saved
         ? JSON.parse(saved)
         : {
             Adam: [{ fileName: "F1.ndg", nodes: [] }],
-            Bob: [{ fileName: "F1.ndg", nodes: [] }, { fileName: "F2.ndg", nodes: [] }],
-            Charlie: [{ fileName: "F1.ndg", nodes: [] }, { fileName: "F2.ndg", nodes: [] }, { fileName: "F3.ndg", nodes: [] }],
+            Bob: [
+              { fileName: "F1.ndg", nodes: [] },
+              { fileName: "F2.ndg", nodes: [] },
+            ],
+            Charlie: [
+              { fileName: "F1.ndg", nodes: [] },
+              { fileName: "F2.ndg", nodes: [] },
+              { fileName: "F3.ndg", nodes: [] },
+            ],
           };
     } catch (error) {
       console.error("Error parsing patientFiles from localStorage:", error);
       return {
         Adam: [{ fileName: "F1.ndg", nodes: [] }],
-        Bob: [{ fileName: "F1.ndg", nodes: [] }, { fileName: "F2.ndg", nodes: [] }],
-        Charlie: [{ fileName: "F1.ndg", nodes: [] }, { fileName: "F2.ndg", nodes: [] }, { fileName: "F3.ndg", nodes: [] }],
+        Bob: [
+          { fileName: "F1.ndg", nodes: [] },
+          { fileName: "F2.ndg", nodes: [] },
+        ],
+        Charlie: [
+          { fileName: "F1.ndg", nodes: [] },
+          { fileName: "F2.ndg", nodes: [] },
+          { fileName: "F3.ndg", nodes: [] },
+        ],
       };
     }
   });
-  const [modifiedFiles, setModifiedFiles] = useState<Record<string, boolean>>({});
+  const [modifiedFiles, setModifiedFiles] = useState<Record<string, boolean>>(
+    {}
+  );
 
   const addNode = (
     value: string,
@@ -54,7 +75,9 @@ const Diagnosis = () => {
     const validatedSeverity = validSeverities.includes(severity as never)
       ? severity
       : "Low";
-    const validatedClassification = validClassifications.includes(classification as never)
+    const validatedClassification = validClassifications.includes(
+      classification as never
+    )
       ? classification
       : "Infectious";
 
@@ -79,7 +102,10 @@ const Diagnosis = () => {
         x: Math.random() * 200 + 50,
         y: Math.random() * 200 + 50,
         severity: validatedSeverity as "Low" | "Medium" | "High",
-        classification: validatedClassification as "Infectious" | "Allergic" | "Chronic",
+        classification: validatedClassification as
+          | "Infectious"
+          | "Allergic"
+          | "Chronic",
       },
     ]);
     return true;
@@ -145,11 +171,15 @@ const Diagnosis = () => {
           {currentFile && currentPatient && (
             <div className="bg-white p-4 shadow z-1 flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <h2 className="text-lg inter-semibold text-[var(--trust-blue)]">{currentPatient} |</h2>
-                <h3 className="text-sm inter-semibold text-[var(--trust-blue)]">{currentFile}</h3>
+                <h2 className="text-lg inter-semibold text-[var(--primary-teal)]">
+                  {currentPatient} |
+                </h2>
+                <h3 className="text-sm inter-semibold text-[var(--primary-teal)]">
+                  {currentFile}
+                </h3>
               </div>
               <button
-                className="cursor-pointer flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-[var(--trust-blue)] hover:bg-blue-200 transition-all duration-300"
+                className="cursor-pointer flex items-center justify-center w-8 h-8 rounded-full bg-blue-100 text-[var(--primary-teal)] hover:bg-blue-200 transition-all duration-300"
                 onClick={handleSave}
               >
                 <img className="w-5" src="save-icon.svg" alt="Save Icon" />
