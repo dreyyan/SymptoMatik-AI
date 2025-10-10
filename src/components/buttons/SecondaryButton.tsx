@@ -1,34 +1,39 @@
 interface SecondaryButtonProps {
-    text: string;
-    onClick?: () => void;
-    disabled?: boolean;
-    width?: string;
-    fontSize?: string;
+  text: string;
+  onClick?: () => void;
+  disabled?: boolean;
+  width?: string;
+  fontSize?: string;
+  borderRadius?: string;
 }
 
-const SecondaryButton: React.FC<SecondaryButtonProps> = ({ text, onClick, disabled = false, width, fontSize = "16px" }) => {
+const SecondaryButton: React.FC<SecondaryButtonProps> = ({
+  text,
+  onClick,
+  disabled = false,
+  width,
+  fontSize = "16px",
+  borderRadius = "20px",
+}) => {
+  const style = { width, fontSize, borderRadius };
 
-    const style = { width, fontSize };
-
-    return (
-        <button
-            style={style}
-            onClick={disabled ? undefined : onClick}
-            className={`
+  return (
+    <button
+      style={style}
+      onClick={disabled ? undefined : onClick}
+      className={`
                 cursor-pointer
-                rounded-md
+                rounded-sm
 
-                w-auto
+                w-42
 
                 flex justify-center items-center
 
                 mt-2 px-6 py-2
 
-                bg-[var(--clean-white)]
                 text-[var(--trust-blue)]
                 border-[var(--trust-blue)]
-                hover:bg-[var(--trust-blue)]
-                hover:text-[var(--clean-white)]
+                hover:text-[var(--healing-teal)]
                 border
 
                 dm-serif-display
@@ -43,10 +48,10 @@ const SecondaryButton: React.FC<SecondaryButtonProps> = ({ text, onClick, disabl
                 disabled:opacity-50
                 disabled:cursor-not-allowed
             `}
-        >
-            {text}
-        </button>
-    );
-}
+    >
+      {text}
+    </button>
+  );
+};
 
 export default SecondaryButton;

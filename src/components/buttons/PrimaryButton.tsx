@@ -17,7 +17,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   href,
   width = "150px",
   height = "52px",
-  borderRadius = "100px",
+  borderRadius = "20px",
   fontSize = "20px",
 }) => {
   const style = { width, height, borderRadius, fontSize };
@@ -39,7 +39,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
       onClick={onClick}
       className="
         cursor-pointer
-        rounded-md
+        rounded-sm
 
         w-auto
 

@@ -19,7 +19,6 @@ body {
   font-family: "Inter";
   font-weight: 400;
   color: var(--slate-gray);
-  background-color: var(--clean-white);
 }
 
 .poppins-semibold {

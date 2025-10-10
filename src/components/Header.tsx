@@ -18,13 +18,13 @@ const Header = () => {
   };
 
   return (
-    <div className="sticky top-0 z-[1001] h-22 row-span-6 col-span-3 bg-[var(--clean-white)] shadow-[0px_4px_10px_-5px_rgba(0,0,0,0.45)]">
+    <div className="sticky top-0 z-[1001] h-22 row-span-6 col-span-3 px-12 bg-white shadow-[0px_4px_10px_-5px_rgba(0,0,0,0.45)]">
       <div className="flex h-full">
         {/* [L] BANNER */}
         <div className="flex justify-center items-center pl-8 pr-14 bg-white-500 w-[24%]">
           <Link to="/home" className="flex items-center gap-4 h-[50%]">
             <img src="/symptomatik-logo.svg" className="h-10" />
-            <img src="/symptomatik-banner.svg" className="h-full" />
+            <img src="/SymptoMatik-banner.svg" className="h-full" />
           </Link>
         </div>
 
