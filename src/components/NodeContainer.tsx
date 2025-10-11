@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from "react";
+import Styles from "../styles/Styles";
 
 type NodeType = {
   id: string;
@@ -20,19 +21,20 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
   const [offset, setOffset] = useState<{ x: number; y: number } | null>(null);
 
   const severityBackgroundColors: Record<string, string> = {
-    Low: "bg-[#4db6ac]", // #2a8475, muted green-teal (was bg-green-500)
-    Medium: "bg-[#f0c14b]", // #8b7d3b, muted gold (was bg-yellow-500)
-    High: "bg-[#da4b41ff]", // #da4b41ff, soft coral-red (was bg-red-500)
-    undefined: "bg-[#b0bec5]", // #4a5e6d, palette gray (was bg-gray-500)
+    Low: Styles.lowColor,
+    Medium: Styles.mediumColor,
+    High: Styles.highColor,
+    undefined: Styles.undefinedColor,
   };
 
   const classificationFillColors: Record<string, string> = {
-    Infectious: "bg-[#4b8291]", // #005566, palette blue (was bg-blue-500)
-    Allergic: "bg-[#4dd0e1]", // #02a9a6, palette teal (was bg-teal-500)
-    Chronic: "bg-[#90a4ae]", // #1a2a44, palette navy (was bg-gray-500)
-    undefined: "bg-[#f5f7fa]", // #f5f7fa, palette white (was bg-gray-300)
+    Infectious: "bg-[#4b8291]",
+    Allergic: "bg-[#4dd0e1]",
+    Chronic: "bg-[#90a4ae]",
+    undefined: "bg-[#f5f7fa]",
   };
 
+  // [HANDLE]: Interaction
   const handleMouseDown = (
     e: React.MouseEvent<HTMLDivElement>,
     node: NodeType

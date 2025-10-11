@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
-import Styles from "../styles/Styles.js";
-import LinkedList from "../logic/LinkedList.ts";
-import Modal from "./Modal.tsx";
-import data from "../data/data.json";
+import Styles from "../../styles/Styles.js";
+import LinkedList from "../../logic/LinkedList.ts";
+import Modal from "../Modal.tsx";
+import data from "../../data/data.json";
 
 type NodeType = {
   id: string;
@@ -36,16 +36,16 @@ interface ModalConfig {
   showCancel?: boolean;
 }
 
-const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentFile, patientFiles, setPatientFiles, modifiedFiles, setModifiedFiles, currentPatient, currentFile }: LeftSidebarProps) => {
-  const [symptomList] = useState(() => {
-    const list = new LinkedList();
+const LeftSidebar = ({ addNode, nodes, setModifiedFiles, currentPatient, currentFile }: LeftSidebarProps) => {
+  const [symptomList] = useState<LinkedList<string>>(() => {
+    const list = new LinkedList<string>();
     Object.keys(data.symptoms).forEach((symptom) => list.append(symptom));
     return list;
   });
 
   const [allSymptoms, setAllSymptoms] = useState<string[]>(symptomList.toArray().sort((a, b) => a.localeCompare(b)));
   const [symptomSearch, setSymptomSearch] = useState<string>("");
-  const [leftSidebar, setLeftSidebar] = useState("Nodes");
+  const [leftSidebar] = useState("Nodes");
   const [sidebarVisibility, setSidebarVisibility] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState<ModalConfig>({
@@ -54,9 +54,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
     confirmText: "OK",
     showCancel: false,
   });
-  const [patientSearch, setPatientSearch] = useState<string>("");
   const [openFolders, setOpenFolders] = useState<Record<string, boolean>>({});
-  const [hoveredFile, setHoveredFile] = useState<string | null>(null);
   const [symptomMetadata] = useState(data.symptoms);
   const [settingsMenuPatient, setSettingsMenuPatient] = useState<string | null>(null);
   const [settingsMenuFile, setSettingsMenuFile] = useState<string | null>(null);
@@ -103,51 +101,25 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
     }));
   };
 
-  const toggleLeftSidebar = () => {
-    setSidebarVisibility((prev) => !prev);
+    // HANDLE: DELETE NODE
+  const handleDeleteNode = (nodeId: string) => {
+    console.log("Deleting node with ID:", nodeId);
+    if (!currentPatient || !currentFile) {
+      setModalConfig({
+        title: "Error",
+        message: "No file is currently loaded. Please load a file to delete nodes.",
+        confirmText: "OK",
+        showCancel: false,
+      });
+      setIsModalOpen(true);
+      return;
+    }
+    const node = nodes.find((n) => n.id === nodeId);
+    if (!node) return;
   };
 
-  // Filter patients and files based on search input
-  const filteredPatients = Object.keys(patientFiles).filter(
-    (patient) =>
-      patient.toLowerCase().includes(patientSearch.toLowerCase()) ||
-      patientFiles[patient].some((file) =>
-        file.fileName.toLowerCase().includes(patientSearch.toLowerCase())
-      )
-  );
-  const filteredFiles = filteredPatients.reduce((acc, patient) => {
-    const matchingFiles = patientFiles[patient].filter((file) =>
-      file.fileName.toLowerCase().includes(patientSearch.toLowerCase()) ||
-      patient.toLowerCase().includes(patientSearch.toLowerCase())
-    );
-    if (matchingFiles.length > 0) acc[patient] = matchingFiles;
-    return acc;
-  }, {} as Record<string, { fileName: string; nodes: NodeType[]; modified?: boolean }[]>);
-
-  // Track changes to nodes to mark files as modified
-  useEffect(() => {
-    if (nodes.length > 0 && currentPatient && currentFile) {
-      setModifiedFiles((prev) => ({
-        ...prev,
-        [`${currentPatient}-${currentFile}`]: true,
-      }));
-    }
-  }, [nodes, currentPatient, currentFile, setModifiedFiles]);
-
-  // Calculate dropdown menu position
-  const getMenuPosition = (buttonRef: HTMLButtonElement | null) => {
-    if (!buttonRef) return { top: '0px', left: '0px', openUpward: false };
-    const rect = buttonRef.getBoundingClientRect();
-    const menuHeight = 80; // Approximate height of the menu
-    const viewportHeight = window.innerHeight;
-    const openUpward = rect.bottom + menuHeight > viewportHeight;
-    const menuTop = openUpward ? rect.top - menuHeight : rect.bottom;
-    const menuLeft = rect.right - 100; // Adjust to align menu with button (assuming menu width ~100px)
-    return {
-      top: `${menuTop}px`,
-      left: `${menuLeft}px`,
-      openUpward,
-    };
+  const toggleLeftSidebar = () => {
+    setSidebarVisibility((prev) => !prev);
   };
 
   // HANDLE: ADD SYMPTOM NODE
@@ -220,7 +192,6 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
         confirmText={modalConfig.confirmText}
         inputValue={modalConfig.inputValue}
         onConfirm={modalConfig.onConfirm}
-        showCancel={modalConfig.showCancel}
       />
       <div
         className={`flex flex-col gap-4 px-6 py-4 bg-white shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] h-screen ${

@@ -352,114 +352,6 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
     setSettingsMenuFile(null);
   };
 
-  // HANDLE: TOGGLE FILE SETTINGS
-  const toggleFileSettings = (patient: string, fileName: string) => {
-    const key = `${patient}-${fileName}`;
-    console.log("Toggling file settings for:", key);
-    setSettingsMenuFile((prev) => (prev === key ? null : key));
-    setSettingsMenuPatient(null);
-  };
-
-  // HANDLE: DELETE FILE
-  const handleDeleteFile = (patient: string, fileName: string) => {
-    console.log("Opening Delete File modal for:", fileName);
-    setModalConfig({
-      title: "Delete File",
-      message: `Are you sure you want to delete ${fileName} for ${patient}?`,
-      confirmText: "Delete",
-      showCancel: true,
-      onConfirm: () => {
-        console.log("Deleting file:", fileName);
-        setPatientFiles((prev) => {
-          const updatedFiles = prev[patient].filter((file) => file.fileName !== fileName);
-          const updated = { ...prev, [patient]: updatedFiles };
-          localStorage.setItem("patientFiles", JSON.stringify(updated));
-          return updated;
-        });
-        if (currentPatient === patient && currentFile === fileName) {
-          setCurrentFile(null);
-          loadNodes([]);
-        }
-        setModifiedFiles((prev) => {
-          const updated = { ...prev };
-          delete updated[`${patient}-${fileName}`];
-          return updated;
-        });
-        setModalConfig({
-          title: "File Deleted",
-          message: `File ${fileName} was successfully deleted.`,
-          confirmText: "OK",
-          showCancel: false,
-        });
-        setIsModalOpen(true);
-      },
-    });
-    setIsModalOpen(true);
-  };
-
-  // HANDLE: RENAME FILE
-  const renameFile = (patient: string, fileName: string) => {
-    console.log("Opening Rename File modal for:", fileName);
-    setModalConfig({
-      title: "Rename File",
-      message: `Enter new name for ${fileName}:`,
-      confirmText: "Rename",
-      inputValue: "",
-      showCancel: true,
-      onConfirm: (newFileName: string) => {
-        console.log("Renaming file from", fileName, "to", newFileName);
-        if (!newFileName.trim()) {
-          setModalConfig({
-            title: "Error",
-            message: "Please enter a valid file name.",
-            confirmText: "OK",
-            showCancel: false,
-          });
-          setIsModalOpen(true);
-          return;
-        }
-        const finalNewFileName = newFileName.endsWith(".ndg") ? newFileName : `${newFileName}.ndg`;
-        if (patientFiles[patient].some((file) => file.fileName === finalNewFileName)) {
-          setModalConfig({
-            title: "Error",
-            message: "A file with this name already exists.",
-            confirmText: "OK",
-            showCancel: false,
-          });
-          setIsModalOpen(true);
-          return;
-        }
-        setPatientFiles((prev) => {
-          const updatedFiles = prev[patient].map((file) =>
-            file.fileName === fileName ? { ...file, fileName: finalNewFileName } : file
-          );
-          const updated = { ...prev, [patient]: updatedFiles };
-          localStorage.setItem("patientFiles", JSON.stringify(updated));
-          return updated;
-        });
-        if (currentPatient === patient && currentFile === fileName) {
-          setCurrentFile(finalNewFileName);
-        }
-        setModifiedFiles((prev) => {
-          const updated = { ...prev };
-          if (updated[`${patient}-${fileName}`]) {
-            updated[`${patient}-${finalNewFileName}`] = updated[`${patient}-${fileName}`];
-            delete updated[`${patient}-${fileName}`];
-          }
-          return updated;
-        });
-        setModalConfig({
-          title: "File Renamed",
-          message: `File ${fileName} was successfully renamed to ${finalNewFileName}.`,
-          confirmText: "OK",
-          showCancel: false,
-        });
-        setIsModalOpen(true);
-      },
-    });
-    setIsModalOpen(true);
-  };
-
   // HANDLE: DELETE NODE
   const handleDeleteNode = (nodeId: string) => {
     console.log("Deleting node with ID:", nodeId);
@@ -704,40 +596,6 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
     }
   };
 
-  // HANDLE: SAVE FILE
-  const handleSaveFile = () => {
-    console.log("Saving file, currentPatient:", currentPatient, "currentFile:", currentFile);
-    if (!currentPatient || !currentFile) {
-      setModalConfig({
-        title: "Error",
-        message: "No file is currently loaded. Please load a file before saving.",
-        confirmText: "OK",
-        showCancel: false,
-      });
-      setIsModalOpen(true);
-      return;
-    }
-    setPatientFiles((prev) => {
-      const updatedFiles = prev[currentPatient].map((file) =>
-        file.fileName === currentFile ? { ...file, nodes } : file
-      );
-      const updated = { ...prev, [currentPatient]: updatedFiles };
-      localStorage.setItem("patientFiles", JSON.stringify(updated));
-      return updated;
-    });
-    setModifiedFiles((prev) => ({
-      ...prev,
-      [`${currentPatient}-${currentFile}`]: false,
-    }));
-    setModalConfig({
-      title: "File Saved",
-      message: `File ${currentFile} for ${currentPatient} was successfully saved.`,
-      confirmText: "OK",
-      showCancel: false,
-    });
-    setIsModalOpen(true);
-  };
-
   // HANDLE: ADD SYMPTOM NODE
   const addSymptomNode = (value?: string) => {
     console.log("Adding symptom node:", value);
@@ -811,7 +669,6 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
         confirmText={modalConfig.confirmText}
         inputValue={modalConfig.inputValue}
         onConfirm={modalConfig.onConfirm}
-        showCancel={modalConfig.showCancel}
       />
       <div
         className={`flex flex-col gap-4 bg-white shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] h-auto transition-all duration-300 ${
@@ -941,7 +798,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                         className="fixed bg-white shadow-lg rounded-md p-2 z-50 w-40"
                         style={getMenuPosition(settingsMenuRefs.current[`patient-${patient}`])}
                         ref={(el) => {
-                          if (el) settingsMenuRefs.current[`patient-menu-${patient}`] = el as any;
+                          if (el) settingsMenuRefs.current[`patient-menu-${patient}`] = el as never;
                         }}
                       >
                         <button

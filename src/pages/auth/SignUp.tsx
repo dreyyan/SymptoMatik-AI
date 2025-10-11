@@ -8,7 +8,7 @@ import PrimaryButton from "../../components/buttons/PrimaryButton";
 const SignUp = () => {
     document.title = "SymptoMatik: Sign Up";
 
-    // [ METHODS ]: User Authentication
+    // [HANDLE]: User Authentication
     const navigate = useNavigate();
 
     const handleSignUp = () => {
@@ -16,7 +16,7 @@ const SignUp = () => {
         navigate("/");
     }
 
-    // [ METHODS ]: OAuth Authentication
+    // [HANDLE]: OAuth Authentication
     const handleFacebookSignUp = () => {
         alert("Logging in via Facebook...")
     }
@@ -27,18 +27,18 @@ const SignUp = () => {
 
     return (
     <div className={Styles.mainDivStyle}>
-        {/* LOGIN PANEL */}
+        {/* Login Panel */}
         <div className={Styles.loginDivStyle}>
-            {/* HEADER */}
+            {/* Header */}
             <div className="flex gap-4">
                 <img src="./symptomatik-logo.svg" className="w-10 mt-6 mb-4"/>
                 <img src="./symptomatik-banner.svg" className="w-[50%] mt-6 mb-4"/>
             </div>
 
-            <h2 className={Styles.h2Style}>Start your journey</h2>
+            <h2 className="text-[var(--trust-blue)] text-3xl font-bold">Start your journey</h2>
             <h2 className={Styles.pStyle}>Be a part of the revolution.</h2>
 
-            {/* FORM INPUT */}
+            {/* Form Input */}
             <form action="/login-form" className={Styles.formStyle}>
                 <label htmlFor="username-email" className={Styles.inputLabelStyle}>Email</label>
                 <input type="text" className={Styles.inputStyle}/>
@@ -53,17 +53,17 @@ const SignUp = () => {
                 <input type="text" className={Styles.inputStyle}/>
             </form>
 
-            {/* BUTTON: SIGN UP */}
+            {/* Button: Sign Up */}
             <PrimaryButton text="Sign Up" onClick={handleSignUp} width="full" fontSize="18px" height="40px" disabled={false}/>
 
-            {/* OR SEPARATOR */}
+            {/* 'or' separator */}
             <div className="flex items-center w-full my-4 text-[var-(--trust-blue)]">
                 <hr className="flex-grow border-t border-slate-400"/>
                 <span className="mx-2 text-[var-(--trust-blue)] text-sm">or</span>
                 <hr className="flex-grow border-t border-slate-400"/>
             </div>
 
-            {/* BUTTON: SIGN UP */}
+            {/* Button: Sign Up */}
             <OAuthButton 
             src="/fb-icon.png" 
             alt="Facebook Sign Up" 
@@ -75,7 +75,7 @@ const SignUp = () => {
             onClick={handleGoogleSignUp} 
             label="Continue with Google"/>
 
-            {/* SIGN IN: SUBLINK */}
+            {/* Link: Sign In */}
             <div className={Styles.signUpLinkDivStyle}>
                 <h4>Already have an account?</h4>
                 <Link to=".." className={Styles.sublinkStyle}>Sign In</Link>

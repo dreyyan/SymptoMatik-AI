@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
@@ -13,6 +12,8 @@ type MessageType = {
 type DoctorType = {
   id: string;
   name: string;
+  medicalPlace: string;
+  address: string;
   specialty: string;
   mockConversation: MessageType[];
 };

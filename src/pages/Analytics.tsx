@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
 import Chart from "chart.js/auto"; // Import Chart.js
 import Header from "../components/Header";

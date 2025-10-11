@@ -1,51 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  /* 🌊 Primary brand color — trust, reliability */
-  --trust-blue: #005566;   /* Navbar, buttons, links, highlights */
-  /* 🩺 Secondary brand color — healing, wellness */
-  --healing-teal: #02a9a6; /* Secondary buttons, charts, badges */
-  /* 🧼 Backgrounds & surfaces */
-  --clean-white: #f5f7fa; /* Page background, cards, form inputs */
-  /* 🪨 Neutral text & dividers */
-  --slate-gray: #4a5e6d; /* Body text, secondary text, borders */
-  /* 🌺 Accent (use sparingly for CTAs) */
-  --accent-coral: #ff6f61; /* Alert button, notification dot, emphasis */
-  /* 🌌 Deep background */
-  --dark-navy: #1a2a44; /* Footers, sidebars, headers on dark mode */
+  /* Primary Color */
+  --trust-blue: #005566;
+  /* Secondary Color */
+  --healing-teal: #02a9a6;
+  /* Background Color */
+  --clean-white: #f5f7fa;
+  /* Text Color */
+  --slate-gray: #4a5e6d;
+  /* Dark: Background Color */
+  --dark-navy: #1a2a44;
 }
 
 body {
   font-family: "Inter";
   font-weight: 400;
-}
-
-.poppins-semibold {
-  font-family: "Poppins", sans-serif;
-  font-weight: 600;
-  font-style: normal;
-}
-
-.poppins-bold {
-  font-family: "Poppins", sans-serif;
-  font-weight: 700;
-  font-style: normal;
-}
-
-.roboto-heading {
-  font-family: "Roboto", sans-serif;
-  font-weight: 700;
-  font-style: normal;
-}
-.roboto-body {
-  font-family: "Roboto", sans-serif;
-  font-weight: 400;
-  font-style: normal;
-}
-.roboto-cta {
-  font-family: "Roboto", sans-serif;
-  font-weight: 500;
-  font-style: normal;
 }
 
 .inter {
@@ -76,26 +46,24 @@ body {
   font-style: normal;
 }
 
-/* For Chrome, Safari, Edge */
+/* REMOVE SCROLLBAR */
+/* 1. Chrome, Safari, Edge */
 ::-webkit-scrollbar {
   display: none;
 }
-
-/* For Firefox */
+/* 2. Firefox */
 html {
   scrollbar-width: none;
 }
-
-/* For IE/Edge (legacy) */
+/* 3. IE/Edge (legacy) */
 body {
   -ms-overflow-style: none;
 }
 
-/* Hide the Scrollbar */
+/* HIDE SCROLLBAR */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
-
 .scrollbar-hide {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */

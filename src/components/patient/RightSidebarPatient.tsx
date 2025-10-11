@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import PrimaryButton from "./buttons/PrimaryButton";
+import PrimaryButton from "../buttons/PrimaryButton";
 import { useNavigate } from "react-router-dom";
 
 type NodeType = {

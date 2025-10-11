@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
-import LeftSidebarPatient from "../../components/LeftSidebarPatient";
-import RightSidebar from "../../components/RightSidebar";
 import NodeContainer from "../../components/NodeContainer";
-import RightSidebarPatient from "../../components/RightSidebarPatient";
+import LeftSidebarPatient from "../../components/patient/LeftSidebarPatient";
+import RightSidebarPatient from "../../components/patient/RightSidebarPatient";
 
 type NodeType = {
   id: string;

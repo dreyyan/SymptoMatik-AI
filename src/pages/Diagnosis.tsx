@@ -298,7 +298,6 @@ const Diagnosis = () => {
         confirmText={modalConfig.confirmText}
         inputValue={modalConfig.inputValue}
         onConfirm={modalConfig.onConfirm}
-        showCancel={modalConfig.showCancel}
       />
     </div>
   );
