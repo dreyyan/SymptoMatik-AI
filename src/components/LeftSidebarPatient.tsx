@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import Styles from "../styles/Styles.js";
-import LinkedList from "../logic/LinkedList.js";
+import LinkedList from "../logic/LinkedList.ts";
 import Modal from "./Modal.tsx";
 import data from "../data/data.json";
 

@@ -35,8 +35,9 @@ const SignIn = () => {
       {/* LOGIN PANEL */}
       <div className={Styles.loginDivStyle}>
         {/* HEADER */}
-        <div className="flex justify-center items-center">
-          <img src="./symptomatik-logo.svg" className="w-16 mt-6 mb-4" />
+        <div className="flex justify-center items-center gap-x-3 mb-2 mt-8">
+            <img src="/symptomatik-logo.svg" className="h-10" />
+            <img src="/symptomatik-banner.svg" className="h-full" />
         </div>
 
         <h2 className="text-4xl text-center inter-semibold text-[var(--trust-blue)]">

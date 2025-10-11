@@ -230,31 +230,29 @@ const Diagnosis = () => {
   }, [currentPatient, currentFile, nodes]);
 
   return (
-    <div className="flex flex-col bg-gray-100">
+    <div className="flex flex-col min-h-screen bg-gray-100">
       {/* Header */}
       <Header />
       {/* Main Content */}
-      <div className="flex min-h-screen flex-1">
+      <div className="flex flex-1 overflow-hidden">
         {/* Left: Sidebar */}
-        <div className="w-1/5 h-screen">
-          <LeftSidebar
-            addNode={addNode}
-            nodes={nodes}
-            loadNodes={loadNodes}
-            setCurrentPatient={setCurrentPatient}
-            setCurrentFile={setCurrentFile}
-            patientFiles={patientFiles}
-            setPatientFiles={setPatientFiles}
-            modifiedFiles={modifiedFiles}
-            setModifiedFiles={setModifiedFiles}
-            currentPatient={currentPatient}
-            currentFile={currentFile}
-          />
-        </div>
+        <LeftSidebar
+          addNode={addNode}
+          nodes={nodes}
+          loadNodes={loadNodes}
+          setCurrentPatient={setCurrentPatient}
+          setCurrentFile={setCurrentFile}
+          patientFiles={patientFiles}
+          setPatientFiles={setPatientFiles}
+          modifiedFiles={modifiedFiles}
+          setModifiedFiles={setModifiedFiles}
+          currentPatient={currentPatient}
+          currentFile={currentFile}
+        />
         {/* Center: Droppable Area */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col min-h-0">
           {currentFile && currentPatient && (
-            <div className="bg-[var(--trust-blue)] p-4 shadow z-1 flex items-center justify-between">
+            <div className="bg-[var(--trust-blue)] p-4 shadow z-10 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <h2 className="text-xl inter-semibold text-[var(--clean-white)]">
                   {currentPatient} |
@@ -268,19 +266,19 @@ const Diagnosis = () => {
                   className="cursor-pointer flex items-center justify-center w-8 h-8 mr-6 rounded-full hover:opacity-70 transition-all duration-300"
                   onClick={handleDeleteFile}
                 >
-                  <img className="w-5" src="remove-file-icon.svg" alt="Remove Icon" />
+                  <img className="w-6" src="remove-file-icon.svg" alt="Remove Icon" />
                 </button>
                 <button
                   className="cursor-pointer flex items-center justify-center w-8 h-8 rounded-full hover:opacity-70 transition-all duration-300"
                   onClick={renameFile}
                 >
-                  <img className="w-5" src="rename-file-icon.svg" alt="Rename Icon" />
+                  <img className="w-6" src="rename-file-icon.svg" alt="Rename Icon" />
                 </button>
                 <button
                   className="cursor-pointer flex items-center justify-center w-8 h-8 rounded-full hover:opacity-70 transition-all duration-300"
                   onClick={handleSave}
                 >
-                  <img className="w-5" src="save-icon.svg" alt="Save Icon" />
+                  <img className="w-6" src="save-icon.svg" alt="Save Icon" />
                 </button>
               </div>
             </div>
@@ -288,9 +286,7 @@ const Diagnosis = () => {
           <NodeContainer nodes={nodes} setNodes={setNodes} />
         </div>
         {/* Right: Sidebar */}
-        <div className="w-[20%]">
-          <RightSidebar nodes={nodes} />
-        </div>
+        <RightSidebar nodes={nodes} />
       </div>
       {/* Footer */}
       <Footer />

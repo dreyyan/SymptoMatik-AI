@@ -23,9 +23,9 @@ const Styles = {
   roundedButtonStyle:
     "cursor-pointer border bg-[var(--primary-teal)] text-[var(--clean-white)] rounded-full w-full mt-2 px-6 py-1 text-sm",
   primaryButtonStyle:
-    "cursor-pointer bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-full w-auto mt-2 px-6 text-md inter-semibold",
+    "cursor-pointer bg-[var(--trust-blue)] text-[var(--clean-white)] rounded-full w-auto px-6 text-md inter-semibold",
   secondaryButtonStyle:
-    "cursor-pointer border inter bg-[var(--clean-white)] text-[var(--trust-blue)] rounded-full w-auto mt-2 px-6 py-1 text-md transition duration-300 ease-in-out hover:bg-[#E6F0F2] hover:text-[var(--trust-blue)] hover:border-[var(--clean-white)]",
+    "cursor-pointer border inter bg-[var(--clean-white)] text-[var(--trust-blue)] rounded-full w-auto px-6 py-1 text-md transition duration-300 ease-in-out hover:bg-[#E6F0F2] hover:text-[var(--trust-blue)] hover:border-[var(--clean-white)]",
 
   // Components
   searchBarStyle:

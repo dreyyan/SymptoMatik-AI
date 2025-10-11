@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import Styles from "../styles/Styles.js";
-import LinkedList from "../logic/LinkedList.js";
+import LinkedList from "../logic/LinkedList.ts";
 import Modal from "./Modal.tsx";
 import data from "../data/data.json";
 
@@ -37,8 +37,8 @@ interface ModalConfig {
 }
 
 const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentFile, patientFiles, setPatientFiles, modifiedFiles, setModifiedFiles, currentPatient, currentFile }: LeftSidebarProps) => {
-  const [symptomList] = useState(() => {
-    const list = new LinkedList();
+  const [symptomList] = useState<LinkedList<string>>(() => {
+    const list = new LinkedList<string>();
     Object.keys(data.symptoms).forEach((symptom) => list.append(symptom));
     return list;
   });
@@ -69,6 +69,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
         (ref) => ref && !ref.contains(event.target as Node)
       );
       if (isOutside && (settingsMenuPatient || settingsMenuFile)) {
+        console.log("Clicked outside, closing menus");
         setSettingsMenuPatient(null);
         setSettingsMenuFile(null);
       }
@@ -97,6 +98,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
   }, {} as Record<string, string[]>);
 
   const toggleFolder = (key: string) => {
+    console.log("Toggling folder for:", key);
     setOpenFolders((prev) => ({
       ...prev,
       [key]: !prev[key],
@@ -104,6 +106,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
   };
 
   const toggleLeftSidebar = () => {
+    console.log("Toggling sidebar visibility");
     setSidebarVisibility((prev) => !prev);
   };
 
@@ -127,6 +130,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
   // Track changes to nodes to mark files as modified
   useEffect(() => {
     if (nodes.length > 0 && currentPatient && currentFile) {
+      console.log("Marking file as modified:", `${currentPatient}-${currentFile}`);
       setModifiedFiles((prev) => ({
         ...prev,
         [`${currentPatient}-${currentFile}`]: true,
@@ -136,13 +140,16 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
 
   // Calculate dropdown menu position
   const getMenuPosition = (buttonRef: HTMLButtonElement | null) => {
-    if (!buttonRef) return { top: '0px', left: '0px', openUpward: false };
+    if (!buttonRef) {
+      console.log("No button ref found for menu positioning");
+      return { top: '0px', left: '0px', openUpward: false };
+    }
     const rect = buttonRef.getBoundingClientRect();
     const menuHeight = 80; // Approximate height of the menu
     const viewportHeight = window.innerHeight;
     const openUpward = rect.bottom + menuHeight > viewportHeight;
     const menuTop = openUpward ? rect.top - menuHeight : rect.bottom;
-    const menuLeft = rect.right - 100; // Adjust to align menu with button (assuming menu width ~100px)
+    const menuLeft = rect.right - 100; // Adjust to align menu with button
     return {
       top: `${menuTop}px`,
       left: `${menuLeft}px`,
@@ -152,6 +159,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
 
   // HANDLE: ADD PATIENT
   const handleAddPatient = () => {
+    console.log("Opening Add Patient modal");
     setModalConfig({
       title: "Add Patient",
       message: "",
@@ -159,6 +167,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
       inputValue: "",
       showCancel: true,
       onConfirm: (patientName: string) => {
+        console.log("Adding patient:", patientName);
         if (!patientName.trim()) {
           setModalConfig({
             title: "Error",
@@ -199,23 +208,40 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
 
   // HANDLE: DELETE PATIENT
   const handleDeletePatient = (patient: string) => {
+    console.log("Opening Delete Patient modal for:", patient);
     setModalConfig({
       title: "Delete Patient",
       message: `Are you sure you want to delete ${patient} and all associated files?`,
       confirmText: "Delete",
       showCancel: true,
       onConfirm: () => {
+        console.log("Deleting patient:", patient);
         setPatientFiles((prev) => {
           const updated = { ...prev };
           delete updated[patient];
           localStorage.setItem("patientFiles", JSON.stringify(updated));
           return updated;
         });
+        setModifiedFiles((prev) => {
+          const updated = { ...prev };
+          Object.keys(updated).forEach((key) => {
+            if (key.startsWith(`${patient}-`)) {
+              delete updated[key];
+            }
+          });
+          return updated;
+        });
         if (currentPatient === patient) {
+          console.log("Clearing current patient and file");
           setCurrentPatient(null);
           setCurrentFile(null);
           loadNodes([]);
         }
+        setOpenFolders((prev) => {
+          const updated = { ...prev };
+          delete updated[patient];
+          return updated;
+        });
         setModalConfig({
           title: "Patient Deleted",
           message: `Patient ${patient} was successfully deleted.`,
@@ -229,14 +255,17 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
   };
 
   // HANDLE: RENAME PATIENT
+// HANDLE: RENAME PATIENT
   const renamePatient = (patient: string) => {
+    console.log("Opening Rename Patient modal for:", patient);
     setModalConfig({
       title: "Rename Patient",
       message: `Enter new name for ${patient}:`,
       confirmText: "Rename",
-      inputValue: "",
+      inputValue: patient,
       showCancel: true,
       onConfirm: (newName: string) => {
+        console.log("Renaming patient from", patient, "to", newName);
         if (!newName.trim()) {
           setModalConfig({
             title: "Error",
@@ -245,6 +274,10 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
             showCancel: false,
           });
           setIsModalOpen(true);
+          return;
+        }
+        if (newName === patient) {
+          setIsModalOpen(false);
           return;
         }
         if (patientFiles[newName]) {
@@ -257,6 +290,8 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
           setIsModalOpen(true);
           return;
         }
+        
+        // Update patient files
         setPatientFiles((prev) => {
           const updated = { ...prev };
           updated[newName] = updated[patient];
@@ -264,9 +299,36 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
           localStorage.setItem("patientFiles", JSON.stringify(updated));
           return updated;
         });
+        
+        // Update modified files
+        setModifiedFiles((prev) => {
+          const updated = { ...prev };
+          Object.keys(prev).forEach((key) => {
+            if (key.startsWith(`${patient}-`)) {
+              const newKey = `${newName}${key.substring(patient.length)}`;
+              updated[newKey] = updated[key];
+              delete updated[key];
+            }
+          });
+          return updated;
+        });
+        
+        // Update current patient if it's the one being renamed
         if (currentPatient === patient) {
+          console.log("Updating current patient to:", newName);
           setCurrentPatient(newName);
         }
+        
+        // Update open folders state
+        setOpenFolders((prev) => {
+          const updated = { ...prev };
+          if (prev[patient] !== undefined) {
+            updated[newName] = prev[patient];
+            delete updated[patient];
+          }
+          return updated;
+        });
+        
         setModalConfig({
           title: "Patient Renamed",
           message: `Patient ${patient} was successfully renamed to ${newName}.`,
@@ -281,25 +343,33 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
 
   // HANDLE: TOGGLE PATIENT SETTINGS
   const togglePatientSettings = (patient: string) => {
-    setSettingsMenuPatient((prev) => (prev === patient ? null : patient));
-    setSettingsMenuFile(null); // Close any open file menu
+    console.log("Toggling patient settings for:", patient);
+    setSettingsMenuPatient((prev) => {
+      const newState = prev === patient ? null : patient;
+      console.log("New settingsMenuPatient state:", newState);
+      return newState;
+    });
+    setSettingsMenuFile(null);
   };
 
   // HANDLE: TOGGLE FILE SETTINGS
   const toggleFileSettings = (patient: string, fileName: string) => {
     const key = `${patient}-${fileName}`;
+    console.log("Toggling file settings for:", key);
     setSettingsMenuFile((prev) => (prev === key ? null : key));
-    setSettingsMenuPatient(null); // Close any open patient menu
+    setSettingsMenuPatient(null);
   };
 
   // HANDLE: DELETE FILE
   const handleDeleteFile = (patient: string, fileName: string) => {
+    console.log("Opening Delete File modal for:", fileName);
     setModalConfig({
       title: "Delete File",
       message: `Are you sure you want to delete ${fileName} for ${patient}?`,
       confirmText: "Delete",
       showCancel: true,
       onConfirm: () => {
+        console.log("Deleting file:", fileName);
         setPatientFiles((prev) => {
           const updatedFiles = prev[patient].filter((file) => file.fileName !== fileName);
           const updated = { ...prev, [patient]: updatedFiles };
@@ -329,6 +399,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
 
   // HANDLE: RENAME FILE
   const renameFile = (patient: string, fileName: string) => {
+    console.log("Opening Rename File modal for:", fileName);
     setModalConfig({
       title: "Rename File",
       message: `Enter new name for ${fileName}:`,
@@ -336,6 +407,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
       inputValue: "",
       showCancel: true,
       onConfirm: (newFileName: string) => {
+        console.log("Renaming file from", fileName, "to", newFileName);
         if (!newFileName.trim()) {
           setModalConfig({
             title: "Error",
@@ -390,6 +462,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
 
   // HANDLE: DELETE NODE
   const handleDeleteNode = (nodeId: string) => {
+    console.log("Deleting node with ID:", nodeId);
     if (!currentPatient || !currentFile) {
       setModalConfig({
         title: "Error",
@@ -420,6 +493,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
 
   // HANDLE: LOAD FILE
   const handleLoadFile = (patient: string, fileName: string) => {
+    console.log("Loading file:", fileName, "for patient:", patient);
     try {
       const file = patientFiles[patient]?.find((f) => f.fileName === fileName);
       if (file) {
@@ -435,7 +509,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                 ["Infectious", "Allergic", "Chronic"].includes(node.classification)
             )
           : [];
-        console.log(`Loading ${fileName} for ${patient}:`, validNodes);
+        console.log(`Loaded nodes for ${fileName}:`, validNodes);
         loadNodes(validNodes);
         setCurrentPatient(patient);
         setCurrentFile(fileName);
@@ -463,6 +537,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
 
   // HANDLE: ADD FILE
   const handleAddFile = () => {
+    console.log("Opening Add File modal, hoveredFile:", hoveredFile);
     if (hoveredFile) {
       const [patient] = hoveredFile.split("-");
       if (patientFiles[patient]) {
@@ -473,6 +548,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
           inputValue: "",
           showCancel: true,
           onConfirm: (fileName: string) => {
+            console.log("Adding file:", fileName, "for patient:", patient);
             if (!fileName.trim()) {
               setModalConfig({
                 title: "Error",
@@ -511,7 +587,6 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
         });
         setIsModalOpen(true);
       } else {
-        // Fallback if hovered patient not found
         setModalConfig({
           title: "Add File",
           message: "Enter patient name and file name (Patient:FileName.ndg):",
@@ -519,6 +594,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
           inputValue: "",
           showCancel: true,
           onConfirm: (input: string) => {
+            console.log("Adding file with input:", input);
             const [patient, fileName] = input.split(":");
             if (!patient || !fileName) {
               setModalConfig({
@@ -569,7 +645,6 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
         setIsModalOpen(true);
       }
     } else {
-      // No hovered file, prompt for patient and file
       setModalConfig({
         title: "Add File",
         message: "Enter patient name and file name (Patient:FileName.ndg):",
@@ -577,6 +652,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
         inputValue: "",
         showCancel: true,
         onConfirm: (input: string) => {
+          console.log("Adding file with input:", input);
           const [patient, fileName] = input.split(":");
           if (!patient || !fileName) {
             setModalConfig({
@@ -630,6 +706,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
 
   // HANDLE: SAVE FILE
   const handleSaveFile = () => {
+    console.log("Saving file, currentPatient:", currentPatient, "currentFile:", currentFile);
     if (!currentPatient || !currentFile) {
       setModalConfig({
         title: "Error",
@@ -663,6 +740,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
 
   // HANDLE: ADD SYMPTOM NODE
   const addSymptomNode = (value?: string) => {
+    console.log("Adding symptom node:", value);
     if (!value) {
       setModalConfig({
         title: "Add Custom Symptom",
@@ -671,6 +749,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
         inputValue: "",
         showCancel: true,
         onConfirm: (customSymptom: string) => {
+          console.log("Adding custom symptom:", customSymptom);
           if (!customSymptom.trim()) {
             setModalConfig({
               title: "Error",
@@ -718,6 +797,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
       <Modal
         isOpen={isModalOpen}
         onClose={() => {
+          console.log("Closing modal");
           setIsModalOpen(false);
           setModalConfig({
             title: "",
@@ -734,11 +814,21 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
         showCancel={modalConfig.showCancel}
       />
       <div
-        className={`flex flex-col gap-4 px-6 py-4 bg-white shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] h-screen ${
-          sidebarVisibility ? "" : "px-1 py-4"
+        className={`flex flex-col gap-4 bg-white shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] h-auto transition-all duration-300 ${
+          sidebarVisibility ? "w-90 px-6 py-4" : "w-16 px-4 py-4 overflow-hidden"
         }`}
       >
-        {/* BUTTONS: FILE & NODES */}
+        <div className="flex justify-end mt-4">
+          <button
+            className="cursor-pointer duration-300 hover:opacity-60"
+            onClick={toggleLeftSidebar}
+          >
+            <img
+              className="w-8 transition-all duration-150 hover:scale-105"
+              src={sidebarVisibility ? "dock-to-right-icon.svg" : "dock-to-left-icon.svg"}
+            />
+          </button>
+        </div>
         {sidebarVisibility && (
           <div className="flex gap-2">
             <button
@@ -748,7 +838,10 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                   ? Styles.primaryButtonStyle
                   : Styles.secondaryButtonStyle
               }
-              onClick={() => setLeftSidebar("File")}
+              onClick={() => {
+                console.log("Switching to File tab");
+                setLeftSidebar("File");
+              }}
             >
               Files
             </button>
@@ -759,7 +852,10 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                   ? Styles.primaryButtonStyle
                   : Styles.secondaryButtonStyle
               }
-              onClick={() => setLeftSidebar("Nodes")}
+              onClick={() => {
+                console.log("Switching to Symptoms tab");
+                setLeftSidebar("Nodes");
+              }}
             >
               Symptoms
             </button>
@@ -767,17 +863,29 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
         )}
         {/* PANEL: FILE */}
         {sidebarVisibility && leftSidebar === "File" && (
-          <div className="flex flex-col gap-4 min-h-32 pt-4">
+          <div className="flex flex-col gap-4 pt-4 flex-1">
             {/* MINI-HEADER */}
             <div className="flex justify-between items-end">
               <h3 className="text-lg font-[600] leading-none text-[var(--trust-blue)]">
                 Patient Records
               </h3>
               <div className="flex gap-2">
-                <button className="cursor-pointer duration-300 hover:opacity-60" onClick={handleAddPatient}>
+                <button
+                  className="cursor-pointer duration-300 hover:opacity-60"
+                  onClick={() => {
+                    console.log("Add Patient button clicked");
+                    handleAddPatient();
+                  }}
+                >
                   <img className="w-6 transition-all duration-150 hover:scale-105" src="add-patient-icon.svg" />
                 </button>
-                <button className="cursor-pointer duration-300 hover:opacity-60" onClick={handleAddFile}>
+                <button
+                  className="cursor-pointer duration-300 hover:opacity-60"
+                  onClick={() => {
+                    console.log("Add File button clicked");
+                    handleAddFile();
+                  }}
+                >
                   <img className="w-6 transition-all duration-150 hover:scale-105" src="add-symptom-file-icon.svg" />
                 </button>
               </div>
@@ -791,29 +899,38 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
               onChange={(e) => setPatientSearch(e.target.value)}
             />
             {/* PATIENT FILES */}
-            <div className="max-h-[calc(100vh-100px)] overflow-y-auto relative">
+            <div className="flex-1 overflow-y-auto relative">
               {Object.keys(filteredFiles).length > 0 ? (
                 Object.entries(filteredFiles).map(([patient, files]) => (
                   <div key={patient} className="rounded p-2 pr-4 relative">
                     <div className="flex justify-center items-center">
                       <button
-                        onClick={() => toggleFolder(patient)}
+                        onClick={() => {
+                          console.log("Toggling folder for patient:", patient);
+                          toggleFolder(patient);
+                        }}
                         className="cursor-pointer flex items-center gap-1 flex-1 text-left"
                       >
                         <img
                           className="w-6 transition-transform duration-300"
                           src={openFolders[patient] ? "arrow-down.svg" : "arrow-right.svg"}
                         />
-                        {/* ICON: Patient */}
-                        <span>
-                          <img className="w-5 mr-1" src="patient-icon.svg"/>
+                        <span className="flex justify-center items-center pr-1">
+                          <img className="w-5" src="patient-icon.svg"/>
                         </span>
                         <span className="text-md inter-semibold text-[var(--trust-blue)]">{patient}</span>
                       </button>
                       <button
-                        className="cursor-pointer flex items-center justify-center w-8 h-4 rounded-full text-gray-500"
-                        onClick={() => togglePatientSettings(patient)}
-                        ref={(el) => (settingsMenuRefs.current[`patient-${patient}`] = el)}
+                        className="cursor-pointer flex items-center justify-center w-8 h-8 rounded-full text-gray-500 hover:bg-gray-100"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          console.log("Patient settings button clicked for:", patient);
+                          togglePatientSettings(patient);
+                        }}
+                        ref={(el) => {
+                          console.log("Setting ref for patient:", patient);
+                          settingsMenuRefs.current[`patient-${patient}`] = el;
+                        }}
                       >
                         <span className="text-2xl text-[var(--text)]">…</span>
                       </button>
@@ -821,23 +938,30 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                     {/* Settings Menu for Patient */}
                     {settingsMenuPatient === patient && (
                       <div
-                        className="fixed bg-white shadow-lg rounded-md p-2 z-20 w-40"
+                        className="fixed bg-white shadow-lg rounded-md p-2 z-50 w-40"
                         style={getMenuPosition(settingsMenuRefs.current[`patient-${patient}`])}
+                        ref={(el) => {
+                          if (el) settingsMenuRefs.current[`patient-menu-${patient}`] = el as any;
+                        }}
                       >
                         <button
                           className="roboto-cta block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => {
-                            renamePatient(patient);
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            console.log("Rename Patient button clicked for:", patient);
                             setSettingsMenuPatient(null);
+                            renamePatient(patient);
                           }}
                         >
                           Rename Patient
                         </button>
                         <button
                           className="roboto-cta block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-                          onClick={() => {
-                            handleDeletePatient(patient);
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            console.log("Delete Patient button clicked for:", patient);
                             setSettingsMenuPatient(null);
+                            handleDeletePatient(patient);
                           }}
                         >
                           Delete Patient
@@ -853,7 +977,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                         {files.map((file, idx) => (
                           <div
                             key={idx}
-                            className={`border-b border-[rgba(107,114,128,0.2)] relative flex items-center justify-between text-md font-bold text-[var(--slate-gray)] hover:text-[var(---dark-navy)] cursor-pointer px-2 pr-2 py-1 rounded ${
+                            className={`border-b border-[rgba(107,114,128,0.2)] relative flex items-center justify-between text-md font-bold text-[var(--slate-gray)] hover:text-[var(--dark-navy)] cursor-pointer px-2 pr-2 py-1 rounded ${
                               hoveredFile === `${patient}-${file.fileName}` ? "bg-gray-200" : ""
                             }`}
                             onMouseEnter={() => setHoveredFile(`${patient}-${file.fileName}`)}
@@ -880,7 +1004,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
         )}
         {/* PANEL: NODES */}
         {sidebarVisibility && leftSidebar === "Nodes" && (
-          <div className="flex flex-col gap-4 pt-3">
+          <div className="flex flex-col gap-4 pt-3 flex-1">
             <h3 className="text-lg font-[600] text-[var(--trust-blue)]">Symptoms</h3>
             <input
               className="w-full inter text-sm rounded-full px-4 py-2 bg-gray-50 border border-gray-200 focus:outline-none focus:ring-1 focus:ring-[var(--healing-teal)] focus:border-blue-500 transition-all duration-300 placeholder-gray-400"
@@ -889,13 +1013,16 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
               value={symptomSearch}
               onChange={(e) => setSymptomSearch(e.target.value)}
             />
-            <div className="max-h-[calc(100vh-100px)] overflow-y-scroll scrollbar-hide">
+            <div className="flex-1 overflow-y-auto relative">
               <div>
                 {Object.keys(filteredSymptomsBySection).length > 0 ? (
                   Object.entries(filteredSymptomsBySection).map(([section, symptoms]) => (
                     <div key={section} className="rounded p-2">
                       <button
-                        onClick={() => toggleFolder(section)}
+                        onClick={() => {
+                          console.log("Toggling folder for section:", section);
+                          toggleFolder(section);
+                        }}
                         className="cursor-pointer flex items-center gap-2 w-full text-left"
                       >
                         <img
@@ -909,7 +1036,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                           openFolders[section] ? "h-auto opacity-100" : "h-0 opacity-0"
                         }`}
                       >
-                        <div className="ml-6 mt-1 ">
+                        <div className="ml-6 mt-1">
                           {symptoms.map((value, index) => (
                             <div
                               key={index}
@@ -937,7 +1064,7 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
               {/* LOADED NODES */}
               {currentFile && currentPatient && (
                 <div className="mt-4">
-                  <h3 className="text-sm inter-semibold text-[var(--trust-blue)]">Loaded Nodes</h3>
+                  <h3 className="text-md inter-semibold text-[var(--trust-blue)]">Loaded Nodes</h3>
                   {nodes.length > 0 ? (
                     <div className="mt-2 space-y-1">
                       {nodes.map((node) => (
@@ -945,12 +1072,15 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
                           key={node.id}
                           className="flex items-center justify-between text-sm font-semibold text-[var(--trust-blue)] p-2 rounded"
                         >
-                     <span>{node.value}</span>
+                          <span className="inter">{node.value}</span>
                           <button
-                            className="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-500 hover:bg-red-200 hover:text-red-700 transition-all duration-300"
+                            className="cursor-pointer flex items-center justify-center w-6 h-6 rounded-full hover:opacity-50 transition-all duration-300"
                             onClick={() => handleDeleteNode(node.id)}
                           >
-                            <span className="text-xs font-bold">X</span>
+                          <img
+                          className="w-8 transition-transform duration-300"
+                          src="remove-node-icon.svg"
+                          />
                           </button>
                         </div>
                       ))}

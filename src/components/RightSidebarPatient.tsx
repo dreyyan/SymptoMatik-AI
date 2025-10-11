@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import PrimaryButton from "./buttons/PrimaryButton";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type NodeType = {
   id: string;
@@ -15,37 +15,38 @@ type RightSidebarPatientProps = {
   nodes: NodeType[];
 };
 
-// Mock data for professionals
+// Mock data for professionals (Metro Manila version)
 const professionals = [
   {
-    name: "Dr. Jane Smith",
+    name: "Dr. Juan dela Cruz",
     specialty: "Infectious Disease Specialist",
-    medicalPlace: "City Pediatric Clinic",
-    address: "123 Health St, Springfield, IL 62701",
+    medicalPlace: "St. Luke’s Medical Center Extension Clinic",
+    address: "1177 Jorge Bocobo Street, Ermita, Manila 1000, Philippines",
   },
   {
-    name: "Dr. Michael Lee",
-    specialty: "Allergist",
-    medicalPlace: "Allergy Care Center",
-    address: "456 Wellness Ave, Springfield, IL 62702",
+    name: "Dr. Ana Reyes",
+    specialty: "Cardiologist",
+    medicalPlace: "The Medical City Clinic — Exquadra Tower, Ortigas Center",
+    address: "17th Floor, Exquadra Tower, Exchange Road corner Jade Drive, Ortigas Center, Pasig City, Metro Manila",
   },
   {
-    name: "Dr. Emily Chen",
+    name: "Dr. Abad Santos",
     specialty: "Chronic Disease Specialist",
-    medicalPlace: "Springfield General Hospital",
-    address: "789 Healing Rd, Springfield, IL 62703",
+    medicalPlace: "Clinica Manila — SM Megamall Branch",
+    address: "2nd Floor, Building A, SM Megamall, Mandaluyong City, Metro Manila",
   },
   {
-    name: "Dr. Robert Patel",
+    name: "Dr. Aaron Chua",
     specialty: "Pediatrician",
-    medicalPlace: "Family Health Clinic",
-    address: "321 Care Lane, Springfield, IL 62704",
+    medicalPlace: "Aaron Medical Clinic",
+    address: "No. 1923 San Marcelino Street, Barangay 691 Zone 75, Malate, Manila 1004, Metro Manila",
   },
 ];
 
-const specialtyToClassification = {
+// Mapping of specialties to classifications
+const specialtyToClassification: Record<string, string | string[]> = {
   "Infectious Disease Specialist": "Infectious",
-  Allergist: "Allergic",
+  Cardiologist: "Chronic",
   "Chronic Disease Specialist": "Chronic",
   Pediatrician: ["Infectious", "Allergic", "Chronic"], // Generalist can handle all
 };
@@ -61,27 +62,42 @@ const RightSidebarPatient = ({ nodes }: RightSidebarPatientProps) => {
   // Calculate recommended professionals
   const recommendedProfessionals = useMemo(() => {
     const scoredProfessionals = professionals.map((professional) => {
-      const matchingClassifications = Array.isArray(specialtyToClassification[professional.specialty])
-        ? nodeClassifications.filter((classification) =>
-            specialtyToClassification[professional.specialty].includes(classification)
-          )
-        : nodeClassifications.includes(specialtyToClassification[professional.specialty])
-        ? [specialtyToClassification[professional.specialty]]
-        : [];
-      const score = matchingClassifications.length;
-      return { ...professional, score, matchCount: matchingClassifications.length };
+      const specialtyClassifications = Array.isArray(specialtyToClassification[professional.specialty])
+        ? specialtyToClassification[professional.specialty] as string[]
+        : [specialtyToClassification[professional.specialty]] as string[];
+
+      const matchingClassifications = nodeClassifications.filter((classification) =>
+        specialtyClassifications.includes(classification)
+      );
+
+      // Assign a score: prioritize specialists with a higher base score
+      const isGeneralist = Array.isArray(specialtyToClassification[professional.specialty]);
+      const baseScore = isGeneralist ? 1 : 2; // Specialists get double the base score
+      const score = matchingClassifications.length * baseScore;
+
+      return {
+        ...professional,
+        score,
+        matchCount: matchingClassifications.length,
+      };
     });
 
     return scoredProfessionals
       .filter((prof) => prof.matchCount > 0)
       .sort((a, b) => {
-        if (b.score !== a.score) return b.score - a.score; // Sort by number of matching classifications
-        return a.name.localeCompare(b.name); // Then by name
+        // Primary sort by score (specialists with higher base score win)
+        if (b.score !== a.score) return b.score - a.score;
+        // Secondary sort: prefer specialists over generalists
+        const aIsGeneralist = Array.isArray(specialtyToClassification[a.specialty]);
+        const bIsGeneralist = Array.isArray(specialtyToClassification[b.specialty]);
+        if (aIsGeneralist !== bIsGeneralist) return aIsGeneralist ? 1 : -1;
+        // Tertiary sort: alphabetical by name
+        return a.name.localeCompare(b.name);
       });
   }, [nodeClassifications]);
 
   const connectWithDoctor = () => {
-    navigate('/consultation-patient')
+    navigate('/consultation-patient');
   };
 
   return (
@@ -100,10 +116,10 @@ const RightSidebarPatient = ({ nodes }: RightSidebarPatientProps) => {
               className="bg-white p-4 rounded-lg shadow-[0_0_2px_rgba(0,0,0,0.1)] transition-all duration-200"
             >
               <div className="flex flex-row items-center gap-2">
-                <img src="doctor-icon-1.jpg" className="w-9 h-9 rounded-full"/>
+                <img src="doctor-icon-1.jpg" className="w-9 h-9 rounded-full" />
                 <div className="flex flex-col">
                   <p className="text-base inter-semibold text-[var(--trust-blue)]">{professional.name}</p>
-                  <p className="text-sm inter italic text-[var(--slate-gray)]">{professional.specialty}</p>                  
+                  <p className="text-sm inter italic text-[var(--slate-gray)]">{professional.specialty}</p>
                 </div>
               </div>
               <hr className="my-2 border-t border-gray-300" />

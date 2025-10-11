@@ -30,93 +30,93 @@ const Consultation = () => {
     {
       id: "1",
       name: "Maria Santos",
-      age: "4 taong gulang",
+      age: "28 years old",
       mockConversation: [
         {
           id: "1-1",
           sender: "patient",
-          text: "Magandang araw, Doktor. Ang anak ko po ay may lagnat at ubo simula kahapon. Ano po ang dapat kong gawin?",
-          timestamp: new Date(Date.now() - 5 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          text: "Magandang araw po, Dok Juan. Nilalagnat ako simula kagabi at masakit ang katawan ko. Parang nanghihina rin ako.",
+          timestamp: new Date(Date.now() - 8 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
         {
           id: "1-2",
           sender: "doctor",
-          text: "Magandang araw din! Ilang taon po ang anak mo, at gaano kataas ang lagnat? May iba pa bang sintomas, tulad ng sipon o pananakit ng katawan?",
-          timestamp: new Date(Date.now() - 4 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          text: "Magandang araw din, Maria. May kasabay bang ubo, sipon, o pananakit ng lalamunan? Ilang beses mo na bang nararanasan ito nitong mga nakaraang linggo?",
+          timestamp: new Date(Date.now() - 7 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
         {
           id: "1-3",
           sender: "patient",
-          text: "Apat na taon po siya. Ang lagnat ay mga 38.5°C, at may kaunting sipon din po. Hindi naman siya masyadong masakit ang katawan.",
-          timestamp: new Date(Date.now() - 3 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          text: "Opo, may konting ubo at masakit din ang lalamunan ko. Madalas din po akong giniginaw at madaling mapagod.",
+          timestamp: new Date(Date.now() - 6 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
         {
           id: "1-4",
           sender: "doctor",
-          text: "Sige po, pakikalmahan mo muna ang lagnat gamit ang paracetamol para sa edad niya. Siguraduhing hydrated siya—bigyan ng maraming tubig at juice. Subaybayan mo ang lagnat sa susunod na 48 oras. Kung lumala o may bagong sintomas, mag-follow-up ka agad, ha?",
-          timestamp: new Date(Date.now() - 2 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          text: "Sige, base sa mga sintomas mo, posible itong viral infection gaya ng trangkaso o influenza. I-monitor mo muna ang temperatura mo. Uminom ng maraming tubig, pahinga, at paracetamol kung masakit ang ulo o lagnatin. Kung tumaas pa ang lagnat sa 39°C o tumagal ng higit 3 araw, bumalik ka agad dito, ha?",
+          timestamp: new Date(Date.now() - 5 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
       ],
     },
     {
       id: "2",
-      name: "Pedro Gomez",
-      age: "35 taong gulang",
+      name: "Jose Dela Peña",
+      age: "42 years old",
       mockConversation: [
         {
           id: "2-1",
           sender: "patient",
-          text: "Dok, kamusta po? May pananakit po ang tiyan ko pagkatapos kumain. Parang gas pain, pero madalas.",
-          timestamp: new Date(Date.now() - 6 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          text: "Dok, palagi pong sumisikip ang dibdib ko. Minsan parang may bigat at mabilis akong hingalin kahit konting lakad lang.",
+          timestamp: new Date(Date.now() - 10 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
         {
           id: "2-2",
           sender: "doctor",
-          text: "Kumusta! Ilang araw na bang ganyan ang tiyan mo? May pagbabago ba sa pagkain mo o may diarrhea ka rin? Anong edad mo po?",
-          timestamp: new Date(Date.now() - 5 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          text: "Jose, kailan mo unang napansin itong paninikip ng dibdib? May kasabay ba itong pawis, pagsusuka, o pagkahilo?",
+          timestamp: new Date(Date.now() - 9 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
         {
           id: "2-3",
           sender: "patient",
-          text: "Mga tatlong araw na po. Wala namang diarrhea, pero minsan parang bloated. 35 po ako.",
-          timestamp: new Date(Date.now() - 4 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          text: "Mga dalawang linggo na po. Oo, madalas din po akong pinagpapawisan at minsan nasusuka.",
+          timestamp: new Date(Date.now() - 8 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
         {
           id: "2-4",
           sender: "doctor",
-          text: "Maaaring acid reflux o dyspepsia yan. Iwasan muna ang maanghang, mamantika, at kape. Subukan mo rin ang over-the-counter antacid tulad ng omeprazole. Kung hindi bumuti sa loob ng isang linggo, magpatingin sa klinika para sa blood tests, okay?",
-          timestamp: new Date(Date.now() - 3 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          text: "Sige, Jose. Base sa sintomas mo, kailangan nating i-rule out ang posibleng heart condition gaya ng myocardial infarction. Ire-refer kita kay Dr. Ana Reyes, isang cardiologist. Sa ngayon, iwasan mo muna ang mabibigat na gawain at paninigarilyo. Kung lalong sumikip ang dibdib o mahirapan kang huminga, pumunta agad sa emergency room.",
+          timestamp: new Date(Date.now() - 7 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
       ],
     },
     {
       id: "3",
       name: "Liza Mendoza",
-      age: "9 taong gulang",
+      age: "9 years old",
       mockConversation: [
         {
           id: "3-1",
           sender: "patient",
-          text: "Magandang umaga, Doktora. Ang anak ko po ay may mga pantal sa balat at madalas humihikab. Allergic reaction po kaya ito?",
-          timestamp: new Date(Date.now() - 7 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          text: "Dok, anak ko po may mga pantal sa braso at leeg. Tatlong araw na po ito, parang allergy.",
+          timestamp: new Date(Date.now() - 6 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
         {
           id: "3-2",
           sender: "doctor",
-          text: "Magandang umaga! Posible ngang allergic reaction yan. Ilang taon ang anak mo, at may kinain ba siyang bago o nalantad sa bagong halaman? May lagnat ba siya o hirap sa paghinga?",
-          timestamp: new Date(Date.now() - 6 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          text: "Sige po, may kinain ba siyang bago nitong mga araw na to? May lagnat o hirap ba sa paghinga?",
+          timestamp: new Date(Date.now() - 5 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
         {
           id: "3-3",
           sender: "patient",
-          text: "Siyam na taon po siya. Wala namang lagnat o hirap sa paghinga, pero kumain siya ng hipon kahapon. Mga tatlong araw na rin po ang pantal.",
-          timestamp: new Date(Date.now() - 5 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          text: "Kumain po siya ng hipon nung isang araw. Wala namang lagnat pero makati po ang mga pantal.",
+          timestamp: new Date(Date.now() - 4 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
         {
           id: "3-4",
           sender: "doctor",
-          text: "Mukhang posible na allergic sa hipon yan. Bigyan mo muna ng antihistamine tulad ng cetirizine, sundin ang dosage para sa edad niya. Iwasan ang hipon at iba pang seafood sa ngayon. Kung lumala ang pantal o may bagong sintomas, dalhin mo agad sa doktor para i-check, ha?",
-          timestamp: new Date(Date.now() - 4 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+          text: "Posibleng allergic reaction yan sa hipon. Bigyan ng antihistamine tulad ng cetirizine. Iwas muna sa seafood. Kung lumala o magka-hirap sa paghinga, dalhin agad sa ospital, ha?",
+          timestamp: new Date(Date.now() - 3 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
       ],
     },
@@ -175,7 +175,7 @@ const Consultation = () => {
       <div className="flex flex-1 p-6 gap-6">
         {/* Left: Patient List */}
         <div className="w-1/4 bg-white rounded-lg shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] p-4">
-          <h3 className="text-lg inter-semibold text-[var(--trust-blue)] mb-4">Mga Pasyente</h3>
+          <h3 className="text-lg inter-semibold text-[var(--trust-blue)] mb-4">My Patients</h3>
           <div className="flex flex-col gap-2">
             {patients.map((patient) => (
               <div
@@ -265,8 +265,11 @@ const Consultation = () => {
                         <p className="text-sm inter">{message.text}</p>
                         <p className="text-xs text-gray-400 mt-1 text-right">{message.timestamp}</p>
                       </div>
+                      
                       {message.sender === "doctor" && (
-                        <img className="w-8 h-8 rounded-full" src="doctor-icon.webp" alt="Icon ng Doktor" />
+                        <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 text-md inter-semibold">
+                          J
+                        </div>
                       )}
                     </div>
                   ))

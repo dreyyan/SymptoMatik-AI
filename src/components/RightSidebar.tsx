@@ -64,7 +64,7 @@ const RightSidebar = ({ nodes }: RightSidebarProps) => {
     });
 
   return (
-    <div className="min-h-screen flex flex-col items-end flex-1 overflow-y-auto p-4 bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] w-[100%]">
+    <div className="min-h-screen min-w-100 flex flex-col items-end overflow-y-auto p-4 bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)]">
       <h3 className="text-xl text-left inter-semibold text-[var(--trust-blue)]">
         Possible Diseases
       </h3>

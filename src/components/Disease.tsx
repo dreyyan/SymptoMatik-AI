@@ -44,8 +44,8 @@ const Disease = ({
 
   return (
     <div className="flex flex-col gap-3 p-4 mb-2 rounded-xl text-[#005566] shadow-[0_0_6px_rgba(0,0,0,0.15)] bg-[#f5f7fa] sm:p-3">
-      {/* Disease Name */}
       <div className="flex justify-between items-center">
+        {/* Disease Name */}
         <h3 className="text-lg font-bold text-[#005566] sm:text-base">
           {diseaseName}
         </h3>

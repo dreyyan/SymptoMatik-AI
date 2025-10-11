@@ -17,13 +17,19 @@ type OutbreakAlert = {
   description: string;
 };
 
+type SymptomData = {
+  symptom: string;
+  count: number;
+};
+
 const Analytics = () => {
   document.title = "SymptoMatik: Analytics";
 
   const [caseTrends, setCaseTrends] = useState<CaseTrendData[]>([]);
   const [outbreakAlerts, setOutbreakAlerts] = useState<OutbreakAlert[]>([]);
+  const [symptomData, setSymptomData] = useState<SymptomData[]>([]);
 
-  // Mock data for Case Trends (Philippines pediatric cases)
+  // Mock data for Case Trends (general health cases in Philippines)
   useEffect(() => {
     const mockCaseTrends: CaseTrendData[] = [
       { month: "Jan 2025", cases: 120 },
@@ -48,7 +54,7 @@ const Analytics = () => {
         disease: "Hand, Foot, and Mouth Disease",
         severity: "High",
         date: "October 5, 2025",
-        description: "Rapid increase in cases among preschool children in urban areas.",
+        description: "Rapid increase in cases in urban areas.",
       },
       {
         id: "2",
@@ -64,7 +70,7 @@ const Analytics = () => {
         disease: "Measles",
         severity: "High",
         date: "September 28, 2025",
-        description: "Outbreak confirmed in school clusters; vaccination drive initiated.",
+        description: "Outbreak confirmed in communities; vaccination drive initiated.",
       },
       {
         id: "4",
@@ -76,6 +82,17 @@ const Analytics = () => {
       },
     ];
     setOutbreakAlerts(mockOutbreakAlerts);
+  }, []);
+
+  // Mock data for Top Symptoms Reported
+  useEffect(() => {
+    const mockSymptomData: SymptomData[] = [
+      { symptom: "Fever", count: 350 },
+      { symptom: "Cough", count: 280 },
+      { symptom: "Rash", count: 200 },
+      { symptom: "Headache", count: 150 },
+    ];
+    setSymptomData(mockSymptomData);
   }, []);
 
   // Chart.js configuration for Case Trends
@@ -95,13 +112,13 @@ const Analytics = () => {
         labels: caseTrends.map((trend) => trend.month),
         datasets: [
           {
-            label: "Pediatric Cases",
+            label: "Health Cases",
             data: caseTrends.map((trend) => trend.cases),
-            borderColor: "rgb(59, 130, 246)",
-            backgroundColor: "rgba(59, 130, 246, 0.1)",
+            borderColor: "#02a9a6",
+            backgroundColor: "rgba(2, 169, 166, 0.1)",
             tension: 0.4,
             fill: true,
-            pointBackgroundColor: "rgb(59, 130, 246)",
+            pointBackgroundColor: "#02a9a6",
             pointBorderColor: "white",
             pointBorderWidth: 2,
             pointRadius: 5,
@@ -110,7 +127,6 @@ const Analytics = () => {
       },
       options: {
         responsive: true,
-        maintainAspectRatio: false,
         plugins: {
           legend: {
             display: true,
@@ -118,35 +134,27 @@ const Analytics = () => {
           },
           title: {
             display: true,
-            text: "Monthly Case Trends (2025)",
-            font: {
-              size: 14,
-              weight: "bold",
-            },
+            text: "Philippines Health Case Trends",
           },
         },
         scales: {
-          y: {
-            beginAtZero: true,
-            ticks: {
-              stepSize: 50,
-            },
-            title: {
-              display: true,
-              text: "Number of Cases",
-            },
-          },
           x: {
             title: {
               display: true,
               text: "Month",
             },
           },
+          y: {
+            title: {
+              display: true,
+              text: "Number of Cases",
+            },
+          },
         },
       },
     });
 
-    // Store chart reference
+    // Save the new chart instance
     (ctx as any).chartInstance = newChart;
 
     return () => {
@@ -154,50 +162,162 @@ const Analytics = () => {
     };
   }, [caseTrends]);
 
-  const severityColors: Record<string, string> = {
-    Low: "bg-green-100 text-green-800 border-green-300",
-    Medium: "bg-yellow-100 text-yellow-800 border-yellow-300",
-    High: "bg-red-100 text-red-800 border-red-300",
+  // Chart.js configuration for Regional Breakdown Pie Chart
+  useEffect(() => {
+    const ctx = document.getElementById("regionalBreakdownChart") as HTMLCanvasElement;
+    if (!ctx) return;
+
+    // Destroy existing chart if it exists
+    const existingChart = (ctx as any).chartInstance;
+    if (existingChart) {
+      existingChart.destroy();
+    }
+
+    const newChart = new Chart(ctx, {
+      type: "pie",
+      data: {
+        labels: ["Metro Manila", "Cebu", "Davao", "Ilocos Region", "Others"],
+        datasets: [
+          {
+            label: "Case Distribution",
+            data: [42, 18, 15, 12, 13],
+            backgroundColor: [
+              "#4db6ac",
+              "#f0c14b",
+              "#da4b41ff",
+              "#81c784",
+              "#9575cd",
+            ],
+            borderColor: ["#ffffff"],
+            borderWidth: 2,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true,
+            position: "right",
+          },
+          title: {
+            display: true,
+            text: "Regional Case Distribution",
+          },
+          tooltip: {
+            callbacks: {
+              label: (context) => {
+                const label = context.label || "";
+                const value = context.raw as number;
+                return `${label}: ${value}%`;
+              },
+            },
+          },
+        },
+      },
+    });
+
+    // Save the new chart instance
+    (ctx as any).chartInstance = newChart;
+
+    return () => {
+      newChart.destroy();
+    };
+  }, []);
+
+  // Chart.js configuration for Top Symptoms Reported
+  useEffect(() => {
+    const ctx = document.getElementById("symptomsChart") as HTMLCanvasElement;
+    if (!ctx) return;
+
+    // Destroy existing chart if it exists
+    const existingChart = (ctx as any).chartInstance;
+    if (existingChart) {
+      existingChart.destroy();
+    }
+
+    const newChart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: symptomData.map((data) => data.symptom),
+        datasets: [
+          {
+            label: "Symptom Reports",
+            data: symptomData.map((data) => data.count),
+            backgroundColor: "#4db6ac",
+            borderColor: "#02a9a6",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            display: true,
+            position: "top",
+          },
+          title: {
+            display: true,
+            text: "Top Reported Symptoms",
+          },
+        },
+        scales: {
+          x: {
+            title: {
+              display: true,
+              text: "Symptom",
+            },
+          },
+          y: {
+            title: {
+              display: true,
+              text: "Number of Reports",
+            },
+            beginAtZero: true,
+          },
+        },
+      },
+    });
+
+    // Save the new chart instance
+    (ctx as any).chartInstance = newChart;
+
+    return () => {
+      newChart.destroy();
+    };
+  }, [symptomData]);
+
+  const severityColors = {
+    Low: "bg-[#4db6ac]",
+    Medium: "bg-[#f0c14b]",
+    High: "bg-[#da4b41ff]",
   };
 
   return (
-    <div className="flex flex-col bg-gray-100 min-h-screen">
+    <div className="flex flex-col min-h-screen bg-gray-100">
       {/* Header */}
       <Header />
-      {/* Main Content */}
-      <div className="flex flex-1 p-4 gap-4">
-        {/* Left: Case Trends */}
-        <div className="w-1/2 flex flex-col">
-          <div className="bg-white p-6 rounded-lg shadow mb-4">
+
+      {/* Analytics Content */}
+      <div className="flex-1 p-8">
+        <h1 className="text-2xl font-bold text-[var(--trust-blue)] mb-6">
+          Health Analytics Dashboard
+        </h1>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          {/* Case Trends Chart */}
+          <div className="bg-white p-6 rounded-lg shadow">
             <h2 className="text-xl font-bold text-[var(--trust-blue)] mb-4">
-              Case Trends - Philippines (Pediatric Cases)
+              Case Trends
             </h2>
             <p className="text-sm text-gray-600 mb-4">
-              Monthly reported cases of common pediatric diseases (2025)
+              Monthly health case trends in the Philippines
             </p>
-            <div className="h-64 bg-gray-50 rounded-lg p-4">
-              <canvas id="caseTrendsChart" className="w-full h-full"></canvas>
-            </div>
+            <canvas id="caseTrendsChart" className="w-full h-64"></canvas>
           </div>
+
+          {/* Outbreak Alerts */}
           <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-bold text-[var(--trust-blue)] mb-2">
-              Trend Summary
-            </h3>
-            <p className="text-sm text-gray-600">
-              <span className="font-semibold">Current Month (Oct 2025):</span>{" "}
-              {caseTrends[caseTrends.length - 1]?.cases || 0} cases
-              <br />
-              <span className="font-semibold">Monthly Change:</span> +15% from
-              September
-              <br />
-              <span className="font-semibold">Year-over-Year:</span> +8% increase
-              from Oct 2024
-            </p>
-          </div>
-        </div>
-        {/* Right: Outbreak Alerts */}
-        <div className="w-1/2">
-          <div className="bg-white p-6 rounded-lg shadow mb-4">
             <h2 className="text-xl font-bold text-[var(--trust-blue)] mb-4">
               Outbreak Alerts
             </h2>
@@ -213,10 +333,10 @@ const Analytics = () => {
                   <div
                     className={`flex-shrink-0 w-2 h-2 rounded-full mt-2 ${
                       alert.severity === "High"
-                        ? "bg-red-500"
+                        ? "bg-[#da4b41ff]"
                         : alert.severity === "Medium"
-                        ? "bg-yellow-500"
-                        : "bg-green-500"
+                        ? "bg-[#f0c14b]"
+                        : "bg-[#4db6ac]"
                     }`}
                   ></div>
                   <div className="flex-1">
@@ -245,28 +365,29 @@ const Analytics = () => {
               )}
             </div>
           </div>
+
+          {/* Regional Breakdown Pie Chart */}
           <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-bold text-[var(--trust-blue)] mb-2">
-              Regional Breakdown
-            </h3>
-            <div className="grid grid-cols-2 gap-2 text-sm">
-              <div className="bg-gray-50 p-2 rounded">
-                <p className="font-semibold">Metro Manila</p>
-                <p className="text-gray-600">42% of cases</p>
-              </div>
-              <div className="bg-gray-50 p-2 rounded">
-                <p className="font-semibold">Cebu</p>
-                <p className="text-gray-600">18% of cases</p>
-              </div>
-              <div className="bg-gray-50 p-2 rounded">
-                <p className="font-semibold">Davao</p>
-                <p className="text-gray-600">15% of cases</p>
-              </div>
-              <div className="bg-gray-50 p-2 rounded">
-                <p className="font-semibold">Ilocos</p>
-                <p className="text-gray-600">12% of cases</p>
-              </div>
+            <h2 className="text-xl font-bold text-[var(--trust-blue)] mb-4">
+              Regional Case Distribution
+            </h2>
+            <p className="text-sm text-gray-600 mb-4">
+              Percentage of health cases by region
+            </p>
+            <div className="w-[600px] h-[500px] mx-auto">
+              <canvas id="regionalBreakdownChart"></canvas>
             </div>
+          </div>
+
+          {/* Top Symptoms Reported */}
+          <div className="bg-white p-6 rounded-lg shadow">
+            <h2 className="text-xl font-bold text-[var(--trust-blue)] mb-4">
+              Top Reported Symptoms
+            </h2>
+            <p className="text-sm text-gray-600 mb-4">
+              Most frequently reported symptoms across cases
+            </p>
+            <canvas id="symptomsChart" className="w-full h-64"></canvas>
           </div>
         </div>
       </div>

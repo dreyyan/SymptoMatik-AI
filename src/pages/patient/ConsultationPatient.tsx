@@ -25,12 +25,14 @@ const ConsultationPatient = () => {
   const [messageInput, setMessageInput] = useState<string>("");
   const [showOthersMenu, setShowOthersMenu] = useState<boolean>(false);
 
-  // Mock doctor data with Tagalog conversations
+  // Mock doctor data with Tagalog conversations (Philippines version)
   const doctors: DoctorType[] = [
     {
       id: "1",
-      name: "Dr. Tim Bautista",
+      name: "Dr. Aaron Chua",
       specialty: "Pediatrician",
+      medicalPlace: "Aaron Medical Clinic",
+      address: "No. 1923 San Marcelino Street, Barangay 691 Zone 75, Malate, Manila 1004, Metro Manila",
       mockConversation: [
         {
           id: "1-1",
@@ -61,30 +63,32 @@ const ConsultationPatient = () => {
     {
       id: "2",
       name: "Dr. Juan Dela Cruz",
-      specialty: "General Practitioner",
+      specialty: "Infectious Disease Specialist",
+      medicalPlace: "St. Luke’s Medical Center Extension Clinic",
+      address: "1177 Jorge Bocobo Street, Ermita, Manila 1000, Philippines",
       mockConversation: [
         {
           id: "2-1",
           sender: "patient",
-          text: "Dok, kamusta po? May pananakit po ang tiyan ko pagkatapos kumain. Parang gas pain, pero madalas.",
+          text: "Dok, kamusta po? Nilalagnat po ako at masakit ang katawan ko mula kahapon. Baka trangkaso po ito?",
           timestamp: new Date(Date.now() - 6 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
         {
           id: "2-2",
           sender: "doctor",
-          text: "Kumusta! Ilang araw na bang ganyan ang tiyan mo? May pagbabago ba sa pagkain mo o may diarrhea ka rin? Anong edad mo po?",
+          text: "Magandang araw! May ubo o sipon ka rin ba? May contact ka ba sa ibang may sakit kamakailan?",
           timestamp: new Date(Date.now() - 5 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
         {
           id: "2-3",
           sender: "patient",
-          text: "Mga tatlong araw na po. Wala namang diarrhea, pero minsan parang bloated. 35 po ako.",
+          text: "Opo, may konting sipon din. Wala naman po akong kilala na may sakit.",
           timestamp: new Date(Date.now() - 4 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
         {
           id: "2-4",
           sender: "doctor",
-          text: "Maaaring acid reflux o dyspepsia yan. Iwasan muna ang maanghang, mamantika, at kape. Subukan mo rin ang over-the-counter antacid tulad ng omeprazole. Kung hindi bumuti sa loob ng isang linggo, magpatingin sa klinika para sa blood tests, okay?",
+          text: "Posibleng viral infection lang yan, pero para makasiguro, magpahinga muna at uminom ng maraming tubig. Pwede kang uminom ng paracetamol para sa lagnat. Kung tumaas pa sa 39°C o higit sa 3 araw, magpa-laboratory test na tayo.",
           timestamp: new Date(Date.now() - 3 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
       ],
@@ -92,31 +96,66 @@ const ConsultationPatient = () => {
     {
       id: "3",
       name: "Dra. Ana Reyes",
-      specialty: "Allergist",
+      specialty: "Cardiologist",
+      medicalPlace: "The Medical City Clinic — Exquadra Tower, Ortigas Center",
+      address: "17th Floor, Exquadra Tower, Exchange Road corner Jade Drive, Ortigas Center, Pasig City, Metro Manila",
       mockConversation: [
         {
           id: "3-1",
           sender: "patient",
-          text: "Magandang umaga, Doktora. Ang anak ko po ay may mga pantal sa balat at madalas humihikab. Allergic reaction po kaya ito?",
+          text: "Magandang umaga, Doktora. Minsan po ay sumasakit ang dibdib ko kapag naglalakad o umaakyat ng hagdan. Dapat ko na po bang ipatingin ito?",
           timestamp: new Date(Date.now() - 7 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
         {
           id: "3-2",
           sender: "doctor",
-          text: "Magandang umaga! Posible ngang allergic reaction yan. Ilang taon ang anak mo, at may kinain ba siyang bago o nalantad sa bagong halaman? May lagnat ba siya o hirap sa paghinga?",
+          text: "Magandang umaga rin. Ilang beses na bang nangyari yan? May kasabay ba na sintomas gaya ng hilo, pawis, o hingal?",
           timestamp: new Date(Date.now() - 6 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
         {
           id: "3-3",
           sender: "patient",
-          text: "Siyam na taon po siya. Wala namang lagnat o hirap sa paghinga, pero kumain siya ng hipon kahapon. Mga tatlong araw na rin po ang pantal.",
+          text: "Mga tatlong beses na po sa loob ng dalawang linggo. Minsan po ay may konting hilo at pawis din.",
           timestamp: new Date(Date.now() - 5 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
         {
           id: "3-4",
           sender: "doctor",
-          text: "Mukhang posible na allergic sa hipon yan. Bigyan mo muna ng antihistamine tulad ng cetirizine, sundin ang dosage para sa edad niya. Iwasan ang hipon at iba pang seafood sa ngayon. Kung lumala ang pantal o may bagong sintomas, dalhin mo agad sa doktor para i-check, ha?",
+          text: "Maaaring sintomas yan ng heart disease o unstable angina. Iwasan muna ang mabibigat na gawain. Magpa-ECG at blood test sa clinic para masuri agad. Kung sumakit nang matindi, pumunta agad sa ER, ha?",
           timestamp: new Date(Date.now() - 4 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        },
+      ],
+    },
+    {
+      id: "4",
+      name: "Dr. Abad Santos",
+      specialty: "Chronic Disease Specialist",
+      medicalPlace: "Clinica Manila — SM Megamall Branch",
+      address: "2nd Floor, Building A, SM Megamall, Mandaluyong City, Metro Manila",
+      mockConversation: [
+        {
+          id: "4-1",
+          sender: "patient",
+          text: "Dok, may diabetes po ako at napapansin kong mabilis mapagod lately. Normal lang po ba yun?",
+          timestamp: new Date(Date.now() - 8 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        },
+        {
+          id: "4-2",
+          sender: "doctor",
+          text: "Kamusta! Kailan huling beses mo nasukat ang blood sugar mo? At may iniinom ka bang maintenance medicine?",
+          timestamp: new Date(Date.now() - 7 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        },
+        {
+          id: "4-3",
+          sender: "patient",
+          text: "Kagabi po, mga 160 mg/dL. Umiinom po ako ng Metformin.",
+          timestamp: new Date(Date.now() - 6 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+        },
+        {
+          id: "4-4",
+          sender: "doctor",
+          text: "Okay. Medyo mataas pa yan, pero manageable. Siguraduhin mong kumakain sa tamang oras at iwasan ang matatamis. Ipagpatuloy ang maintenance at magpa-laboratory test sa loob ng linggo para macheck ang HbA1c mo.",
+          timestamp: new Date(Date.now() - 5 * 60 * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
         },
       ],
     },
@@ -175,7 +214,7 @@ const ConsultationPatient = () => {
       <div className="flex flex-1 p-6 gap-6">
         {/* Left: Doctor List */}
         <div className="w-1/4 bg-white rounded-lg shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] p-4">
-          <h3 className="text-lg inter-semibold text-[var(--trust-blue)] mb-4">Mga Doktor</h3>
+          <h3 className="text-lg inter-semibold text-[var(--trust-blue)] mb-4">My Doctors</h3>
           <div className="flex flex-col gap-2">
             {doctors.map((doctor) => (
               <div
@@ -185,7 +224,9 @@ const ConsultationPatient = () => {
                 }`}
                 onClick={() => handleSelectDoctor(doctor)}
               >
-                <img className="w-10 h-10 rounded-full" src="doctor-icon.webp" alt="Icon ng Doktor" />
+                  <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 text-md inter-semibold">
+                    
+                  </div>
                 <div>
                   <p className="text-base inter-semibold text-[var(--trust-blue)]">{doctor.name}</p>
                   <p className="text-xs inter text-[var(--slate-gray)]">{doctor.specialty}</p>
@@ -200,7 +241,9 @@ const ConsultationPatient = () => {
             <>
               <div className="p-4 border-b border-gray-200 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <img className="w-10 h-10 rounded-full" src="doctor-icon.webp" alt="Icon ng Doktor" />
+                  <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 text-md inter-semibold">
+                    
+                  </div>
                   <div>
                     <h2 className="text-lg inter-semibold text-[var(--trust-blue)]">{selectedDoctor.name}</h2>
                     <p className="text-sm inter text-[var(--slate-gray)]">{selectedDoctor.specialty}</p>
@@ -253,7 +296,9 @@ const ConsultationPatient = () => {
                       className={`flex mb-4 ${message.sender === "patient" ? "flex-row-reverse" : "flex-row"} items-end gap-2`}
                     >
                       {message.sender === "doctor" && (
-                        <img className="w-8 h-8 rounded-full" src="doctor-icon.webp" alt="Icon ng Doktor" />
+                        <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 text-md inter-semibold">
+                          
+                        </div>
                       )}
                       <div
                         className={`max-w-[70%] p-3 rounded-lg shadow-sm ${
@@ -265,6 +310,11 @@ const ConsultationPatient = () => {
                         <p className="text-sm inter">{message.text}</p>
                         <p className="text-xs text-gray-400 mt-1 text-right">{message.timestamp}</p>
                       </div>
+                      {message.sender === "patient" && (
+                        <div className="w-9 h-9 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 text-md inter-semibold">
+                          J
+                        </div>
+                      )}
                     </div>
                   ))
                 ) : (
@@ -283,7 +333,7 @@ const ConsultationPatient = () => {
                   />
                   <button
                     type="submit"
-                    className="cursor-pointer flex items-center justify-center w-10 h-10 rounded-full bg-[var(--trust-blue)] text-white hover:bg-blue-600 transition-all duration-300"
+                    className="cursor-pointer flex items-center justify-center w-10 h-10 rounded-full bg-[var(--trust-blue)] text-white hover:bg-[var(--healing-teal)] transition-all duration-300"
                   >
                     <img className="w-5" src="send-icon.svg" alt="Icon ng Ipadala" />
                   </button>
