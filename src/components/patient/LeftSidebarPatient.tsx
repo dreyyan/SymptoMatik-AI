@@ -36,7 +36,7 @@ interface ModalConfig {
   showCancel?: boolean;
 }
 
-const LeftSidebar = ({ addNode, nodes, setModifiedFiles, currentPatient, currentFile }: LeftSidebarProps) => {
+const LeftSidebar = ({ addNode, nodes, currentPatient, currentFile }: LeftSidebarProps) => {
   const [symptomList] = useState<LinkedList<string>>(() => {
     const list = new LinkedList<string>();
     Object.keys(data.symptoms).forEach((symptom) => list.append(symptom));
@@ -46,7 +46,7 @@ const LeftSidebar = ({ addNode, nodes, setModifiedFiles, currentPatient, current
   const [allSymptoms, setAllSymptoms] = useState<string[]>(symptomList.toArray().sort((a, b) => a.localeCompare(b)));
   const [symptomSearch, setSymptomSearch] = useState<string>("");
   const [leftSidebar] = useState("Nodes");
-  const [sidebarVisibility, setSidebarVisibility] = useState(true);
+  const [sidebarVisibility] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalConfig, setModalConfig] = useState<ModalConfig>({
     title: "",

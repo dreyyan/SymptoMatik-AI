@@ -68,8 +68,8 @@ const SignUp = () => {
         <div className={Styles.loginDivStyle}>
             {/* Header */}
             <div className="flex gap-4">
-                <img src="./symptomatik-logo.svg" className="w-10 mt-6 mb-4"/>
-                <img src="./symptomatik-banner.svg" className="w-[50%] mt-6 mb-4"/>
+                <img src="/symptomatik-logo.svg" className="w-10 mt-6 mb-4"/>
+                <img src="/symptomatik-banner.svg" className="w-[50%] mt-6 mb-4"/>
             </div>
 
             <h2 className="text-[var(--trust-blue)] text-3xl font-bold">Start your journey</h2>
