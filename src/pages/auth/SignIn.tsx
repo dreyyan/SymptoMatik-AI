@@ -16,7 +16,7 @@ const SignIn = () => {
 
   // [HANDLE]: User Authentication
   const navigate = useNavigate();
-  const handleSignIn = async (e: React.FormEvent) => {
+  const handleSignIn = async () => {
     // Redirect to main homepage
     navigate("/home");
     // Uncomment for actual sign in logic

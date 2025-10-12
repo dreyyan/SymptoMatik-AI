@@ -79,7 +79,7 @@ const LeftSidebar = ({ addNode, nodes, setModifiedFiles, currentPatient, current
 
   // Group symptoms by section
   const symptomsBySection = allSymptoms.reduce((acc, symptom) => {
-    const section = symptomMetadata[symptom]?.section || "Other";
+    const section = symptomMetadata[symptom as keyof typeof symptomMetadata]?.section || "Other";
     if (!acc[section]) acc[section] = [];
     acc[section].push(symptom);
     return acc;
@@ -116,10 +116,6 @@ const LeftSidebar = ({ addNode, nodes, setModifiedFiles, currentPatient, current
     }
     const node = nodes.find((n) => n.id === nodeId);
     if (!node) return;
-  };
-
-  const toggleLeftSidebar = () => {
-    setSidebarVisibility((prev) => !prev);
   };
 
   // HANDLE: ADD SYMPTOM NODE
@@ -168,7 +164,7 @@ const LeftSidebar = ({ addNode, nodes, setModifiedFiles, currentPatient, current
       setIsModalOpen(true);
       return;
     }
-    const metadata = symptomMetadata[value];
+    const metadata = symptomMetadata[value as keyof typeof symptomMetadata];
     if (!metadata) return;
     const id = Date.now().toString();
     addNode(value, id, metadata.severity, metadata.classification);
