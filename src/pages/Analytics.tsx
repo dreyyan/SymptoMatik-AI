@@ -305,13 +305,13 @@ const Analytics = () => {
         <h1 className="text-2xl font-bold text-[var(--trust-blue)] mb-6">
           Health Analytics Dashboard
         </h1>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 grid-cols-2 gap-6">
           {/* Case Trends Chart */}
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-bold text-[var(--trust-blue)] mb-4">
+          <div className="bg-white p-6 rounded-lg shadow lg:max-h-90 xl:max-h-200">
+            <h2 className="text-xl font-bold text-[var(--trust-blue)] xl:mb-4 lg:mb-1">
               Case Trends
             </h2>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-gray-600 xl:mb-4 lg:mb-1">
               Monthly health case trends in the Philippines
             </p>
             <canvas id="caseTrendsChart" className="w-full h-64"></canvas>
@@ -319,17 +319,17 @@ const Analytics = () => {
 
           {/* Outbreak Alerts */}
           <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-bold text-[var(--trust-blue)] mb-4">
+            <h2 className="text-xl font-bold text-[var(--trust-blue)] xl:mb-4 lg:mb-0">
               Outbreak Alerts
             </h2>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-gray-600 xl:mb-4 lg:mb-1">
               Active alerts and surveillance notifications
             </p>
-            <div className="space-y-3 max-h-[calc(100vh-200px)] overflow-y-auto">
+            <div className="xl:space-y-3 lg:space-y-2 max-h-[calc(100vh-200px)] overflow-y-auto">
               {outbreakAlerts.map((alert) => (
                 <div
                   key={alert.id}
-                  className="flex gap-3 p-3 border rounded-lg bg-gray-50"
+                  className="flex xl:gap-3 lg:gap-1 p-3 border rounded-lg bg-gray-50"
                 >
                   <div
                     className={`flex-shrink-0 w-2 h-2 rounded-full mt-2 ${
@@ -342,7 +342,7 @@ const Analytics = () => {
                   ></div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="font-semibold text-[var(--trust-blue)]">
+                      <span className="inter-semibold text-[var(--trust-blue)]">
                         {alert.disease}
                       </span>
                       <span
@@ -351,9 +351,9 @@ const Analytics = () => {
                         {alert.severity}
                       </span>
                     </div>
-                    <p className="text-sm text-gray-600 mb-1">{alert.region}</p>
-                    <p className="text-xs text-gray-500">{alert.date}</p>
-                    <p className="text-sm text-gray-700 mt-1">
+                    <p className="xl:text-sm lg:text-xs text-gray-600 mb-1">{alert.region}</p>
+                    <p className="xl:text-xs lg:text-[10px] text-gray-500">{alert.date}</p>
+                    <p className="xl:text-sm lg:text-xs text-gray-700 mt-1">
                       {alert.description}
                     </p>
                   </div>
@@ -369,23 +369,23 @@ const Analytics = () => {
 
           {/* Regional Breakdown Pie Chart */}
           <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-bold text-[var(--trust-blue)] mb-4">
+            <h2 className="text-xl font-bold text-[var(--trust-blue)] mb-4 lg:mb-1">
               Regional Case Distribution
             </h2>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-gray-600 mb-4 lg:mb-1">
               Percentage of health cases by region
             </p>
-            <div className="w-[600px] h-[500px] mx-auto">
+            <div className="flex flex-col justify-center items-center xl:w-[600px] xl:h-[500px] lg:w-[400px] lg:h-[260px] mx-auto">
               <canvas id="regionalBreakdownChart"></canvas>
             </div>
           </div>
 
           {/* Top Symptoms Reported */}
           <div className="bg-white p-6 rounded-lg shadow">
-            <h2 className="text-xl font-bold text-[var(--trust-blue)] mb-4">
+            <h2 className="text-xl font-bold text-[var(--trust-blue)] mb-4 lg:mb-1">
               Top Reported Symptoms
             </h2>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-gray-600 mb-4 lg:mb-1">
               Most frequently reported symptoms across cases
             </p>
             <canvas id="symptomsChart" className="w-full h-64"></canvas>

@@ -101,30 +101,30 @@ const RightSidebarPatient = ({ nodes }: RightSidebarPatientProps) => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col gap-2 p-4 bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] w-80 overflow-y-auto">
-      <h3 className="text-xl inter-semibold text-end text-[var(--trust-blue)]">Suitable Professionals</h3>
+    <div className="min-h-screen xl:min-w-100 lg:min-w-60 flex flex-col items-end overflow-y-auto xl:p-4 lg:p-3 bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)]">
+      <h3 className="xl:text-xl lg:text-lg inter-semibold text-end text-[var(--trust-blue)]">Suitable Professionals</h3>
       {nodes.length === 0 ? (
         <p className="text-sm inter text-gray-600">No symptoms selected.</p>
       ) : recommendedProfessionals.length === 0 ? (
         <p className="text-sm inter text-gray-600">No suitable professionals found.</p>
       ) : (
         <div className="flex flex-col gap-4">
-          <p className="text-xs inter text-[var(--slate-gray)] text-right">SymptoMatik-AI thinks you should contact...</p>
+          <p className="xl:text-sm lg:text-xs inter text-[var(--slate-gray)] text-right">SymptoMatik-AI thinks you should contact...</p>
           {recommendedProfessionals.map((professional, index) => (
             <div
               key={index}
-              className="bg-white p-4 rounded-lg shadow-[0_0_2px_rgba(0,0,0,0.1)] transition-all duration-200"
+              className="bg-white p-4 rounded-lg shadow-[0_0_2px_rgba(0,0,0,0.1)] transition-all duration-200 xl:max-w-90 lg:max-w-70"
             >
               <div className="flex flex-row items-center gap-2">
-                <img src="doctor-icon-1.jpg" className="w-9 h-9 rounded-full" />
+                <img src="doctor-icon-1.jpg" className="xl:w-9 xl:h-9 lg:w-6 lg:h-6 rounded-full" />
                 <div className="flex flex-col">
                   <p className="text-base inter-semibold text-[var(--trust-blue)]">{professional.name}</p>
-                  <p className="text-sm inter italic text-[var(--slate-gray)]">{professional.specialty}</p>
+                  <p className="text-sm inter text-[var(--slate-gray)]">{professional.specialty}</p>
                 </div>
               </div>
               <hr className="my-2 border-t border-gray-300" />
-              <p className="text-sm inter font-semibold text-[var(--trust-blue)]">{professional.medicalPlace}</p>
-              <p className="text-sm inter text-[var(--slate-gray)] mb-4">{professional.address}</p>
+              <p className="text-sm inter-semibold text-[var(--trust-blue)]">{professional.medicalPlace}</p>
+              <p className="text-xs inter text-[var(--slate-gray)] mb-4">{professional.address}</p>
               <PrimaryButton
                 text="Connect"
                 onClick={connectWithDoctor}

@@ -19,10 +19,10 @@ const Home = () => {
         {/* Header */}
         <Header />
         {/* Hero Section */}
-        <div className="flex flex-col row-span-200 col-span-3 h-screen bg-[url('/hero-bg.png')] bg-cover px-[6%] pt-[6%]">
+        <div className="flex flex-col row-span-200 col-span-3 h-screen bg-[url('/hero-bg.png')] lg:flex-row lg:bg-center bg-cover px-[6%] xl:pt-[6%] lg:pt-[3%]">
           <div className={Styles.heroSectionDivStyle}>
             {/* HEADER */}
-            <div className="flex w-4xl text-7xl leading-18">
+            <div className="flex w-4xl xl:text-7xl lg:text-6xl xl:leading-18 lg:leading-16">
               <h1 className="inter-semibold text-[var(--dark-navy)]">
                 Your Health, Diagnosed with
                 <span   className="inter-semibold inline-block
@@ -34,8 +34,8 @@ const Home = () => {
             </div>
 
             {/* TEXT */}
-            <div className="pt-6 flex flex-col justify-center">
-              <p className="inter text-lg text-[var(--slate-gray)] w-xl pl-2">
+            <div className="xl:pt-6 lg:pt-2 flex flex-col justify-center">
+              <p className="inter xl:text-lg lg:text-md text-[var(--slate-gray)] w-xl pl-2">
                 Support your healthcare practices with AI-powered disease
                 prediction and symptom assessment.
               </p>

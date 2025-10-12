@@ -254,7 +254,6 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
     setIsModalOpen(true);
   };
 
-  // HANDLE: RENAME PATIENT
 // HANDLE: RENAME PATIENT
   const renamePatient = (patient: string) => {
     console.log("Opening Rename Patient modal for:", patient);
@@ -672,10 +671,10 @@ const LeftSidebar = ({ addNode, nodes, loadNodes, setCurrentPatient, setCurrentF
       />
       <div
         className={`flex flex-col gap-4 bg-white shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] h-auto transition-all duration-300 ${
-          sidebarVisibility ? "w-90 px-6 py-4" : "w-16 px-4 py-4 overflow-hidden"
+          sidebarVisibility ? "w-90 lg:w-70 px-6 py-4 lg:px-3" : "w-16 lg:w-12 px-4 lg:px-2 py-4 overflow-hidden"
         }`}
       >
-        <div className="flex justify-end mt-4">
+        <div className="flex justify-end mt-4 lg:mt-0">
           <button
             className="cursor-pointer duration-300 hover:opacity-60"
             onClick={toggleLeftSidebar}

@@ -8,6 +8,8 @@ interface PrimaryButtonProps {
   height?: string;
   borderRadius?: string;
   fontSize?: string;
+
+  type?: "submit" | "reset" | "button" | undefined;
 }
 
 const PrimaryButton: React.FC<PrimaryButtonProps> = ({
@@ -19,6 +21,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   height = "52px",
   borderRadius = "20px",
   fontSize = "20px",
+  type,
 }) => {
   const style = { width, height, borderRadius, fontSize };
   if (href) {
@@ -35,6 +38,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
 
   return (
     <button
+      type={type}
       style={style}
       onClick={onClick}
       className="

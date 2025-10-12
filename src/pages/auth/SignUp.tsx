@@ -1,5 +1,6 @@
 import { useNavigate, Link } from "react-router-dom";
 import Styles from '../../styles/Styles';
+import { useState } from "react";
 
 // Components
 import OAuthButton from "../../components/buttons/OAuthButton";
@@ -8,13 +9,49 @@ import PrimaryButton from "../../components/buttons/PrimaryButton";
 const SignUp = () => {
     document.title = "SymptoMatik: Sign Up";
 
+    // STATES: Sign Up
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+
     // [HANDLE]: User Authentication
     const navigate = useNavigate();
 
-    const handleSignUp = () => {
-        alert("Success! You may now proceed to login.")
-        navigate("/");
-    }
+    const handleSignUp = async (e: { preventDefault: () => void; }) => {
+        e.preventDefault(); // prevent page reload
+
+        const userData = {
+        name,
+        email,
+        username,
+        password,
+        confirm_password: confirmPassword,
+        };
+
+        try {
+            const res = await fetch("http://localhost:8000/api/sign-up", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(userData),
+            });
+
+            const data = await res.json();
+            console.log("Response:", data);
+
+            if (res.ok) { // ✅ check HTTP status instead of data.success
+                alert(`User ${data.username} registered successfully!`);
+                // Navigate to sign in page after registering account
+                navigate("/");
+            } else {
+                alert(data.detail || "Signup failed");
+            }
+        } catch (err) {
+            console.error("Error:", err);
+            alert("Network error during signup");
+        }
+    };
 
     // [HANDLE]: OAuth Authentication
     const handleFacebookSignUp = () => {
@@ -39,22 +76,24 @@ const SignUp = () => {
             <h2 className={Styles.pStyle}>Be a part of the revolution.</h2>
 
             {/* Form Input */}
-            <form action="/login-form" className={Styles.formStyle}>
-                <label htmlFor="username-email" className={Styles.inputLabelStyle}>Email</label>
-                <input type="text" className={Styles.inputStyle}/>
+            <form onSubmit={handleSignUp} className={Styles.formStyle}>
+                <label className={Styles.inputLabelStyle}>Name</label>
+                <input value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder="Enter your name..." className={Styles.inputStyle}/>
+
+                <label className={Styles.inputLabelStyle}>Email</label>
+                <input value={email} onChange={(e) => setEmail(e.target.value)} type="text" placeholder="Enter your email..." className={Styles.inputStyle}/>
                 
-                <label htmlFor="username-email" className={Styles.inputLabelStyle}>Username</label>
-                <input type="text" className={Styles.inputStyle}/>
+                <label className={Styles.inputLabelStyle}>Username</label>
+                <input value={username} onChange={(e) => setUsername(e.target.value)} type="text" placeholder="Enter your username..." className={Styles.inputStyle}/>
 
                 <label htmlFor="password" className={Styles.inputLabelStyle}>Password</label>
-                <input type="password" className={Styles.inputStyle}/>
+                <input value={password} onChange={(e) => setPassword(e.target.value)} type="password" placeholder="**********" className={Styles.inputStyle}/>
 
-                <label htmlFor="username-email" className={Styles.inputLabelStyle}>Confirm Password</label>
-                <input type="text" className={Styles.inputStyle}/>
+                <label className={Styles.inputLabelStyle}>Confirm Password</label>
+                <input value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} type="password" placeholder="**********" className={Styles.inputStyle}/>
+                {/* Button: Sign Up */}
+                <PrimaryButton text="Sign Up" type="submit" width="full" fontSize="18px" height="40px" disabled={false}/>
             </form>
-
-            {/* Button: Sign Up */}
-            <PrimaryButton text="Sign Up" onClick={handleSignUp} width="full" fontSize="18px" height="40px" disabled={false}/>
 
             {/* 'or' separator */}
             <div className="flex items-center w-full my-4 text-[var-(--trust-blue)]">
@@ -78,7 +117,7 @@ const SignUp = () => {
             {/* Link: Sign In */}
             <div className={Styles.signUpLinkDivStyle}>
                 <h4>Already have an account?</h4>
-                <Link to=".." className={Styles.sublinkStyle}>Sign In</Link>
+                <Link to="../sign-in" className={Styles.sublinkStyle}>Sign In</Link>
             </div>
         </div>
     </div>

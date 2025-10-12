@@ -123,25 +123,23 @@ const Diagnosis = () => {
       {/* Header */}
       <Header />
       {/* Main Content */}
-      <div className="flex min-h-screen flex-1">
+      <div className="flex flex-1 overflow-hidden">
         {/* Left: Sidebar */}
-        <div className="w-1/5 h-screen">
-          <LeftSidebarPatient
-            addNode={addNode}
-            nodes={nodes}
-            loadNodes={loadNodes}
-            setCurrentPatient={setCurrentPatient}
-            setCurrentFile={setCurrentFile}
-            patientFiles={patientFiles}
-            setPatientFiles={setPatientFiles}
-            modifiedFiles={modifiedFiles}
-            setModifiedFiles={setModifiedFiles}
-            currentPatient={currentPatient}
-            currentFile={currentFile}
-          />
-        </div>
+        <LeftSidebarPatient
+          addNode={addNode}
+          nodes={nodes}
+          loadNodes={loadNodes}
+          setCurrentPatient={setCurrentPatient}
+          setCurrentFile={setCurrentFile}
+          patientFiles={patientFiles}
+          setPatientFiles={setPatientFiles}
+          modifiedFiles={modifiedFiles}
+          setModifiedFiles={setModifiedFiles}
+          currentPatient={currentPatient}
+          currentFile={currentFile}
+        />
         {/* Center: Droppable Area */}
-        <div className="flex-1 flex flex-col">
+        <div className="flex-1 flex flex-col min-h-0">
           {currentFile && currentPatient && (
             <div className="bg-white p-4 shadow z-1 flex items-center justify-between">
               <div className="flex items-center gap-2">

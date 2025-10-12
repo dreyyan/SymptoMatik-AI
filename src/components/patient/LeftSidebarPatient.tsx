@@ -193,8 +193,9 @@ const LeftSidebar = ({ addNode, nodes, setModifiedFiles, currentPatient, current
         inputValue={modalConfig.inputValue}
         onConfirm={modalConfig.onConfirm}
       />
+      
       <div
-        className={`flex flex-col gap-4 px-6 py-4 bg-white shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] h-screen ${
+        className={`flex flex-col gap-4 bg-white shadow-[0_0_4px_1px_rgba(0,0,0,0.2)] h-auto transition-all duration-300 w-90 lg:w-70 px-6 py-4 lg:px-3 ${
           sidebarVisibility ? "" : "px-1 py-4"
         }`}
       >

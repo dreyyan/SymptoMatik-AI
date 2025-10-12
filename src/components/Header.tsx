@@ -50,7 +50,7 @@ const Header = () => {
 
   const handleLogout = () => {
     console.log("Logging out");
-    navigate("/..");
+    navigate("/../sign-in");
     setIsProfileDropdownOpen(false);
   };
 
@@ -58,15 +58,15 @@ const Header = () => {
     <div className="sticky top-0 z-[1001] h-24 row-span-6 col-span-3 shadow-[0px_4px_10px_-5px_rgba(0,0,0,0.45)] bg-gradient-to-r from-[var(--trust-blue)] to-[var(--healing-teal)]">
       <div className="flex h-full">
         {/* [L] Banner: SymptoMatik */}
-        <div className="flex justify-center items-center pl-8 pr-14 bg-white-500 w-[24%]">
+        <div className="flex justify-center items-center pl-8 pr-14 bg-white-500 w-[600px]">
           <Link to="/home" className="flex items-center gap-4 h-[50%]">
             <img src="/symptomatik-white-logo.png" className="h-10" />
-            <img src="/symptomatik-white-banner.png" className="h-full" />
+            <img src="/symptomatik-white-banner.png" className="w-50" />
           </Link>
         </div>
 
         {/* [C] Navigation Links */}
-        <div className="flex flex-row justify-end items-center gap-x-[6%] w-full">
+        <div className="flex flex-row justify-end items-center md:gap-x-[10%] lg:gap-x-[6%] w-full pr-[2%]">
           <div className="relative">
             {/* Link: Diagnosis */}
             <Link to="/diagnosis" onMouseEnter={() => handleHover("diagnosis", true)} onMouseLeave={() => handleHover("diagnosis", false)}>
@@ -123,7 +123,7 @@ const Header = () => {
         </div>
 
         {/* [R] USER PROFILE */}
-        <div className="flex flex-col justify-center items-end h-full px-6 w-[26%]">
+        <div className="flex flex-col justify-center items-end h-full px-6 lg:w-[500px]">
           <div className="relative" ref={profileDropdownRef}>
             <button
               onClick={toggleProfileDropdown}

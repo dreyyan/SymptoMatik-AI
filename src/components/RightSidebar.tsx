@@ -64,8 +64,8 @@ const RightSidebar = ({ nodes }: RightSidebarProps) => {
     });
 
   return (
-    <div className="min-h-screen min-w-100 flex flex-col items-end overflow-y-auto p-4 bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)]">
-      <h3 className="text-xl text-left inter-semibold text-[var(--trust-blue)]">
+    <div className="min-h-screen xl:min-w-100 lg:min-w-60 flex flex-col items-end overflow-y-auto xl:p-4 lg:p-3 bg-gray-100 shadow-[0_0_4px_1px_rgba(0,0,0,0.2)]">
+      <h3 className="xl:text-xl lg:text-lg text-left inter-semibold text-[var(--trust-blue)]">
         Possible Diseases
       </h3>
       {Object.keys(nodeSymptoms).length === 0 ? (
@@ -73,8 +73,8 @@ const RightSidebar = ({ nodes }: RightSidebarProps) => {
       ) : scoredDiseases.length === 0 ? (
         <p className="text-sm text-gray-600">No matching diseases found.</p>
       ) : (
-        <div className="flex flex-col gap-4">
-          <p className="text-sm text-end text-[var(--slate-gray)]">
+        <div className="flex flex-col items-end gap-4">
+          <p className="xl:text-sm lg:text-xs text-end text-[var(--slate-gray)]">
             SymptoMatik-AI thinks your patient has...
           </p>
           {scoredDiseases.map((item, index) => (

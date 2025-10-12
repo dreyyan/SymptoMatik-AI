@@ -43,7 +43,7 @@ const Disease = ({
   };
 
   return (
-    <div className="flex flex-col gap-3 p-4 mb-2 rounded-xl text-[#005566] shadow-[0_0_6px_rgba(0,0,0,0.15)] bg-[#f5f7fa] sm:p-3">
+    <div className="flex flex-col gap-3 p-4 mb-2 rounded-xl text-[#005566] xl:w-90 lg:w-60 shadow-[0_0_6px_rgba(0,0,0,0.15)] bg-[#f5f7fa] sm:p-3">
       <div className="flex justify-between items-center">
         {/* Disease Name */}
         <h3 className="text-lg font-bold text-[#005566] sm:text-base">
@@ -62,7 +62,7 @@ const Disease = ({
       {/* Classification & Severity */}
       <div className="flex justify-between text-sm text-[#4a5e6d] sm:text-xs">
         <span className="italic">Classification: {classification}</span>
-        <span className={`font-semibold ${severityColor[severity]}`}>
+        <span className={`text-end font-semibold ${severityColor[severity]}`}>
           Severity: {severity}
         </span>
       </div>

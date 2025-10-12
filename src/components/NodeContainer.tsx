@@ -98,7 +98,7 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-screen bg-gray-100 border-2 border-[rgba(107,114,128,0.1)]"
+      className="relative w-full h-full bg-gray-100 border-2 border-[rgba(107,114,128,0.1)]"
     >
       {nodes.map((node) => {
         console.log(
@@ -109,7 +109,7 @@ const NodeContainer = ({ nodes, setNodes }: NodeContainerProps) => {
         return (
           <div
             key={node.id}
-            className="absolute w-80 h-16 flex items-center rounded-lg pr-4 bg-[var(--clean-white)] text-white font-bold shadow-md select-none shadow-[0_0_4px_2px_rgba(0,0,0,0.8)]"
+            className="absolute xl:w-80 lg:w-70 h-16 flex items-center rounded-lg pr-4 bg-[var(--clean-white)] text-white font-bold shadow-md select-none shadow-[0_0_4px_2px_rgba(0,0,0,0.8)]"
             style={{ left: node.x, top: node.y }}
           >
             {/* Left: Draggable Point with Leeway */}

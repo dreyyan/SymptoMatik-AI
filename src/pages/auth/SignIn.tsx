@@ -1,6 +1,7 @@
 import { useNavigate, Link } from "react-router-dom";
 import React from "react";
 import Styles from "../../styles/Styles";
+import { useState } from "react";
 
 // Components
 import OAuthButton from "../../components/buttons/OAuthButton";
@@ -9,10 +10,49 @@ import PrimaryButton from "../../components/buttons/PrimaryButton";
 const SignIn = () => {
   document.title = "SymptoMatik: Sign In";
 
+  // STATES
+  const [usernameOrEmail, setUsernameOrEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   // [HANDLE]: User Authentication
   const navigate = useNavigate();
-  const handleSignIn = () => {
+  const handleSignIn = async (e: React.FormEvent) => {
+    // Redirect to main homepage
     navigate("/home");
+    // Uncomment for actual sign in logic
+    // e.preventDefault(); // Prevent page reload
+
+    // const userData = {
+    //   email: usernameOrEmail, // FastAPI login uses "email" field
+    //   password,
+    // };
+
+    // try {
+    //   const res = await fetch("http://localhost:8000/api/sign-in", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(userData),
+    //   });
+
+    //   const data = await res.json();
+    //   console.log("Response:", data);
+
+    //   if (res.ok) {
+    //     alert(`Welcome back, ${data.username}!`);
+    //     // Save session info (optional)
+    //     localStorage.setItem("user", JSON.stringify(data));
+
+    //     // Redirect to main homepage
+    //     navigate("/home");
+    //   } else {
+    //     alert(data.detail || "Invalid credentials");
+    //   }
+    // } catch (err) {
+    //   console.error("Error:", err);
+    //   alert("Network error during sign in");
+    // }
   };
 
   // [HANDLE]: OAuth Authentication
@@ -42,35 +82,37 @@ const SignIn = () => {
         </h2>
 
         {/* Form Input */}
-        <form action="/login-form" className={Styles.formStyle}>
-        <label htmlFor="username-email" className={Styles.inputLabelStyle}>Username or Email</label>
+        <form onSubmit={handleSignIn} className={Styles.formStyle}>
+          <label className={Styles.inputLabelStyle}>Username or Email</label>
           <input
             type="text"
-            placeholder="Username or Email"
+            value={usernameOrEmail} onChange={(e) => setUsernameOrEmail(e.target.value)}
+            placeholder="Enter your username or email..."
             className={Styles.inputStyle}
           />
 
-          <label htmlFor="password" className={Styles.inputLabelStyle}>Password</label>
+          <label className={Styles.inputLabelStyle}>Password</label>
           <input
             type="password"
-            placeholder="Password"
+            value={password} onChange={(e) => setPassword(e.target.value)}
+            placeholder="**********"
             className={Styles.inputStyle}
           />
 
           <Link to="ResetPassword" className={Styles.sublinkStyle}>
             Forgot password?
           </Link>
-        </form>
 
-        {/* Button: Sign In */}
-        <PrimaryButton
-          text="Sign In"
-          onClick={handleSignIn}
-          width="full"
-          fontSize="18px"
-          height="40px"
-          disabled={false}
-        />
+          {/* Button: Sign In */}
+          <PrimaryButton
+            text="Sign In"
+            type="submit"
+            width="full"
+            fontSize="18px"
+            height="40px"
+            disabled={false}
+          />
+        </form>
 
         {/* 'or' separator */}
         <div className="flex items-center w-full my-4 text-[var-(--trust-blue)]">
@@ -96,7 +138,7 @@ const SignIn = () => {
         {/* Link: Sign Up */}
         <div className={Styles.signUpLinkDivStyle}>
           <h4>Don't have an account?</h4>
-          <Link to="sign-up" className={Styles.sublinkStyle}>
+          <Link to="../sign-up" className={Styles.sublinkStyle}>
             Sign Up
           </Link>
         </div>
