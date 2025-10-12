@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 
 // AUTH
 import Login from "./pages/auth/SignIn";
@@ -23,6 +23,9 @@ import HelpSupport from "./pages/HelpSupport";
 function App() {
   return (
     <Routes>
+      {/* Default redirect */}
+      <Route path="/" element={<Navigate to="/sign-in" replace />} />
+
       {/* AUTH */}
       <Route path="/sign-in" element={<Login/>}/>
       <Route path="/sign-up" element={<SignUp/>}/>
