@@ -36,9 +36,9 @@ const Header = () => {
   }, []);
 
   // [HANDLE]: Navigation
-  const navigateToAccount = () => {
-    console.log("Navigating to /account");
-    navigate("/account");
+  const navigateToMyProfile = () => {
+    console.log("Navigating to /my-profile");
+    navigate("/my-profile");
     setIsProfileDropdownOpen(false);
   };
 
@@ -50,7 +50,7 @@ const Header = () => {
 
   const handleLogout = () => {
     console.log("Logging out");
-    navigate("/../sign-in");
+    navigate("/sign-in");
     setIsProfileDropdownOpen(false);
   };
 
@@ -154,17 +154,17 @@ const Header = () => {
                   isProfileDropdownOpen ? "opacity-100 scale-100" : "opacity-0 scale-95 pointer-events-none"
                 }`}
               >
-                {/* Link: My Account */}
+                {/* Link: My Profile */}
                 <button
                   onClick={(event) => {
-                    console.log("Clicked My Account");
+                    console.log("Clicked My Profile");
                     event.stopPropagation();
-                    navigateToAccount();
+                    navigateToMyProfile();
                   }}
                   className="cursor-pointer block w-full text-left px-4 py-2 text-sm inter-semibold text-[var(--trust-blue)] hover:bg-[rgba(74,94,109,0.4)]/20 transition-colors duration-200"
-                  aria-label="My Account"
+                  aria-label="My Profile"
                 >
-                  My Account
+                  My Profile
                 </button>
                 {/* Link: Settings */}
                 <button

@@ -6,7 +6,7 @@ import SignUp from "./pages/auth/SignUp";
 
 // MAIN
 import Home from "./pages/Home";
-import Account from "./pages/Account";
+import MyProfile from "./pages/MyProfile";
 
 // HEADER NAV LINKS
 import Diagnosis from "./pages/Diagnosis";
@@ -15,10 +15,11 @@ import Analytics from "./pages/Analytics";
 import Consultation from "./pages/Consultation";
 import ConsultationPatient from "./pages/patient/ConsultationPatient";
 
-// FOOTER
+// OTHERS
 import About from "./pages/About";
 import PrivacyPolicyTerms from "./pages/PrivacyPolicyTerms";
 import HelpSupport from "./pages/HelpSupport";
+import Settings from "./pages/Settings";
 
 function App() {
   return (
@@ -32,7 +33,7 @@ function App() {
 
       {/* MAIN */}
       <Route path="/home" element={<Home/>}/>
-      <Route path="/account" element={<Account/>}/>
+      <Route path="/my-profile" element={<MyProfile/>}/>
 
       {/* HEADER NAV LINKS */}
       <Route path="/diagnosis" element={<Diagnosis/>}/>
@@ -45,6 +46,7 @@ function App() {
       <Route path="/about" element={<About/>}/>
       <Route path="/privacy-policy-and-terms" element={<PrivacyPolicyTerms/>}/>
       <Route path="/help-support" element={<HelpSupport/>}/>
+      <Route path="/settings" element={<Settings/>}/>
     </Routes>
   );
 }

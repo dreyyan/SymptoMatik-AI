@@ -2,7 +2,7 @@ const Styles = {
   // Div
   mainDivStyle:
   "bg-[url(/login-bg.png)] bg-cover bg-end flex flex-row w-full min-h-screen bg-white lg:flex-row lg:bg-center",
-  loginDivStyle: "bg-gradient-to-l flex flex-col px-24 pt-2 pb-8 w-[40%] h-auto ml-14 mt-5 lg:px-12",
+  loginDivStyle: "bg-gradient-to-l flex flex-col items-center min-w-[356px] px-24 pt-2 pb-8 w-[30%] h-auto ml-[8%] mt-5 lg:px-12",
   heroSectionDivStyle: "flex flex-col justify-center xl:mb-[20%] xl:h-[40%] lg:mb-[8%] lg:h-[60%]",
   signUpLinkDivStyle: "flex flex-row justify-center items-center gap-1 my-2 text-sm",
 

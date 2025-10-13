@@ -1,7 +1,7 @@
 import { useNavigate, Link } from "react-router-dom";
 import React from "react";
 import Styles from "../../styles/Styles";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // Components
 import OAuthButton from "../../components/buttons/OAuthButton";
@@ -13,12 +13,12 @@ const SignIn = () => {
   // STATES
   const [usernameOrEmail, setUsernameOrEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [shouldNavigate, setShouldNavigate] = useState(false);
 
   // [HANDLE]: User Authentication
   const navigate = useNavigate();
   const handleSignIn = async () => {
-    // Redirect to main homepage
-    navigate("/home");
+    setShouldNavigate(true);
     // Uncomment for actual sign in logic
     // e.preventDefault(); // Prevent page reload
 
@@ -64,22 +64,45 @@ const SignIn = () => {
     alert("Logging in via Google...");
   };
 
+  useEffect(() => {
+    if (!shouldNavigate) return;
+
+    const images = Array.from(document.querySelectorAll("img"));
+    let loaded = 0;
+
+    if (images.length === 0) {
+      console.log("Navigating to /home");
+      navigate("/home");
+      return;
+    }
+
+    images.forEach((img) => {
+      if (img.complete) {
+        loaded++;
+        console.log("Navigating to /home");
+        if (loaded === images.length) navigate("/home");
+      } else {
+        img.onload = img.onerror = () => {
+          loaded++;
+          console.log("Navigating to /home");
+          if (loaded === images.length) navigate("/home");
+        };
+      }
+    });
+  }, [shouldNavigate]);
+
   return (
     <div className={Styles.mainDivStyle}>
       {/* Login Panel */}
       <div className={Styles.loginDivStyle}>
         {/* Header */}
-        <div className="flex justify-center items-center gap-x-3 mb-2 mt-8">
+        <div className="flex justify-center items-center gap-x-3 mb-4 mt-8">
             <img src="/symptomatik-logo.svg" className="h-10" />
             <img src="/symptomatik-banner.svg" className="h-full" />
         </div>
 
-        <h2 className="text-4xl text-center inter-semibold text-[var(--trust-blue)]">
-          Welcome Back
-        </h2>
-        <h2 className="text-md text-center">
-          Please enter your login credentials
-        </h2>
+        <h2 className="text-4xl text-center inter-semibold text-[var(--trust-blue)]">Welcome Back</h2>
+        <h2 className="text-md text-center">Please enter your login credentials</h2>
 
         {/* Form Input */}
         <form onSubmit={handleSignIn} className={Styles.formStyle}>
@@ -115,10 +138,10 @@ const SignIn = () => {
         </form>
 
         {/* 'or' separator */}
-        <div className="flex items-center w-full my-4 text-[var-(--trust-blue)]">
-          <hr className="flex-grow border-t border-slate-400" />
-          <span className="mx-2 text-[var-(--trust-blue)] text-sm">or</span>
-          <hr className="flex-grow border-t border-slate-400" />
+        <div className="flex items-center w-full my-4">
+            <hr className="flex-grow border-t border-slate-400"/>
+            <span className="mx-2 text-[var(--slate-gray)] text-sm">or</span>
+            <hr className="flex-grow border-t border-slate-400"/>
         </div>
 
         {/* Button: Sign Up */}

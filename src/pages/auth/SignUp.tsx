@@ -67,12 +67,12 @@ const SignUp = () => {
         {/* Login Panel */}
         <div className={Styles.loginDivStyle}>
             {/* Header */}
-            <div className="flex gap-4">
-                <img src="/symptomatik-logo.svg" className="w-10 mt-6 mb-4"/>
-                <img src="/symptomatik-banner.svg" className="w-[50%] mt-6 mb-4"/>
-            </div>
+        <div className="flex justify-center items-center gap-x-3 mb-4 mt-8">
+            <img src="/symptomatik-logo.svg" className="h-10" />
+            <img src="/symptomatik-banner.svg" className="h-full" />
+        </div>
 
-            <h2 className="text-[var(--trust-blue)] text-3xl font-bold">Start your journey</h2>
+            <h2 className="text-4xl text-center inter-semibold text-[var(--trust-blue)]">Start your journey</h2>
             <h2 className={Styles.pStyle}>Be a part of the revolution.</h2>
 
             {/* Form Input */}
@@ -96,9 +96,9 @@ const SignUp = () => {
             </form>
 
             {/* 'or' separator */}
-            <div className="flex items-center w-full my-4 text-[var-(--trust-blue)]">
+            <div className="flex items-center w-full my-4">
                 <hr className="flex-grow border-t border-slate-400"/>
-                <span className="mx-2 text-[var-(--trust-blue)] text-sm">or</span>
+                <span className="mx-2 text-[var(--slate-gray)] text-sm">or</span>
                 <hr className="flex-grow border-t border-slate-400"/>
             </div>
 
