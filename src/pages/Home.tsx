@@ -54,6 +54,7 @@ const Home = () => {
                 text="View Demo"
                 fontSize="16px"
                 disabled={false}
+                onClick={() => window.open("https://drive.google.com/file/d/1_ML_QYlG3jq7xSE5zf667D_BWjDGC-pH/view?usp=sharing")}
               />
             </div>
             {/* IMAGE */}
